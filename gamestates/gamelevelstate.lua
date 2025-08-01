@@ -51,10 +51,10 @@ function MyGameLevelState:handleMessage(message)
 end
 
 --- @param primary Senses[] { curActor:getComponent(prism.components.Senses)}
----@param secondary Senses[]
+--- @param secondary Senses[]
 function MyGameLevelState:draw(primary, secondary)
    if not self.decision then return end
-   
+
    self.display:clear()
 
    local position = self.decision.actor:getPosition()
@@ -119,6 +119,11 @@ function MyGameLevelState:keypressed(key, scancode)
          decision:setAction(move)
          return
       end
+
+      local target = self.level:query():at(destination:decompose()):first()
+
+      local kick = prism.actions.Kick(owner, target)
+      if self.level:canPerform(kick) then decision:setAction(kick) end
    end
 
    -- Handle waiting
