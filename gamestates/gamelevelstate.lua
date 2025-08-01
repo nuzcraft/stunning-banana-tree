@@ -24,11 +24,13 @@ function MyGameLevelState:__new(display)
    -- Add a pit area to the southeast
    mapbuilder:drawRectangle(20, 20, 25, 25, prism.cells.Pit)
 
+   mapbuilder:addActor(prism.actors.Kobold(), 12, 20)
    -- Place the player character at a starting location
    mapbuilder:addActor(prism.actors.Player(), 12, 12)
 
    -- Build the map and instantiate the level with systems
    local map, actors = mapbuilder:build()
+
    local level = prism.Level(map, actors, {
       prism.systems.Senses(),
       prism.systems.Sight(),
@@ -51,10 +53,10 @@ function MyGameLevelState:handleMessage(message)
 end
 
 --- @param primary Senses[] { curActor:getComponent(prism.components.Senses)}
----@param secondary Senses[]
+--- @param secondary Senses[]
 function MyGameLevelState:draw(primary, secondary)
    if not self.decision then return end
-   
+
    self.display:clear()
 
    local position = self.decision.actor:getPosition()
@@ -119,6 +121,11 @@ function MyGameLevelState:keypressed(key, scancode)
          decision:setAction(move)
          return
       end
+
+      local target = self.level:query():at(destination:decompose()):first()
+
+      local kick = prism.actions.Kick(owner, target)
+      if self.level:canPerform(kick) then decision:setAction(kick) end
    end
 
    -- Handle waiting
