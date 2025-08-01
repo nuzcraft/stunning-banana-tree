@@ -24,11 +24,13 @@ function MyGameLevelState:__new(display)
    -- Add a pit area to the southeast
    mapbuilder:drawRectangle(20, 20, 25, 25, prism.cells.Pit)
 
+   mapbuilder:addActor(prism.actors.Kobold(), 12, 20)
    -- Place the player character at a starting location
    mapbuilder:addActor(prism.actors.Player(), 12, 12)
 
    -- Build the map and instantiate the level with systems
    local map, actors = mapbuilder:build()
+
    local level = prism.Level(map, actors, {
       prism.systems.Senses(),
       prism.systems.Sight(),
