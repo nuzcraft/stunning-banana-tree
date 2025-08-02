@@ -3,7 +3,7 @@
 local Fall = prism.Action:extend "Fall"
 
 function Fall:perform(level)
-   level:removeActor(self.owner)
+   level:perform(prism.actions.Die(self.owner))
 end
 
 --- @param level Level
