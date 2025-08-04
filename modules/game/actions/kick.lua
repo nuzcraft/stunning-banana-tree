@@ -25,6 +25,9 @@ function Kick:perform(level, kicked)
       if not level:hasActor(kicked) then break end
       level:moveActor(kicked, nextpos)
    end
+
+   local damage = prism.actions.Damage(kicked, 1)
+   if level:canPerform(damage) then level:perform(damage) end
 end
 
 return Kick

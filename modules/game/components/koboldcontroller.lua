@@ -1,4 +1,4 @@
---- @class KoboldController
+--- @class KoboldController : Component
 --- @overload fun(): KoboldController
 local KoboldController = prism.components.Controller:extend("KoboldController")
 KoboldController.name = "KoboldController"
