@@ -3,5 +3,6 @@ prism.registerCell("Pit", function()
       prism.components.Name("Pit"),
       prism.components.Drawable(" "),
       prism.components.Collider({ allowedMovetypes = { "fly" } }),
+      prism.components.Void(),
    }
 end)
