@@ -9,5 +9,6 @@ prism.registerActor("Kobold", function()
       prism.components.Mover { "walk" },
       prism.components.KoboldController(),
       prism.components.Health(3),
+      prism.components.Attacker(1),
    }
 end)
