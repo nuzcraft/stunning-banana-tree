@@ -1,5 +1,6 @@
 local keybindings = require "keybindingschema"
 local GameOverState = require "gamestates.gameoverstate"
+local levelgen = require "levelgen"
 
 --- @class MyGameLevelState : LevelState
 --- A custom game level state responsible for initializing the level map,
@@ -12,22 +13,8 @@ local MyGameLevelState = spectrum.LevelState:extend "MyGameLevelState"
 
 --- @param display Display
 function MyGameLevelState:__new(display)
-   -- Construct a simple test map using MapBuilder.
-   -- In a complete game, you'd likely extract this logic to a separate module
-   -- and pass in an existing player object between levels.
-   local mapbuilder = prism.MapBuilder(prism.cells.Wall)
-
-   mapbuilder:drawRectangle(0, 0, 32, 32, prism.cells.Wall)
-   -- Fill the interior with floor tiles
-   mapbuilder:drawRectangle(1, 1, 31, 31, prism.cells.Floor)
-   -- Add a small block of walls within the map
-   mapbuilder:drawRectangle(5, 5, 7, 7, prism.cells.Wall)
-   -- Add a pit area to the southeast
-   mapbuilder:drawRectangle(20, 20, 25, 25, prism.cells.Pit)
-
-   mapbuilder:addActor(prism.actors.Kobold(), 12, 20)
-   -- Place the player character at a starting location
-   mapbuilder:addActor(prism.actors.Player(), 12, 12)
+   local seed = tostring(os.time())
+   local mapbuilder = levelgen(prism.RNG(seed), prism.actors.Player(), 60, 30)
 
    -- Build the map and instantiate the level with systems
    local map, actors = mapbuilder:build()
