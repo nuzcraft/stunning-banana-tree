@@ -72,6 +72,18 @@ return function(rng, player, width, height)
          builder:addActor(prism.actors.Kobold(), cx, cy)
       end
    end
+
+   --- @type Rectangle[]
+   local availableRooms = {}
+   for _, room in pairs(rooms) do
+      if room ~= startRoom then table.insert(availableRooms, room) end
+   end
+
+   local stairRoom = availableRooms[rng:random(1, #availableRooms)]
+   local corners = stairRoom:toCorners()
+   local randCorner = corners[rng:random(1, #corners)]
+   builder:addActor(prism.actors.Stairs(), randCorner.x, randCorner.y)
+
    builder:addPadding(1, prism.cells.Wall)
 
    return builder

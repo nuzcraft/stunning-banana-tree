@@ -34,6 +34,7 @@ function MyGameLevelState:handleMessage(message)
    spectrum.LevelState.handleMessage(self, message)
 
    if prism.messages.Lose:is(message) then self.manager:enter(GameOverState(self.display)) end
+   if prism.messages.Descend:is(message) then self.manager:enter(MyGameLevelState(self.display)) end
    -- Handle any messages sent to the level state from the level. LevelState
    -- handles a few built-in messages for you, like the decision you fill out
    -- here.
@@ -114,6 +115,13 @@ function MyGameLevelState:keypressed(key, scancode)
    -- Attempt to translate the action into a directional move
    if keybindOffsets[action] then
       local destination = owner:getPosition() + keybindOffsets[action]
+
+      local descendTarget = self.level:query(prism.components.Stairs):at(destination:decompose()):first()
+      local descend = prism.actions.Descend(owner, descendTarget)
+      if self.level:canPerform(descend) then
+         decision:setAction(descend)
+         return
+      end
 
       local move = prism.actions.Move(owner, destination)
       if self.level:canPerform(move) then
