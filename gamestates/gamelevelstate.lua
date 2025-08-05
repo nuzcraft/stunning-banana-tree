@@ -115,6 +115,13 @@ function MyGameLevelState:keypressed(key, scancode)
    if keybindOffsets[action] then
       local destination = owner:getPosition() + keybindOffsets[action]
 
+      local descendTarget = self.level:query(prism.components.Stairs):at(destination:decompose()):first()
+      local descend = prism.actions.Descend(owner, descendTarget)
+      if self.level:canPerform(descend) then
+         decision:setAction(descend)
+         return
+      end
+
       local move = prism.actions.Move(owner, destination)
       if self.level:canPerform(move) then
          decision:setAction(move)

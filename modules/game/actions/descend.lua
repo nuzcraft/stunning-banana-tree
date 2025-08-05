@@ -1,7 +1,7 @@
 local DescendTarget = prism.Target():with(prism.components.Stair):range(1)
 
 --- @class Descend : Action
---- @overload fun(owner: Actor): Descend
+--- @overload fun(owner: Actor, stairs: Actor): Descend
 local Descend = prism.Action:extend "Descend"
 Descend.targets = { DescendTarget }
 
