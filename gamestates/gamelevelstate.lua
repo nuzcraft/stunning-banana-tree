@@ -34,6 +34,7 @@ function MyGameLevelState:handleMessage(message)
    spectrum.LevelState.handleMessage(self, message)
 
    if prism.messages.Lose:is(message) then self.manager:enter(GameOverState(self.display)) end
+   if prism.messages.Descend:is(message) then self.manager:enter(MyGameLevelState(self.display)) end
    -- Handle any messages sent to the level state from the level. LevelState
    -- handles a few built-in messages for you, like the decision you fill out
    -- here.
