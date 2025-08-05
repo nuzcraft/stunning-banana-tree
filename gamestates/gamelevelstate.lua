@@ -1,51 +1,39 @@
 local keybindings = require "keybindingschema"
 local GameOverState = require "gamestates.gameoverstate"
-local levelgen = require "levelgen"
 
---- @class MyGameLevelState : LevelState
---- A custom game level state responsible for initializing the level map,
---- handling input, and drawing the state to the screen.
----
+--- @class GameLevelState : LevelState
 --- @field path Path
 --- @field level Level
---- @overload fun(display: Display): MyGameLevelState
-local MyGameLevelState = spectrum.LevelState:extend "MyGameLevelState"
+--- @overload fun(display: Display, builder: MapBuilder, seed: string): GameLevelState
+local GameLevelState = spectrum.LevelState:extend "GameLevelState"
 
 --- @param display Display
-function MyGameLevelState:__new(display)
-   local seed = tostring(os.time())
-   local mapbuilder = levelgen(prism.RNG(seed), prism.actors.Player(), 60, 30)
-
-   -- Build the map and instantiate the level with systems
-   local map, actors = mapbuilder:build()
-
+--- @param builder MapBuilder
+--- @param seed string
+function GameLevelState:__new(display, builder, seed)
+   local map, actors = builder:build()
    local level = prism.Level(map, actors, {
       prism.systems.Senses(),
       prism.systems.Sight(),
       prism.systems.Fall(),
-   })
+   }, nil, seed)
 
-   -- Initialize with the created level and display, the heavy lifting is done by
-   -- the parent class.
    spectrum.LevelState.__new(self, level, display)
 end
 
-function MyGameLevelState:handleMessage(message)
+--- @param message Message
+function GameLevelState:handleMessage(message)
    spectrum.LevelState.handleMessage(self, message)
 
    if prism.messages.Lose:is(message) then self.manager:enter(GameOverState(self.display)) end
-   if prism.messages.Descend:is(message) then self.manager:enter(MyGameLevelState(self.display)) end
-   -- Handle any messages sent to the level state from the level. LevelState
-   -- handles a few built-in messages for you, like the decision you fill out
-   -- here.
-
-   -- This is where you'd process custom messages like advancing to the next
-   -- level or triggering a game over.
+   if prism.messages.Descend:is(message) then
+      self.manager:enter(GameLevelState(self.display, Game:generateNextFloor(message.descender), Game:getLevelSeed()))
+   end
 end
 
 --- @param primary Senses[] { curActor:getComponent(prism.components.Senses)}
 --- @param secondary Senses[]
-function MyGameLevelState:draw(primary, secondary)
+function GameLevelState:draw(primary, secondary)
    if not self.decision then return end
 
    self.display:clear()
@@ -64,6 +52,7 @@ function MyGameLevelState:draw(primary, secondary)
    local currentActor = self:getCurrentActor()
    local health = currentActor and currentActor:get(prism.components.Health)
    if health then self.display:putString(1, 1, "HP:" .. health.hp .. "/" .. health.maxHP) end
+   self.display:putString(1, 2, "Depth: " .. Game.depth)
 
    local log = currentActor and currentActor:get(prism.components.Log)
    if log then
@@ -100,7 +89,7 @@ local keybindOffsets = {
 -- You should NOT mutate the Level here directly. Instead, find a valid
 -- action and set it in the decision object. It will then be executed by
 -- the level. This is a similar pattern to the example KoboldController.
-function MyGameLevelState:keypressed(key, scancode)
+function GameLevelState:keypressed(key, scancode)
    -- handles opening geometer for us
    spectrum.LevelState.keypressed(self, key, scancode)
 
@@ -139,4 +128,4 @@ function MyGameLevelState:keypressed(key, scancode)
    if action == "wait" then decision:setAction(prism.actions.Wait(self.decision.actor)) end
 end
 
-return MyGameLevelState
+return GameLevelState
