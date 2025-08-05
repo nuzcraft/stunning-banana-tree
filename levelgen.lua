@@ -34,6 +34,45 @@ return function(rng, player, width, height)
          end
       end
    end
+   -- helper function to connect two points with an L shaped hallway
+   --- @param a Rectangle
+   --- @param b Rectangle
+   local function createLShapedHallway(a, b)
+      if not a or not b then return end
+      local ax, ay = a:center():floor():decompose()
+      local bx, by = b:center():floor():decompose()
+      -- randomly choose one of two l shaped tunnel patterns
+      if rng:random() > 0.5 then
+         builder:drawLine(ax, ay, bx, ay, prism.cells.Floor)
+         builder:drawLine(bx, ay, bx, by, prism.cells.Floor)
+      else
+         builder:drawLine(ax, ay, ax, by, prism.cells.Floor)
+         builder:drawLine(ax, by, bx, by, prism.cells.Floor)
+      end
+   end
+
+   for hash, currentRoom in pairs(rooms) do
+      local px, py = prism.Vector2._unhash(hash)
+      createLShapedHallway(currentRoom, rooms[prism.Vector2._hash(px + 1, py)])
+      createLShapedHallway(currentRoom, rooms[prism.Vector2._hash(px, py + 1)])
+   end
+
+   local startRoom
+   while not startRoom do
+      local x, y = rng:random(0, PARTITIONS - 1), rng:random(0, PARTITIONS - 1)
+      startRoom = rooms[prism.Vector2._hash(x, y)]
+   end
+
+   local playerPos = startRoom:center():floor()
+   builder:addActor(player, playerPos.x, playerPos.y)
+
+   for _, room in pairs(rooms) do
+      if room ~= startRoom then
+         local cx, cy = room:center():floor():decompose()
+         builder:addActor(prism.actors.Kobold(), cx, cy)
+      end
+   end
+   builder:addPadding(1, prism.cells.Wall)
 
    return builder
 end
