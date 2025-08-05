@@ -32,11 +32,15 @@ function Kick:perform(level, kicked)
    local damage = prism.actions.Damage(kicked, 1)
    if level:canPerform(damage) then
       level:perform(damage)
+
+      local dmgstr = ""
+      if damage.dealt then dmgstr = sf("Dealing %i damage.", damage.dealt) end
+
       local kickName = Name.lower(kicked)
       local ownerName = Name.lower(self.owner)
-      Log.addMessage(self.owner, sf("You kick the %s.", kickName))
-      Log.addMessage(kicked, sf("The %s kicks you!", ownerName))
-      Log.addMessageSensed(level, self, sf("The %s kicks the %s.", ownerName, kickName))
+      Log.addMessage(self.owner, sf("You kick the %s. %s", kickName, dmgstr))
+      Log.addMessage(kicked, sf("The %s kicks you! %s", ownerName, dmgstr))
+      Log.addMessageSensed(level, self, sf("The %s kicks the %s. %s", ownerName, kickName, dmgstr))
    end
 end
 
