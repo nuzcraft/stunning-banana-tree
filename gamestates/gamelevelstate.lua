@@ -1,4 +1,5 @@
 local keybindings = require "keybindingschema"
+local GameOverState = require "gamestates.gameoverstate"
 
 --- @class MyGameLevelState : LevelState
 --- A custom game level state responsible for initializing the level map,
@@ -45,10 +46,7 @@ end
 function MyGameLevelState:handleMessage(message)
    spectrum.LevelState.handleMessage(self, message)
 
-   if prism.messages.Lose:is(message) then
-      self.manager:pop()
-      love.event.quit()
-   end
+   if prism.messages.Lose:is(message) then self.manager:enter(GameOverState(self.display)) end
    -- Handle any messages sent to the level state from the level. LevelState
    -- handles a few built-in messages for you, like the decision you fill out
    -- here.
