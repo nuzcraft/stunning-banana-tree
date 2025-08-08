@@ -47,7 +47,8 @@ end
 function InventoryState:keypressed(key)
    for i, letter in ipairs(self.letters) do
       if key == letter then
-         self.manager:push(InventoryActionState(self.display, self.decision, self.level, self.items[i]))
+         local inventoryactionstate = InventoryActionState(self.display, self.decision, self.level, self.items[i])
+         self.manager:push(inventoryactionstate)
          return
       end
    end
