@@ -1,5 +1,6 @@
 local utf8 = require "utf8"
 local keybindings = require "keybindingschema"
+local InventoryActionState = require "gamestates.inventoryactionstate"
 
 --- @class InventoryState : GameState
 --- @overload fun(display: Display, decision: ActionDecision, level: Level, inventory: Inventory)
@@ -46,15 +47,16 @@ end
 function InventoryState:keypressed(key)
    for i, letter in ipairs(self.letters) do
       if key == letter then
-         local pressedItem = self.items[i]
-         local drop = prism.actions.Drop(self.decision.actor, pressedItem)
-         if drop:canPerform(self.level) then self.decision:setAction(drop) end
-         self.manager:pop()
+         self.manager:push(InventoryActionState(self.display, self.decision, self.level, self.items[i]))
          return
       end
    end
    local binding = keybindings:keypressed(key)
    if binding == "inventory" or binding == "return" then self.manager:pop() end
+end
+
+function InventoryState:resume()
+   if self.decision:validateResponse() then self.manager:pop() end
 end
 
 return InventoryState
