@@ -1,5 +1,6 @@
 local keybindings = require "keybindingschema"
 local GameOverState = require "gamestates.gameoverstate"
+local InventoryState = require "gamestates.inventorystate"
 
 --- @class GameLevelState : LevelState
 --- @field path Path
@@ -122,6 +123,23 @@ function GameLevelState:keypressed(key, scancode)
 
       local kick = prism.actions.Kick(owner, target)
       if self.level:canPerform(kick) then decision:setAction(kick) end
+   end
+
+   if action == "inventory" then
+      local inventory = owner:get(prism.components.Inventory)
+      if inventory then
+         local inventoryState = InventoryState(self.display, decision, self.level, inventory)
+         self.manager:push(inventoryState)
+      end
+   end
+
+   if action == "pickup" then
+      local target = self.level:query(prism.components.Item):at(owner:getPosition():decompose()):first()
+      local pickup = prism.actions.Pickup(owner, target)
+      if self.level:canPerform(pickup) then
+         decision:setAction(pickup)
+         return
+      end
    end
 
    -- Handle waiting
