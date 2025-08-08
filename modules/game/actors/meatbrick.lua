@@ -7,5 +7,6 @@ prism.registerActor("MeatBrick", function()
          stackable = prism.actors.MeatBrick,
          stackLimit = 99,
       },
+      prism.components.Edible(1),
    }
 end)
