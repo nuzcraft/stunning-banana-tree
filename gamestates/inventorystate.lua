@@ -21,7 +21,6 @@ function InventoryState:__new(display, decision, level, inventory)
    end
 end
 
---- @param previous GameState
 function InventoryState:load(previous)
    self.previousState = previous
 end
@@ -43,3 +42,19 @@ function InventoryState:draw()
    end
    self.display:draw()
 end
+
+function InventoryState:keypressed(key)
+   for i, letter in ipairs(self.letters) do
+      if key == letter then
+         local pressedItem = self.items[i]
+         local drop = prism.actions.Drop(self.decision.actor, pressedItem)
+         if drop:canPerform(self.level) then self.decision:setAction(drop) end
+         self.manager:pop()
+         return
+      end
+   end
+   local binding = keybindings:keypressed(key)
+   if binding == "inventory" or binding == "return" then self.manager:pop() end
+end
+
+return InventoryState
