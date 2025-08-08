@@ -133,6 +133,15 @@ function GameLevelState:keypressed(key, scancode)
       end
    end
 
+   if action == "pickup" then
+      local target = self.level:query(prism.components.Item):at(owner:getPosition():decompose()):first()
+      local pickup = prism.actions.Pickup(owner, target)
+      if self.level:canPerform(pickup) then
+         decision:setAction(pickup)
+         return
+      end
+   end
+
    -- Handle waiting
    if action == "wait" then decision:setAction(prism.actions.Wait(self.decision.actor)) end
 end
