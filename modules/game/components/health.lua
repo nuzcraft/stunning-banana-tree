@@ -8,4 +8,9 @@ function Health:__new(maxHP)
    self.hp = maxHP
 end
 
+--- @param amount integer
+function Health:heal(amount)
+   self.hp = math.min(self.hp + amount, self.maxHP)
+end
+
 return Health
