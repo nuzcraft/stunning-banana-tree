@@ -5,3 +5,5 @@
 !.luarc.json
 
 build/
+
+bin/

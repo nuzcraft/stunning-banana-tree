@@ -119,8 +119,14 @@ function GameLevelState:keypressed(key, scancode)
          return
       end
 
-      local target = self.level:query():at(destination:decompose()):first()
+      local openable = self.level:query(prism.components.Container):at(destination:decompose()):first()
+      local openContainer = prism.actions.OpenContainer(owner, openable)
+      if self.level:canPerform(openContainer) then
+         decision:setAction(openContainer)
+         return
+      end
 
+      local target = self.level:query():at(destination:decompose()):first()
       local kick = prism.actions.Kick(owner, target)
       if self.level:canPerform(kick) then decision:setAction(kick) end
    end
