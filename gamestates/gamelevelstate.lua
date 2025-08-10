@@ -17,6 +17,7 @@ function GameLevelState:__new(display, builder, seed)
       prism.systems.Senses(),
       prism.systems.Sight(),
       prism.systems.Fall(),
+      prism.systems.Tick(),
    }, nil, seed)
 
    spectrum.LevelState.__new(self, level, display)
