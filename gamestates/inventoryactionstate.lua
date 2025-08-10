@@ -45,7 +45,7 @@ end
 
 function InventoryActionState:keypressed(key)
    for i, action in ipairs(self.actions) do
-      print(key, string.char(i + 96))
+      -- print(key, string.char(i + 96))
       if key == string.char(i + 96) then
          self.decision:setAction(action)
          self.manager:pop()
