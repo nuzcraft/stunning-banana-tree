@@ -33,6 +33,10 @@ function Health:heal(amount)
    self.hp = math.min(self.hp + amount, self:getMaxHP())
 end
 
+function Health:enforceBounds()
+   self.hp = math.min(self.hp, self:getMaxHP())
+end
+
 Health.Modifier = HealthModifier
 
 return Health
