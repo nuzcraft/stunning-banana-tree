@@ -52,7 +52,7 @@ function GameLevelState:draw(primary, secondary)
    -- custom terminal drawing goes here!
    local currentActor = self:getCurrentActor()
    local health = currentActor and currentActor:get(prism.components.Health)
-   if health then self.display:putString(1, 1, "HP:" .. health.hp .. "/" .. health.maxHP) end
+   if health then self.display:putString(1, 1, "HP:" .. health.hp .. "/" .. health:getMaxHP()) end
    self.display:putString(1, 2, "Depth: " .. Game.depth)
 
    local log = currentActor and currentActor:get(prism.components.Log)
