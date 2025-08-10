@@ -9,7 +9,7 @@ Drink.targets = {
 --- @param level Level
 function Drink:perform(level, drink)
    local drinkable = drink:expect(prism.components.Drinkable)
-   local statusComponent = self.owner:get(prism.componets.StatusEffects)
+   local statusComponent = self.owner:get(prism.components.StatusEffects)
    if statusComponent and drinkable.status then statusComponent:add(drinkable.status) end
 
    local health = self.owner:get(prism.components.Health)
