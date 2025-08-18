@@ -68,4 +68,4 @@ Based on [this](https://prismrl.github.io/prism/how-tos/object-registration.html
 
 ## Conclusion
 
-I have had a good time with this engine. I like using it and I want to continue. I have some plans to expand the Kicking Kobolds demo to help me continue learning. I definitely experienced some growing pains and some frustrations that stemmed from *not understanding how all the pieces fit together*, but those issues do not overshadown the notion that this is a fun engine to work in that is doing some really cool things.
+I have had a good time with this engine. I like using it and I want to continue. I have some plans to expand the Kicking Kobolds demo to help me continue learning. I definitely experienced some growing pains and some frustrations that stemmed from *not understanding how all the pieces fit together*, but those issues do not overshadow the notion that this is a fun engine to work in that is doing some really cool things.
