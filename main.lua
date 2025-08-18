@@ -7,6 +7,7 @@ prism.loadModule("prism/extra/log")
 prism.loadModule("prism/extra/inventory")
 prism.loadModule("prism/extra/droptable")
 prism.loadModule("prism/extra/statuseffects")
+prism.loadModule("modules/basegame")
 prism.loadModule("modules/game")
 
 Game = require("game")

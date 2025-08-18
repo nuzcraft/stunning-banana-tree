@@ -22,3 +22,30 @@ function TargetHandler:__new(display, levelState, targetList, target)
    self.target = target
    self.index = nil
 end
+
+function TargetHandler:getValidTargets()
+   error("Method 'getValidTargets' must be implemented in subclass")
+end
+
+function TargetHandler:init()
+   self.validTargets = self:getValidTargets()
+   if #self.validTargets == 0 then self.manager:pop("poprecursive") end
+end
+
+function TargetHandler:resume(previous, shouldPop)
+   if shouldPop == "poprecursive" then
+      self.manager:pop("poprecursive")
+      return
+   end
+   if shouldPop then
+      self.manager:pop()
+      return
+   end
+   self:init()
+end
+
+function TargetHandler:load()
+   self:init()
+end
+
+return TargetHandler
