@@ -80,7 +80,7 @@ function InventoryActionState:resume()
       if success then
          self.decision:setAction(action)
       else
-         prism.components.Log.addMessage(self.decision.actor, err)
+         prism.components.Log.addMessage(self.decision.actor, err) -- this doesn't work
       end
       self.manager:pop()
    end
