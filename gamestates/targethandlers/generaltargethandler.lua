@@ -54,52 +54,47 @@ function GeneralTargetHandler:draw()
 end
 
 local keybindOffsets = {
-    ["move up"] = prism.Vector2.UP,
-    ["move left"] = prism.Vector2.LEFT,
-    ["move down"] = prism.Vector2.DOWN,
-    ["move right"] = prism.Vector2.RIGHT,
-    ["move up-left"] = prism.Vector2.UP_LEFT,
-    ["move up-right"] = prism.Vector2.UP_RIGHT,
-    ["move down-left"] = prism.Vector2.DOWN_LEFT,
-    ["move down-right"] = prism.Vector2.DOWN_RIGHT,
+   ["move up"] = prism.Vector2.UP,
+   ["move left"] = prism.Vector2.LEFT,
+   ["move down"] = prism.Vector2.DOWN,
+   ["move right"] = prism.Vector2.RIGHT,
+   ["move up-left"] = prism.Vector2.UP_LEFT,
+   ["move up-right"] = prism.Vector2.UP_RIGHT,
+   ["move down-left"] = prism.Vector2.DOWN_LEFT,
+   ["move down-right"] = prism.Vector2.DOWN_RIGHT,
 }
 
 function GeneralTargetHandler:keypressed(key)
-    local action = keybindings:keypressed(key)
-    if action == "tab" then
-        local lastTarget = self.curTarget
-        self.index, self.curTarget = next(self.validTargets, self.index)
-        while 
-            (not self.index and #self.validTargets > 0) or
-            (lastTarget == self.curTarget and #self.validTargets > 1)
-        do
-            self.index, self.curTarget = next(self.validTargets, self.index)
-        end
-        self:setSelectorPosition()
-    end
-    if action == "select" and self.curTarget then
-        table.insert(self.targetList, self.curTarget)
-        self.manager:pop()
-    end
-    if action == "return" then
-        self.manager:pop("pop")
-    end
-    if keybindOffsets[action] then
-        self.selectorPosition = self.selectorPosition + keybindOffsets[action]
-        self.curTarget = nil
-        if self.target:validate(self.level, self.owner, self.selectorPosition, self.targetList) then
-            self.curTarget = self.selectorPosition
-        end
-        -- stylua ignore
-        local validTarget = self.level:query()
-            :at(self.selectorPosition:decompose())
-            :target(self.target, self.level, self.owner, self.targetList)
-            :first()
-        
-        if validTarget then
-            self.curTarget = validTarget
-        end
-    end
+   local action = keybindings:keypressed(key)
+   if action == "tab" then
+      -- TODO: fix this
+      local lastTarget = self.curTarget
+      self.index, self.curTarget = next(self.validTargets, self.index)
+      while (not self.index and #self.validTargets > 0) or (lastTarget == self.curTarget and #self.validTargets > 1) do
+         self.index, self.curTarget = next(self.validTargets, self.index)
+      end
+      self:setSelectorPosition()
+   end
+   if action == "select" and self.curTarget then
+      table.insert(self.targetList, self.curTarget)
+      self.manager:pop()
+   end
+   if action == "return" then self.manager:pop("pop") end
+   if keybindOffsets[action] then
+      self.selectorPosition = self.selectorPosition + keybindOffsets[action]
+      self.curTarget = nil
+      if self.target:validate(self.level, self.owner, self.selectorPosition, self.targetList) then
+         self.curTarget = self.selectorPosition
+      end
+      -- stylua ignore
+      local validTarget = self.level
+         :query()
+         :at(self.selectorPosition:decompose())
+         :target(self.target, self.level, self.owner, self.targetList)
+         :first()
+
+      if validTarget then self.curTarget = validTarget end
+   end
 end
 
 return GeneralTargetHandler

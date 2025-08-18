@@ -1,5 +1,6 @@
 local keybindings = require "keybindingschema"
 local Name = prism.components.Name
+local GeneralTargetHandler = require "gamestates.targethandlers.generaltargethandler"
 
 --- @class InventoryActionState : GameState
 --- @field decision ActionDecision
@@ -20,8 +21,9 @@ function InventoryActionState:__new(display, decision, level, item)
    self.actions = {}
 
    for _, Action in ipairs(self.decision.actor:getActions()) do
-      local action = Action(self.decision.actor, self.item)
-      if self.level:canPerform(action) then table.insert(self.actions, action) end
+      if Action:validateTarget(1, level, self.decision.actor, item) and not Action:isAbstract() then
+         table.insert(self.actions, Action)
+      end
    end
 end
 
@@ -37,22 +39,51 @@ function InventoryActionState:draw()
 
    for i, action in ipairs(self.actions) do
       local letter = string.char(96 + i)
-      local name = string.gsub(action.className, "Action", "")
+      local name = string.gsub(action.name or action.className, "Action", "")
       self.display:putString(1, 1 + i, string.format("[%s] %s", letter, name), nil, nil, nil, "right")
    end
    self.display:draw()
 end
 
 function InventoryActionState:keypressed(key)
-   for i, action in ipairs(self.actions) do
+   for i, Action in ipairs(self.actions) do
       -- print(key, string.char(i + 96))
       if key == string.char(i + 96) then
-         self.decision:setAction(action)
-         self.manager:pop()
+         self.decision:trySetAction(Action(self.decision.actor, self.item), self.level)
+         if self.decision:validateResponse() then
+            self.manager:pop()
+            return
+         end
+         self.selectedAction = Action
+         self.targets = { self.item }
+         for i = Action:getNumTargets(), 2, -1 do
+            self.manager:push(
+               GeneralTargetHandler(
+                  self.display,
+                  self.previousState,
+                  self.targets,
+                  Action:getTargetObject(i),
+                  self.targets
+               )
+            )
+         end
       end
    end
    local binding = keybindings:keypressed(key)
    if binding == "inventory" or binding == "return" then self.manager:pop() end
+end
+
+function InventoryActionState:resume()
+   if self.targets then
+      local action = self.selectedAction(self.decision.actor, unpack(self.targets))
+      local success, err = self.level:canPerform(action)
+      if success then
+         self.decision:setAction(action)
+      else
+         prism.components.Log.addMessage(self.decision.actor, err)
+      end
+      self.manager:pop()
+   end
 end
 
 return InventoryActionState

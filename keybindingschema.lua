@@ -13,4 +13,5 @@ return spectrum.Keybinding {
    { key = "tab", action = "inventory", description = "Opens the inventory screen." },
    { key = "backspace", action = "return", description = "Moves back up a level in a substate." },
    { key = "p", action = "pickup", description = "Picks up an inventory item." },
+   { key = "space", action = "select", description = "Selects a target." },
 }
