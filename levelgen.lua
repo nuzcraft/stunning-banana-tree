@@ -92,5 +92,16 @@ return function(rng, player, width, height)
    local drops = prism.components.DropTable(chestloot):getDrops(rng)
    builder:addActor(prism.actors.Chest(drops), math.floor(center.x), math.floor(center.y))
 
+   -- set alternate cells
+   for x = 1, width do
+      for y = 1, height do
+         local pitalt = prism.cells.PitAlt
+         if builder:get(x, y):getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
+            print("its a pit and north is not")
+            builder:set(x, y, pitalt())
+         end
+      end
+   end
+
    return builder
 end
