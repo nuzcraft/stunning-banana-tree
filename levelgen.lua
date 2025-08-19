@@ -97,8 +97,7 @@ return function(rng, player, width, height)
       for y = 1, height do
          local pitalt = prism.cells.PitAlt
          if builder:get(x, y):getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
-            print("its a pit and north is not")
-            builder:set(x, y, pitalt())
+            builder:get(x, y):give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
          end
       end
    end

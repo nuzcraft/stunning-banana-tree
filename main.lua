@@ -1,5 +1,6 @@
 require "debugger"
 require "prism"
+require "colors"
 
 prism.loadModule("prism/spectrum")
 prism.loadModule("prism/extra/sight")

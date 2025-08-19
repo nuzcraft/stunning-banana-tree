@@ -1,7 +1,7 @@
 prism.registerActor("Kobold", function()
    return prism.Actor.fromComponents {
       prism.components.Name("Kobold"),
-      prism.components.Drawable("k", prism.Color4.RED),
+      prism.components.Drawable("k", YELLOW),
       prism.components.Position(),
       prism.components.Collider(),
       prism.components.Senses(),
