@@ -92,5 +92,15 @@ return function(rng, player, width, height)
    local drops = prism.components.DropTable(chestloot):getDrops(rng)
    builder:addActor(prism.actors.Chest(drops), math.floor(center.x), math.floor(center.y))
 
+   -- set alternate cells
+   for x = 1, width do
+      for y = 1, height do
+         local pitalt = prism.cells.PitAlt
+         if builder:get(x, y):getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
+            builder:get(x, y):give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
+         end
+      end
+   end
+
    return builder
 end
