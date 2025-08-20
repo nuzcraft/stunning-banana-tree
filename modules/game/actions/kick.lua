@@ -10,6 +10,7 @@ Kick.targets = { KickTarget }
 Kick.requiredComponents = {
    prism.components.Controller,
    prism.components.Kicker,
+   prism.components.Attacker,
 }
 
 function Kick:canPerform(level)
@@ -25,11 +26,10 @@ function Kick:perform(level, kicked)
    local distance = self.owner:get(prism.components.Kicker).distance
    for _ = 1, distance do
       local nextpos = kicked:getPosition() + direction
-      -- TODO: maybe move this into a knockback action
       local target = level:query():at(nextpos:decompose()):first()
-      local kick = prism.actions.Kick(kicked, target)
-      if level:canPerform(kick) then
-         level:perform(kick)
+      local knockback = prism.actions.Knockback(kicked, target)
+      if level:canPerform(knockback) then
+         level:perform(knockback)
          level:moveActor(kicked, nextpos)
          break
       end
@@ -38,7 +38,8 @@ function Kick:perform(level, kicked)
       level:moveActor(kicked, nextpos)
    end
 
-   local damage = prism.actions.Damage(kicked, 1)
+   local damageamount = self.owner:get(prism.components.Attacker).damage
+   local damage = prism.actions.Damage(kicked, damageamount)
    if level:canPerform(damage) then
       level:perform(damage)
 
