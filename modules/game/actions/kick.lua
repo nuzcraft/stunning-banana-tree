@@ -42,6 +42,16 @@ function Kick:perform(level, kicked)
       Log.addMessage(kicked, sf("The %s kicks you! %s", ownerName, dmgstr))
       Log.addMessageSensed(level, self, sf("The %s kicks the %s. %s", ownerName, kickName, dmgstr))
    end
+
+   local openContainer = prism.actions.OpenContainer(self.owner, kicked)
+   if level:canPerform(openContainer) then
+      local kickName = Name.lower(kicked)
+      local ownerName = Name.lower(self.owner)
+      Log.addMessage(self.owner, sf("You kick the %s.", kickName))
+      Log.addMessage(kicked, sf("The %s kicks you!", ownerName))
+      Log.addMessageSensed(level, self, sf("The %s kicks the %s.", ownerName, kickName))
+      level:perform(openContainer)
+   end
 end
 
 return Kick

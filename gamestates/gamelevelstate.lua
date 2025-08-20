@@ -29,6 +29,7 @@ function GameLevelState:handleMessage(message)
 
    if prism.messages.Lose:is(message) then self.manager:enter(GameOverState(self.display)) end
    if prism.messages.Descend:is(message) then
+      --- @diagnostic disable-next-line: undefined-field
       self.manager:enter(GameLevelState(self.display, Game:generateNextFloor(message.descender), Game:getLevelSeed()))
    end
 end
@@ -56,6 +57,9 @@ function GameLevelState:draw(primary, secondary)
    if health then self.display:putString(1, 1, "HP:" .. health.hp .. "/" .. health:getMaxHP()) end
    self.display:putString(1, 2, "Depth: " .. Game.depth)
    self.display:putString(-1, 2, "Turns: " .. Game.turns, nil, nil, nil, "right", self.display.width)
+   local kickmodeColor = ORANGE
+   if Game.kickmode == "Stomping" then kickmodeColor = YELLOW end
+   self.display:putString(1, 3, Game.kickmode, kickmodeColor)
 
    local log = currentActor and currentActor:get(prism.components.Log)
    if log then
@@ -122,19 +126,19 @@ function GameLevelState:keypressed(key, scancode)
          return
       end
 
-      local openable = self.level:query(prism.components.Container):at(destination:decompose()):first()
-      local openContainer = prism.actions.OpenContainer(owner, openable)
-      if self.level:canPerform(openContainer) then
-         decision:setAction(openContainer)
-         Game.turns = Game.turns + 1
-         return
-      end
-
       local target = self.level:query():at(destination:decompose()):first()
-      local kick = prism.actions.Kick(owner, target)
-      if self.level:canPerform(kick) then
-         decision:setAction(kick)
-         Game.turns = Game.turns + 1
+      if Game.kickmode == "Kicking" then
+         local kick = prism.actions.Kick(owner, target)
+         if self.level:canPerform(kick) then
+            decision:setAction(kick)
+            Game.turns = Game.turns + 1
+         end
+      else
+         local stomp = prism.actions.Stomp(owner, target)
+         if self.level:canPerform(stomp) then
+            decision:setAction(stomp)
+            Game.turns = Game.turns + 1
+         end
       end
    end
 
@@ -153,6 +157,17 @@ function GameLevelState:keypressed(key, scancode)
          decision:setAction(pickup)
          return
       end
+   end
+
+   if action == "switch-kickmode" then
+      if Game.kickmode == "Kicking" then
+         Game.kickmode = "Stomping"
+      else
+         Game.kickmode = "Kicking"
+      end
+
+      prism.components.Log.addMessage(owner, "I'm in a " .. string.lower(Game.kickmode) .. " mood!")
+      return
    end
 
    -- Handle waiting

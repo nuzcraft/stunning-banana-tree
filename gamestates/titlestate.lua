@@ -45,7 +45,7 @@ function TitleState:draw()
    self.display:putString(
       2,
       midpoint + 18,
-      "Made with Love2D & PrismRL.",
+      "Made with Love2D & PrismRL",
       prism.Color4.DARKGRAY,
       nil,
       nil,
@@ -56,6 +56,16 @@ function TitleState:draw()
       2,
       midpoint + 19,
       "Wanderlust tiles by Kynsmer",
+      prism.Color4.DARKGRAY,
+      nil,
+      nil,
+      "left",
+      self.display.width
+   )
+   self.display:putString(
+      2,
+      midpoint + 20,
+      "Extended from PrismRL 'Kicking Kobolds' project",
       prism.Color4.DARKGRAY,
       nil,
       nil,
