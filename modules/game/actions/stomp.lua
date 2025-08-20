@@ -41,6 +41,16 @@ function Stomp:perform(level, stomped)
       Log.addMessageSensed(level, self, sf("The %s stomps the %s.", ownerName, stompName))
       level:perform(openContainer)
    end
+
+   local consume = prism.actions.Consume(self.owner, stomped)
+   if level:canPerform(consume) then
+      local stompName = Name.lower(stomped)
+      local ownerName = Name.lower(self.owner)
+      Log.addMessage(self.owner, sf("You stomp the %s.", stompName))
+      Log.addMessage(stomped, sf("The %s stomps you!", ownerName))
+      Log.addMessageSensed(level, self, sf("The %s stomps the %s.", ownerName, stompName))
+      level:perform(consume)
+   end
 end
 
 return Stomp
