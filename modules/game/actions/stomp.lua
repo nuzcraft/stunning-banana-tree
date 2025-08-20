@@ -1,0 +1,47 @@
+local StompTarget = prism.Target():with(prism.components.Collider):range(1):sensed()
+local Log = prism.components.Log
+local Name = prism.components.Name
+local sf = string.format
+
+--- @class StompAction : Action
+local Stomp = prism.Action:extend "StompAction"
+Stomp.name = "Stomp"
+Stomp.targets = { StompTarget }
+Stomp.requiredComponents = {
+   prism.components.Controller,
+}
+
+function Stomp:canPerform(level)
+   return true
+end
+
+-- local mask = prism.Collision.createBitmaskFromMovetypes { "fly" }
+
+--- @param level Level
+--- @param stomped Actor
+function Stomp:perform(level, stomped)
+   -- local direction = (kicked:getPosition() - self.owner:getPosition())
+
+   -- for _ = 1, 3 do
+   --    local nextpos = kicked:getPosition() + direction
+   --    if not level:getCellPassable(nextpos.x, nextpos.y, mask) then break end
+   --    if not level:hasActor(kicked) then break end
+   --    level:moveActor(kicked, nextpos)
+   -- end
+
+   local damage = prism.actions.Damage(stomped, 1)
+   if level:canPerform(damage) then
+      level:perform(damage)
+
+      local dmgstr = ""
+      if damage.dealt then dmgstr = sf("Dealing %i damage.", damage.dealt) end
+
+      local stompName = Name.lower(stomped)
+      local ownerName = Name.lower(self.owner)
+      Log.addMessage(self.owner, sf("You stomp the %s. %s", stompName, dmgstr))
+      Log.addMessage(stomped, sf("The %s stomps you! %s", ownerName, dmgstr))
+      Log.addMessageSensed(level, self, sf("The %s stomps the %s. %s", ownerName, stompName, dmgstr))
+   end
+end
+
+return Stomp
