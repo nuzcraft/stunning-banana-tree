@@ -9,6 +9,7 @@ Kick.name = "Kick"
 Kick.targets = { KickTarget }
 Kick.requiredComponents = {
    prism.components.Controller,
+   prism.components.Kicker,
 }
 
 function Kick:canPerform(level)
@@ -21,13 +22,17 @@ local mask = prism.Collision.createBitmaskFromMovetypes { "fly" }
 --- @param kicked Actor
 function Kick:perform(level, kicked)
    local direction = (kicked:getPosition() - self.owner:getPosition())
-
-   for _ = 1, 3 do
+   local distance = self.owner:get(prism.components.Kicker).distance
+   for _ = 1, distance do
       local nextpos = kicked:getPosition() + direction
       -- TODO: maybe move this into a knockback action
       local target = level:query():at(nextpos:decompose()):first()
       local kick = prism.actions.Kick(kicked, target)
-      if level:canPerform(kick) then level:perform(kick) end
+      if level:canPerform(kick) then
+         level:perform(kick)
+         level:moveActor(kicked, nextpos)
+         break
+      end
       if not level:getCellPassable(nextpos.x, nextpos.y, mask) then break end
       if not level:hasActor(kicked) then break end
       level:moveActor(kicked, nextpos)

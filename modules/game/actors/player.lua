@@ -14,5 +14,7 @@ prism.registerActor("Player", function()
          limitCount = 26,
       },
       prism.components.StatusEffects(),
+      prism.components.Attacker(1),
+      prism.components.Kicker(3),
    }
 end)
