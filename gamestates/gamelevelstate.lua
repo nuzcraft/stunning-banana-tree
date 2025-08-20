@@ -137,6 +137,13 @@ function GameLevelState:keypressed(key, scancode)
          decision:setAction(kick)
          Game.turns = Game.turns + 1
       end
+
+      -- local target = self.level:query():at(destination:decompose()):first()
+      -- local stomp = prism.actions.Stomp(owner, target)
+      -- if self.level:canPerform(stomp) then
+      --    decision:setAction(stomp)
+      --    Game.turns = Game.turns + 1
+      -- end
    end
 
    if action == "inventory" then
