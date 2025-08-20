@@ -15,20 +15,9 @@ function Stomp:canPerform(level)
    return true
 end
 
--- local mask = prism.Collision.createBitmaskFromMovetypes { "fly" }
-
 --- @param level Level
 --- @param stomped Actor
 function Stomp:perform(level, stomped)
-   -- local direction = (kicked:getPosition() - self.owner:getPosition())
-
-   -- for _ = 1, 3 do
-   --    local nextpos = kicked:getPosition() + direction
-   --    if not level:getCellPassable(nextpos.x, nextpos.y, mask) then break end
-   --    if not level:hasActor(kicked) then break end
-   --    level:moveActor(kicked, nextpos)
-   -- end
-
    local damage = prism.actions.Damage(stomped, 1)
    if level:canPerform(damage) then
       level:perform(damage)
@@ -41,6 +30,16 @@ function Stomp:perform(level, stomped)
       Log.addMessage(self.owner, sf("You stomp the %s. %s", stompName, dmgstr))
       Log.addMessage(stomped, sf("The %s stomps you! %s", ownerName, dmgstr))
       Log.addMessageSensed(level, self, sf("The %s stomps the %s. %s", ownerName, stompName, dmgstr))
+   end
+
+   local openContainer = prism.actions.OpenContainer(self.owner, stomped)
+   if level:canPerform(openContainer) then
+      local stompName = Name.lower(stomped)
+      local ownerName = Name.lower(self.owner)
+      Log.addMessage(self.owner, sf("You stomp the %s.", stompName))
+      Log.addMessage(stomped, sf("The %s stomps you!", ownerName))
+      Log.addMessageSensed(level, self, sf("The %s stomps the %s.", ownerName, stompName))
+      level:perform(openContainer)
    end
 end
 

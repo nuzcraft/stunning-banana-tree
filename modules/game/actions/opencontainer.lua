@@ -2,7 +2,7 @@ local Log = prism.components.Log
 local Name = prism.components.Name
 local sf = string.format
 
-local OpenContainerTarget = prism.Target():with(prism.components.Container):range(1):sensed()
+local OpenContainerTarget = prism.Target():with(prism.components.Container):sensed()
 
 --- @class OpenContainer : Action
 local OpenContainer = prism.Action:extend "OpenContainer"
@@ -22,8 +22,8 @@ function OpenContainer:perform(level, container)
    end
    level:removeActor(container)
    local containerName = Name.get(container)
-   Log.addMessage(self.owner, sf("You open the %s.", containerName))
-   Log.addMessageSensed(level, self, sf("The %s opens the %s.", Name.get(self.owner), containerName))
+   Log.addMessage(self.owner, sf("You break the %s.", containerName))
+   Log.addMessageSensed(level, self, sf("The %s breaks the %s.", Name.get(self.owner), containerName))
 end
 
 return OpenContainer

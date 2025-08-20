@@ -126,14 +126,6 @@ function GameLevelState:keypressed(key, scancode)
          return
       end
 
-      local openable = self.level:query(prism.components.Container):at(destination:decompose()):first()
-      local openContainer = prism.actions.OpenContainer(owner, openable)
-      if self.level:canPerform(openContainer) then
-         decision:setAction(openContainer)
-         Game.turns = Game.turns + 1
-         return
-      end
-
       local target = self.level:query():at(destination:decompose()):first()
       if Game.kickmode == "Kicking" then
          local kick = prism.actions.Kick(owner, target)
