@@ -3,6 +3,7 @@ local levelgen = require "levelgen"
 --- @class Game : Object
 --- @field depth integer
 --- @field rng RNG
+--- @field turns integer
 --- @overload fun(seed: string): Game
 local Game = prism.Object:extend("Game")
 
@@ -10,6 +11,7 @@ local Game = prism.Object:extend("Game")
 function Game:__new(seed)
    self.depth = 0
    self.rng = prism.RNG(seed)
+   self.turns = 0
 end
 
 --- @return string

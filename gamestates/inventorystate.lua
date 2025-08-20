@@ -29,7 +29,7 @@ end
 function InventoryState:draw()
    self.previousState:draw()
    self.display:clear()
-   self.display:putString(1, 1, "Inventory", nil, nil, 2, "right")
+   self.display:putString(1, 4, "Inventory", nil, nil, 2, "right")
 
    for i, actor in ipairs(self.items) do
       local name = actor:getName()
@@ -39,7 +39,7 @@ function InventoryState:draw()
       local countstr = ""
       if item.stackCount and item.stackCount > 1 then countstr = ("%sx "):format(item.stackCount) end
       local itemstr = ("[%s] %s%s"):format(letter, countstr, name)
-      self.display:putString(1, 1 + i, itemstr, nil, nil, 2, "right")
+      self.display:putString(1, 4 + i, itemstr, nil, nil, 2, "right")
    end
    self.display:draw()
 end
