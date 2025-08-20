@@ -29,6 +29,7 @@ function GameLevelState:handleMessage(message)
 
    if prism.messages.Lose:is(message) then self.manager:enter(GameOverState(self.display)) end
    if prism.messages.Descend:is(message) then
+      --- @diagnostic disable-next-line: undefined-field
       self.manager:enter(GameLevelState(self.display, Game:generateNextFloor(message.descender), Game:getLevelSeed()))
    end
 end
