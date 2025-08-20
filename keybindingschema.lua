@@ -14,4 +14,5 @@ return spectrum.Keybinding {
    { key = "backspace", action = "return", description = "Moves back up a level in a substate." },
    { key = "p", action = "pickup", description = "Picks up an inventory item." },
    { key = "space", action = "select", description = "Selects a target." },
+   { key = "escape", mode = "title", action = "quit", description = "Quits the game." },
 }

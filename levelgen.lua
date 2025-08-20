@@ -95,7 +95,6 @@ return function(rng, player, width, height)
    -- set alternate cells
    for x = 1, width do
       for y = 1, height do
-         local pitalt = prism.cells.PitAlt
          if builder:get(x, y):getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
             builder:get(x, y):give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
          end
