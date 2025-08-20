@@ -12,5 +12,6 @@ prism.registerActor("VitalityPotion", function()
             },
          },
       },
+      prism.components.Collider(),
    }
 end)
