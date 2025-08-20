@@ -24,6 +24,10 @@ function Kick:perform(level, kicked)
 
    for _ = 1, 3 do
       local nextpos = kicked:getPosition() + direction
+      -- TODO: maybe move this into a knockback action
+      local target = level:query():at(nextpos:decompose()):first()
+      local kick = prism.actions.Kick(kicked, target)
+      if level:canPerform(kick) then level:perform(kick) end
       if not level:getCellPassable(nextpos.x, nextpos.y, mask) then break end
       if not level:hasActor(kicked) then break end
       level:moveActor(kicked, nextpos)
