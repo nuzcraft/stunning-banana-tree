@@ -55,6 +55,7 @@ function GameLevelState:draw(primary, secondary)
    local health = currentActor and currentActor:get(prism.components.Health)
    if health then self.display:putString(1, 1, "HP:" .. health.hp .. "/" .. health:getMaxHP()) end
    self.display:putString(1, 2, "Depth: " .. Game.depth)
+   self.display:putString(-1, 2, "Turns: " .. Game.turns, nil, nil, nil, "right", self.display.width)
 
    local log = currentActor and currentActor:get(prism.components.Log)
    if log then
@@ -117,6 +118,7 @@ function GameLevelState:keypressed(key, scancode)
       local move = prism.actions.Move(owner, destination)
       if self.level:canPerform(move) then
          decision:setAction(move)
+         Game.turns = Game.turns + 1
          return
       end
 
@@ -124,12 +126,16 @@ function GameLevelState:keypressed(key, scancode)
       local openContainer = prism.actions.OpenContainer(owner, openable)
       if self.level:canPerform(openContainer) then
          decision:setAction(openContainer)
+         Game.turns = Game.turns + 1
          return
       end
 
       local target = self.level:query():at(destination:decompose()):first()
       local kick = prism.actions.Kick(owner, target)
-      if self.level:canPerform(kick) then decision:setAction(kick) end
+      if self.level:canPerform(kick) then
+         decision:setAction(kick)
+         Game.turns = Game.turns + 1
+      end
    end
 
    if action == "inventory" then
@@ -150,7 +156,10 @@ function GameLevelState:keypressed(key, scancode)
    end
 
    -- Handle waiting
-   if action == "wait" then decision:setAction(prism.actions.Wait(self.decision.actor)) end
+   if action == "wait" then
+      decision:setAction(prism.actions.Wait(self.decision.actor))
+      Game.turns = Game.turns + 1
+   end
 end
 
 return GameLevelState
