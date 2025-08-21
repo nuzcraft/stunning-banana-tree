@@ -19,36 +19,32 @@ end
 --- @param stomped Actor
 function Stomp:perform(level, stomped)
    local damage = prism.actions.Damage(stomped, 1)
+   local stompstr = sf("You stomp the %s.", Name.lower(stomped))
+   local stompstr2 = sf("The %s stomps you!", Name.lower(self.owner))
+   local stompstr3 = sf("The %s stomps the %s.", Name.lower(self.owner), Name.lower(stomped))
+   local dmgstr = ""
+   local deadstr = ""
    if level:canPerform(damage) then
       level:perform(damage)
-
-      local dmgstr = ""
-      if damage.dealt then dmgstr = sf("Dealing %i damage.", damage.dealt) end
-
-      local stompName = Name.lower(stomped)
-      local ownerName = Name.lower(self.owner)
-      Log.addMessage(self.owner, sf("You stomp the %s. %s", stompName, dmgstr))
-      Log.addMessage(stomped, sf("The %s stomps you! %s", ownerName, dmgstr))
-      Log.addMessageSensed(level, self, sf("The %s stomps the %s. %s", ownerName, stompName, dmgstr))
+      if damage.dealt then dmgstr = sf(" Dealing %i damage.", damage.dealt) end
+      if damage.fatal then deadstr = " It died." end
    end
+
+   Log.addMessage(self.owner, stompstr .. dmgstr .. deadstr)
+   Log.addMessage(stomped, stompstr2 .. dmgstr .. deadstr)
+   Log.addMessageSensed(level, self, stompstr3 .. dmgstr .. deadstr)
 
    local openContainer = prism.actions.OpenContainer(self.owner, stomped)
-   if level:canPerform(openContainer) then
-      local stompName = Name.lower(stomped)
-      local ownerName = Name.lower(self.owner)
-      Log.addMessage(self.owner, sf("You stomp the %s.", stompName))
-      Log.addMessage(stomped, sf("The %s stomps you!", ownerName))
-      Log.addMessageSensed(level, self, sf("The %s stomps the %s.", ownerName, stompName))
-      level:perform(openContainer)
-   end
+   if level:canPerform(openContainer) then level:perform(openContainer) end
 
    local consume = prism.actions.Consume(self.owner, stomped)
    if level:canPerform(consume) then
-      local stompName = Name.lower(stomped)
-      local ownerName = Name.lower(self.owner)
-      Log.addMessage(self.owner, sf("You stomp the %s.", stompName))
-      Log.addMessage(stomped, sf("The %s stomps you!", ownerName))
-      Log.addMessageSensed(level, self, sf("The %s stomps the %s.", ownerName, stompName))
+      Log.addMessage(self.owner, sf("The %s explodes. You feel better.", Name.lower(stomped)))
+      Log.addMessageSensed(
+         level,
+         consume,
+         sf("The %s explodes. The %s looks refreshed.", Name.lower(stomped), Name.lower(self.owner))
+      )
       level:perform(consume)
    end
 end
