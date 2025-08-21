@@ -30,6 +30,8 @@ function Stomp:perform(level, stomped)
       if damage.fatal then deadstr = " It died." end
    end
 
+   if Name.get(self.owner) == "Player" then Game.stats.numStomps = Game.stats.numStomps + 1 end
+
    Log.addMessage(self.owner, stompstr .. dmgstr .. deadstr)
    Log.addMessage(stomped, stompstr2 .. dmgstr .. deadstr)
    Log.addMessageSensed(level, self, stompstr3 .. dmgstr .. deadstr)

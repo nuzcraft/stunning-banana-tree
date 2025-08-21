@@ -19,6 +19,8 @@ function Die:perform(level)
       end
    end
 
+   if Name.get(self.owner) == "Kobold" then Game.stats.koboldsKilled = Game.stats.koboldsKilled + 1 end
+
    level:removeActor(self.owner)
 
    if not level:query(prism.components.PlayerController):first() then level:yield(prism.messages.Lose()) end
