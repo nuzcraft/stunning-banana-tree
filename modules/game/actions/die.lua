@@ -1,3 +1,6 @@
+local Log = prism.components.Log
+local Name = prism.components.Name
+
 --- @class Die : Action
 --- @overload fun(owner: Actor): Die
 local Die = prism.Action:extend("Die")

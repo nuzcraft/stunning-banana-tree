@@ -26,6 +26,12 @@ function Kick:perform(level, kicked)
    local distance = self.owner:get(prism.components.Kicker).distance
    local knockback
    KnockbackAction = nil
+   local kickstr = sf("You kick the %s.", Name.lower(kicked))
+   local kickstr2 = sf("The %s kicks you!", Name.lower(self.owner))
+   local kickstr3 = sf("The %s kicks the %s.", Name.lower(self.owner), Name.lower(kicked))
+   local dmgstr = ""
+   local deadstr = ""
+   local fallstr = ""
    for _ = 1, distance do
       local nextpos = kicked:getPosition() + direction
       local target = level:query():at(nextpos:decompose()):first()
@@ -33,33 +39,25 @@ function Kick:perform(level, kicked)
       if not level:getCellPassable(nextpos.x, nextpos.y, mask) then break end
       if not level:hasActor(kicked) then break end
       level:moveActor(kicked, nextpos)
+      if not level:hasActor(kicked) then fallstr = " It falls into the pit." end
    end
 
    local damageamount = self.owner:get(prism.components.Attacker).damage
    local damage = prism.actions.Damage(kicked, damageamount)
    if level:canPerform(damage) then
       level:perform(damage)
-
-      local dmgstr = ""
-      if damage.dealt then dmgstr = sf("Dealing %i damage.", damage.dealt) end
-
-      local kickName = Name.lower(kicked)
-      local ownerName = Name.lower(self.owner)
-      Log.addMessage(self.owner, sf("You kick the %s. %s", kickName, dmgstr))
-      Log.addMessage(kicked, sf("The %s kicks you! %s", ownerName, dmgstr))
-      Log.addMessageSensed(level, self, sf("The %s kicks the %s. %s", ownerName, kickName, dmgstr))
+      if damage.dealt then dmgstr = sf(" Dealing %i damage.", damage.dealt) end
+      if damage.fatal then deadstr = " It died." end
    end
+
+   Log.addMessage(self.owner, kickstr .. dmgstr .. deadstr .. fallstr)
+   Log.addMessage(kicked, kickstr2 .. dmgstr .. deadstr .. fallstr)
+   Log.addMessageSensed(level, self, kickstr3 .. dmgstr .. deadstr .. fallstr)
 
    local openContainer = prism.actions.OpenContainer(self.owner, kicked)
-   if level:canPerform(openContainer) then
-      local kickName = Name.lower(kicked)
-      local ownerName = Name.lower(self.owner)
-      Log.addMessage(self.owner, sf("You kick the %s.", kickName))
-      Log.addMessage(kicked, sf("The %s kicks you!", ownerName))
-      Log.addMessageSensed(level, self, sf("The %s kicks the %s.", ownerName, kickName))
-      level:perform(openContainer)
-   end
+   if level:canPerform(openContainer) then level:perform(openContainer) end
 
+   -- handle knockbacks at the end
    if level:canPerform(knockback) then level:perform(knockback) end
 end
 

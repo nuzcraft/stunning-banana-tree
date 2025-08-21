@@ -18,33 +18,37 @@ local mask = prism.Collision.createBitmaskFromMovetypes { "fly" }
 --- @param knockedback Actor
 function Knockback:perform(level, knockedback)
    local direction = (knockedback:getPosition() - self.owner:getPosition())
+   local knockback
+   KnockbackAction = nil
+   local kbstr = sf("You knock back the %s.", Name.lower(knockedback))
+   local kbstr2 = sf("The %s knocks you back!", Name.lower(self.owner))
+   local kbstr3 = sf("The %s knocks back the %s.", Name.lower(self.owner), Name.lower(knockedback))
+   local dmgstr = ""
+   local deadstr = ""
+   local fallstr = ""
    for _ = 1, 2 do
       local nextpos = knockedback:getPosition() + direction
       local target = level:query():at(nextpos:decompose()):first()
-      local knockback = prism.actions.Knockback(knockedback, target)
-      if level:canPerform(knockback) then
-         level:perform(knockback)
-         level:moveActor(knockedback, nextpos)
-         break
-      end
+      knockback = prism.actions.Knockback(knockedback, target)
       if not level:getCellPassable(nextpos.x, nextpos.y, mask) then break end
       if not level:hasActor(knockedback) then break end
       level:moveActor(knockedback, nextpos)
+      if not level:hasActor(knockedback) then fallstr = " It falls into the pit." end
    end
 
    local damage = prism.actions.Damage(knockedback, 1)
    if level:canPerform(damage) then
       level:perform(damage)
-
-      local dmgstr = ""
-      if damage.dealt then dmgstr = sf("Dealing %i damage.", damage.dealt) end
-
-      local knockedbackName = Name.lower(knockedback)
-      local ownerName = Name.lower(self.owner)
-      Log.addMessage(self.owner, sf("You knockback the %s. %s", knockedbackName, dmgstr))
-      Log.addMessage(knockedback, sf("The %s knocks you back! %s", ownerName, dmgstr))
-      Log.addMessageSensed(level, self, sf("The %s knocks back the %s. %s", ownerName, knockedbackName, dmgstr))
+      if damage.dealt then dmgstr = sf(" Dealing %i damage.", damage.dealt) end
+      if damage.fatal then deadstr = " It died." end
    end
+
+   Log.addMessage(self.owner, kbstr .. dmgstr .. deadstr .. fallstr)
+   Log.addMessage(knockedback, kbstr2 .. dmgstr .. deadstr .. fallstr)
+   Log.addMessageSensed(level, self, kbstr3 .. dmgstr .. deadstr .. fallstr)
+
+   -- handle more knockbacks at the end
+   if level:canPerform(knockback) then level:perform(knockback) end
 end
 
 return Knockback
