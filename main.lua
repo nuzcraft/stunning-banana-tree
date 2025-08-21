@@ -15,8 +15,8 @@ Game = require("game")
 
 -- Grab our level state and sprite atlas.
 local GameLevelState = require "gamestates.gamelevelstate"
--- local TitleState = require "gamestates.titlestate"
-local TitleState = require "gamestates.gameoverstate"
+local TitleState = require "gamestates.titlestate"
+-- local TitleState = require "gamestates.gameoverstate" -- for testing
 
 -- Load a sprite atlas and configure the terminal-style display,
 local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/wanderlust_16x16.png", 16, 16)
