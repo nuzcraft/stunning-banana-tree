@@ -24,8 +24,7 @@ local mask = prism.Collision.createBitmaskFromMovetypes { "fly" }
 function Kick:perform(level, kicked)
    local direction = (kicked:getPosition() - self.owner:getPosition())
    local distance = self.owner:get(prism.components.Kicker).distance
-   local knockback
-   KnockbackAction = nil
+   local secondaryTarget = nil
    local kickstr = sf("You kick the %s.", Name.lower(kicked))
    local kickstr2 = sf("The %s kicks you!", Name.lower(self.owner))
    local kickstr3 = sf("The %s kicks the %s.", Name.lower(self.owner), Name.lower(kicked))
@@ -34,8 +33,7 @@ function Kick:perform(level, kicked)
    local fallstr = ""
    for _ = 1, distance do
       local nextpos = kicked:getPosition() + direction
-      local target = level:query():at(nextpos:decompose()):first()
-      knockback = prism.actions.Knockback(kicked, target)
+      secondaryTarget = level:query():at(nextpos:decompose()):first()
       if not level:getCellPassable(nextpos.x, nextpos.y, mask) then break end
       if not level:hasActor(kicked) then break end
       level:moveActor(kicked, nextpos)
@@ -57,8 +55,21 @@ function Kick:perform(level, kicked)
    local openContainer = prism.actions.OpenContainer(self.owner, kicked)
    if level:canPerform(openContainer) then level:perform(openContainer) end
 
-   -- handle knockbacks at the end
+   local knockback = prism.actions.Knockback(kicked, secondaryTarget)
    if level:canPerform(knockback) then level:perform(knockback) end
+
+   if secondaryTarget then
+      local consume = prism.actions.Consume(secondaryTarget, kicked)
+      if level:canPerform(consume) then
+         Log.addMessage(kicked, sf("The %s explodes. You feel better.", Name.lower(secondaryTarget)))
+         Log.addMessageSensed(
+            level,
+            consume,
+            sf("The %s explodes. The %s looks refreshed.", Name.lower(kicked), Name.lower(secondaryTarget))
+         )
+         level:perform(consume)
+      end
+   end
 end
 
 return Kick
