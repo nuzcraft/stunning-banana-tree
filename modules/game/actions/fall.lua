@@ -1,8 +1,11 @@
+local Name = prism.components.Name
+
 --- @class Fall : Action
 --- @overload fun(owner: Actor): Fall
 local Fall = prism.Action:extend "Fall"
 
 function Fall:perform(level)
+   if Name.get(self.owner) == "Kobold" then Game.stats.koboldsPitted = Game.stats.koboldsPitted + 1 end
    level:perform(prism.actions.Die(self.owner))
 end
 

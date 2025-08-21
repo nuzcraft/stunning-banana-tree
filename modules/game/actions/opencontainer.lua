@@ -24,6 +24,7 @@ function OpenContainer:perform(level, container)
    local containerName = Name.get(container)
    Log.addMessage(self.owner, sf("You break the %s.", containerName))
    Log.addMessageSensed(level, self, sf("The %s breaks the %s.", Name.get(self.owner), containerName))
+   if Name.get(self.owner) == "Player" then Game.stats.chestsOpened = Game.stats.chestsOpened + 1 end
 end
 
 return OpenContainer

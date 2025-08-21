@@ -1,4 +1,5 @@
 local StatusEffects = prism.components.StatusEffects
+local Name = prism.components.Name
 
 --- @class HealthModifier : StatusEffectsModifier
 --- @field maxHP integer
@@ -30,7 +31,9 @@ end
 
 --- @param amount integer
 function Health:heal(amount)
-   self.hp = math.min(self.hp + amount, self:getMaxHP())
+   local amt = math.min(self.hp + amount, self:getMaxHP())
+   if Name.get(self.owner) == "Player" then Game.stats.healthHealed = Game.stats.healthHealed + (amt - self.hp) end
+   self.hp = amt
 end
 
 function Health:enforceBounds()

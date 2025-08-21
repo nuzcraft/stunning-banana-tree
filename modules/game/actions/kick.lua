@@ -48,6 +48,8 @@ function Kick:perform(level, kicked)
       if damage.fatal then deadstr = " It died." end
    end
 
+   if Name.get(self.owner) == "Player" then Game.stats.numKicks = Game.stats.numKicks + 1 end
+
    Log.addMessage(self.owner, kickstr .. dmgstr .. deadstr .. fallstr)
    Log.addMessage(kicked, kickstr2 .. dmgstr .. deadstr .. fallstr)
    Log.addMessageSensed(level, self, kickstr3 .. dmgstr .. deadstr .. fallstr)

@@ -110,7 +110,7 @@ function GameOverState:draw()
    self.display:putString(
       0,
       midpoint + 3,
-      "Damage Taken: " .. Game.stats.chestsOpened,
+      "Damage Taken: " .. Game.stats.damageTaken,
       prism.Color4.DARKGRAY,
       nil,
       nil,
