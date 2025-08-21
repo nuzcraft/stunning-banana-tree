@@ -21,9 +21,9 @@ function Consume:perform(level, consumable)
    if health and consumablecomponent.healing then health:heal(consumablecomponent.healing) end
 
    level:removeActor(consumable)
-   local consumableName = Name.get(consumable)
-   Log.addMessage(self.owner, sf("You consume the %s.", consumableName))
-   Log.addMessageSensed(level, self, sf("The %s consumes the %s.", Name.get(self.owner), consumableName))
+   -- local consumableName = Name.get(consumable)
+   -- Log.addMessage(self.owner, sf("You consume the %s.", consumableName))
+   -- Log.addMessageSensed(level, self, sf("The %s consumes the %s.", Name.get(self.owner), consumableName))
 end
 
 return Consume

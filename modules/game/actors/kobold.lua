@@ -10,6 +10,7 @@ prism.registerActor("Kobold", function()
       prism.components.KoboldController(),
       prism.components.Health(3),
       prism.components.Attacker(1),
+      prism.components.Kicker(2),
       prism.components.DropTable {
          chance = 0.3,
          entry = prism.actors.MeatBrick,

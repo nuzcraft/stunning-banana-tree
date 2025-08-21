@@ -166,7 +166,7 @@ function GameLevelState:keypressed(key, scancode)
          Game.kickmode = "Kicking"
       end
 
-      prism.components.Log.addMessage(owner, "I'm in a " .. string.lower(Game.kickmode) .. " mood!")
+      prism.components.Log.addMessage(owner, "You're in a " .. string.lower(Game.kickmode) .. " mood!")
       return
    end
 
