@@ -1,6 +1,14 @@
 local chestloot = require "loot.chest"
 local PARTITIONS = 3
 
+--- @param t table
+function ShuffleInPlace(t)
+   for i = #t, 2, -1 do
+      local j = math.random(i)
+      t[i], t[j] = t[j], t[i]
+   end
+end
+
 --- @param rng RNG
 --- @param player Actor
 --- @width integer
@@ -12,7 +20,8 @@ function ClassicLevel(rng, player, width, height, depth)
    for x = 1, width do
       for y = 1, height do
          local noise = love.math.perlinNoise(x / 5 + nox, y / 5 + noy)
-         local cell = noise > 0.5 and prism.cells.Wall or prism.cells.Pit
+         local noise_limit = math.max(0.6 - (depth * 0.02), 0.4)
+         local cell = noise > noise_limit and prism.cells.Wall or prism.cells.Pit
          builder:set(x, y, cell())
       end
    end
@@ -118,7 +127,8 @@ function CircleLevel(rng, player, width, height, depth)
    for x = 1, width do
       for y = 1, height do
          local noise = love.math.perlinNoise(x / 5 + nox, y / 5 + noy)
-         local cell = noise > 0.5 and prism.cells.Wall or prism.cells.Pit
+         local noise_limit = math.max(0.6 - (depth * 0.02), 0.4)
+         local cell = noise > noise_limit and prism.cells.Wall or prism.cells.Pit
          builder:set(x, y, cell())
       end
    end
@@ -168,7 +178,7 @@ function CircleLevel(rng, player, width, height, depth)
 
    -- add pits to the middles
    for _, room in pairs(rooms) do
-      local r = room.ry - 3
+      local r = math.min(room.ry - 2, room.rx - 2)
       builder:drawEllipse(room.cx, room.cy, r, r, prism.cells.Pit)
    end
 
@@ -182,20 +192,18 @@ function CircleLevel(rng, player, width, height, depth)
    builder:addActor(player, playerPos.x, playerPos.y)
 
    for _, room in pairs(rooms) do
+      local sides = {
+         prism.Vector2(room.cx - room.rx + 1, room.cy),
+         prism.Vector2(room.cx + room.rx - 1, room.cy),
+         prism.Vector2(room.cx, room.cy - room.ry + 1),
+         prism.Vector2(room.cx, room.cy + room.ry - 1),
+      }
+      ShuffleInPlace(sides)
       if room ~= startRoom then
-         local rand = rng:random(4)
-         local x = room.cx
-         local y = room.cy
-         if rand == 1 then
-            x = x - room.rx + 1
-         elseif rand == 2 then
-            x = x + room.rx - 1
-         elseif rand == 3 then
-            y = y - room.ry + 1
-         elseif rand == 4 then
-            y = y + room.ry - 1
+         for n = 1, math.min(math.ceil((depth + 1) / 5), 4) do
+            local vec = sides[n]
+            builder:addActor(prism.actors.Kobold(), vec.x, vec.y)
          end
-         builder:addActor(prism.actors.Kobold(), x, y)
       end
    end
 
@@ -219,7 +227,7 @@ function CircleLevel(rng, player, width, height, depth)
    builder:addActor(prism.actors.Stairs(), randCorner.x, randCorner.y)
 
    local chestRoom = availableRooms[rng:random(1, #availableRooms)]
-   local center = prism.Vector2(chestRoom.cx + chestRoom.rx - 2, chestRoom.cy)
+   local center = prism.Vector2(chestRoom.cx + chestRoom.rx - 1, chestRoom.cy - 1)
    local drops = prism.components.DropTable(chestloot):getDrops(rng)
    builder:addActor(prism.actors.Chest(drops), math.floor(center.x), math.floor(center.y))
 
