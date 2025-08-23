@@ -1,4 +1,4 @@
-local levelgen = require "levelgen"
+require "levelgen"
 
 --- @class GameStats
 --- @field numKicks integer
@@ -49,7 +49,7 @@ end
 function Game:generateNextFloor(player)
    self.depth = self.depth + 1
    local genRNG = prism.RNG(self:getLevelSeed())
-   return levelgen(genRNG, player, 60, 30)
+   return GetLevel(genRNG, player, 60, 30, self.depth)
 end
 
 return Game(tostring(os.time()))

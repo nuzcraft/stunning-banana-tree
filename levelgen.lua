@@ -5,7 +5,8 @@ local PARTITIONS = 3
 --- @param player Actor
 --- @width integer
 --- @height integer
-return function(rng, player, width, height)
+--- @depth integer
+function ClassicLevel(rng, player, width, height, depth)
    local builder = prism.MapBuilder(prism.cells.Wall)
    local nox, noy = rng:random(1, 10000), rng:random(1, 10000)
    for x = 1, width do
@@ -97,9 +98,154 @@ return function(rng, player, width, height)
       for y = 1, height do
          if builder:get(x, y):getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
             builder:get(x, y):give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
+            -- elseif builder:get(x, y):getName() == "Wall" and builder:get(x, y + 1):getName() == "Floor" then
+            --    builder:get(x, y):give(prism.components.Drawable({ char = "=" }))
          end
       end
    end
 
    return builder
+end
+
+--- @param rng RNG
+--- @param player Actor
+--- @width integer
+--- @height integer
+--- @depth integer
+function CircleLevel(rng, player, width, height, depth)
+   local builder = prism.MapBuilder(prism.cells.Wall)
+   local nox, noy = rng:random(1, 10000), rng:random(1, 10000)
+   for x = 1, width do
+      for y = 1, height do
+         local noise = love.math.perlinNoise(x / 5 + nox, y / 5 + noy)
+         local cell = noise > 0.5 and prism.cells.Wall or prism.cells.Pit
+         builder:set(x, y, cell())
+      end
+   end
+
+   -- create rooms in each of the partitions
+   --- @type table<number, table>
+   local rooms = {}
+   local missing = prism.Vector2(rng:random(0, PARTITIONS - 1), rng:random(0, PARTITIONS - 1))
+   local pw, ph = math.floor(width / PARTITIONS), math.floor(height / PARTITIONS)
+   local minrx, minry = math.floor(pw / 6), math.floor(ph / 3)
+   local maxrx, maxry = math.floor((pw - 2) / 2), math.floor((ph - 2) / 2)
+   for px = 0, PARTITIONS - 1 do
+      for py = 0, PARTITIONS - 1 do
+         if not missing:equals(px, py) then
+            local rx = rng:random(minrx, maxrx)
+            local ry = rng:random(minry, maxry)
+            local x = (px * pw + 1) + math.floor(pw / 2)
+            local y = (py * ph + 1) + math.floor(ph / 2)
+            local roomEllipse = { cx = x, cy = y, rx = rx, ry = ry }
+            rooms[prism.Vector2._hash(px, py)] = roomEllipse
+            builder:drawEllipse(x, y, rx, ry, prism.cells.Floor)
+         end
+      end
+   end
+   -- helper function to connect two points with an L shaped hallway
+   --- @param a table
+   --- @param b table
+   local function createLShapedHallway(a, b)
+      if not a or not b then return end
+      local ax, ay = a.cx, a.cy
+      local bx, by = b.cx, b.cy
+      -- randomly choose one of two l shaped tunnel patterns
+      if rng:random() > 0.5 then
+         builder:drawLine(ax, ay, bx, ay, prism.cells.Floor)
+         builder:drawLine(bx, ay, bx, by, prism.cells.Floor)
+      else
+         builder:drawLine(ax, ay, ax, by, prism.cells.Floor)
+         builder:drawLine(ax, by, bx, by, prism.cells.Floor)
+      end
+   end
+
+   for hash, currentRoom in pairs(rooms) do
+      local px, py = prism.Vector2._unhash(hash)
+      createLShapedHallway(currentRoom, rooms[prism.Vector2._hash(px + 1, py)])
+      createLShapedHallway(currentRoom, rooms[prism.Vector2._hash(px, py + 1)])
+   end
+
+   -- add pits to the middles
+   for _, room in pairs(rooms) do
+      local r = room.ry - 3
+      builder:drawEllipse(room.cx, room.cy, r, r, prism.cells.Pit)
+   end
+
+   local startRoom
+   while not startRoom do
+      local x, y = rng:random(0, PARTITIONS - 1), rng:random(0, PARTITIONS - 1)
+      startRoom = rooms[prism.Vector2._hash(x, y)]
+   end
+
+   local playerPos = prism.Vector2(startRoom.cx - startRoom.rx + 1, startRoom.cy)
+   builder:addActor(player, playerPos.x, playerPos.y)
+
+   for _, room in pairs(rooms) do
+      if room ~= startRoom then
+         local rand = rng:random(4)
+         local x = room.cx
+         local y = room.cy
+         if rand == 1 then
+            x = x - room.rx + 1
+         elseif rand == 2 then
+            x = x + room.rx - 1
+         elseif rand == 3 then
+            y = y - room.ry + 1
+         elseif rand == 4 then
+            y = y + room.ry - 1
+         end
+         builder:addActor(prism.actors.Kobold(), x, y)
+      end
+   end
+
+   builder:addPadding(1, prism.cells.Wall)
+
+   --- @type table[]
+   local availableRooms = {}
+   for _, room in pairs(rooms) do
+      if room ~= startRoom then table.insert(availableRooms, room) end
+   end
+
+   local stairRoom = availableRooms[rng:random(1, #availableRooms)]
+   -- local corners = stairRoom:toCorners()
+   local corners = {
+      prism.Vector2(stairRoom.cx - stairRoom.rx + 1, stairRoom.cy + 1),
+      prism.Vector2(stairRoom.cx + stairRoom.rx - 1, stairRoom.cy + 1),
+      prism.Vector2(stairRoom.cx - stairRoom.rx + 1, stairRoom.cy - 1),
+      prism.Vector2(stairRoom.cx + stairRoom.rx - 1, stairRoom.cy - 1),
+   }
+   local randCorner = corners[rng:random(1, #corners)]
+   builder:addActor(prism.actors.Stairs(), randCorner.x, randCorner.y)
+
+   local chestRoom = availableRooms[rng:random(1, #availableRooms)]
+   local center = prism.Vector2(chestRoom.cx + chestRoom.rx - 2, chestRoom.cy)
+   local drops = prism.components.DropTable(chestloot):getDrops(rng)
+   builder:addActor(prism.actors.Chest(drops), math.floor(center.x), math.floor(center.y))
+
+   -- set alternate cells
+   for x = 1, width do
+      for y = 1, height do
+         if builder:get(x, y):getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
+            builder:get(x, y):give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
+            -- elseif builder:get(x, y):getName() == "Wall" and builder:get(x, y + 1):getName() == "Floor" then
+            --    builder:get(x, y):give(prism.components.Drawable({ char = "=" }))
+         end
+      end
+   end
+
+   return builder
+end
+
+--- @param rng RNG
+--- @param player Actor
+--- @width integer
+--- @height integer
+--- @depth integer
+function GetLevel(rng, player, width, height, depth)
+   if rng:random() < 0.5 then
+      return ClassicLevel(rng, player, width, height, depth)
+   else
+      return CircleLevel(rng, player, width, height, depth)
+   end
 end
