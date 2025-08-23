@@ -78,9 +78,19 @@ function ClassicLevel(rng, player, width, height, depth)
    builder:addActor(player, playerPos.x, playerPos.y)
 
    for _, room in pairs(rooms) do
+      local cx, cy = room:center():floor():decompose()
+      local sides = {
+         prism.Vector2(cx - 1, cy - 1),
+         prism.Vector2(cx - 1, cy + 1),
+         prism.Vector2(cx + 1, cy - 1),
+         prism.Vector2(cx + 1, cy - 1),
+      }
+      ShuffleInPlace(sides)
       if room ~= startRoom then
-         local cx, cy = room:center():floor():decompose()
-         builder:addActor(prism.actors.Kobold(), cx, cy)
+         for n = 1, math.min(math.ceil((depth + 1) / 5), 4) do
+            local vec = sides[n]
+            builder:addActor(prism.actors.Kobold(), vec.x, vec.y)
+         end
       end
    end
 
