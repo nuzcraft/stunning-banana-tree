@@ -142,22 +142,22 @@ function GameLevelState:keypressed(key, scancode)
       end
    end
 
-   if action == "inventory" then
-      local inventory = owner:get(prism.components.Inventory)
-      if inventory then
-         local inventoryState = InventoryState(self.display, decision, self.level, inventory)
-         self.manager:push(inventoryState)
-      end
-   end
+   -- if action == "inventory" then
+   --    local inventory = owner:get(prism.components.Inventory)
+   --    if inventory then
+   --       local inventoryState = InventoryState(self.display, decision, self.level, inventory)
+   --       self.manager:push(inventoryState)
+   --    end
+   -- end
 
-   if action == "pickup" then
-      local target = self.level:query(prism.components.Item):at(owner:getPosition():decompose()):first()
-      local pickup = prism.actions.Pickup(owner, target)
-      if self.level:canPerform(pickup) then
-         decision:setAction(pickup)
-         return
-      end
-   end
+   -- if action == "pickup" then
+   --    local target = self.level:query(prism.components.Item):at(owner:getPosition():decompose()):first()
+   --    local pickup = prism.actions.Pickup(owner, target)
+   --    if self.level:canPerform(pickup) then
+   --       decision:setAction(pickup)
+   --       return
+   --    end
+   -- end
 
    if action == "switch-kickmode" then
       if Game.kickmode == "Kicking" then
