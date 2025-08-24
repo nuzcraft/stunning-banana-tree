@@ -112,13 +112,35 @@ function ClassicLevel(rng, player, width, height, depth)
    local drops = prism.components.DropTable(chestloot):getDrops(rng)
    builder:addActor(prism.actors.Chest(drops), math.floor(center.x), math.floor(center.y))
 
+   if depth >= 5 then
+      local chestRoom2 = availableRooms[rng:random(1, #availableRooms)]
+      local center2 = chestRoom2:center()
+      local drops2 = prism.components.DropTable(chestloot):getDrops(rng)
+      builder:addActor(prism.actors.Chest(drops2), math.floor(center2.x), math.floor(center2.y))
+   end
+   if depth >= 10 then
+      local chestRoom2 = availableRooms[rng:random(1, #availableRooms)]
+      local center2 = chestRoom2:center()
+      local drops2 = prism.components.DropTable(chestloot):getDrops(rng)
+      builder:addActor(prism.actors.Chest(drops2), math.floor(center2.x), math.floor(center2.y))
+   end
+
    -- set alternate cells
-   for x = 1, width do
-      for y = 1, height do
-         if builder:get(x, y):getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
-            builder:get(x, y):give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
+   for x = 0, width + 1 do
+      for y = 0, height + 1 do
+         local cell = builder:get(x, y)
+         if cell:getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
+            cell:give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
             -- elseif builder:get(x, y):getName() == "Wall" and builder:get(x, y + 1):getName() == "Floor" then
             --    builder:get(x, y):give(prism.components.Drawable({ char = "=" }))
+         elseif cell:getName() == "Wall" and depth >= 5 then
+            local drawable = cell:get(prism.components.Drawable)
+            if drawable and depth < 10 then
+               drawable.color = ORANGE
+            else
+               drawable.color = prism.Color4.RED
+            end
+            cell:give(drawable)
          end
       end
    end
@@ -155,11 +177,12 @@ function CircleLevel(rng, player, width, height, depth)
          if not missing:equals(px, py) then
             local rx = rng:random(minrx, maxrx)
             local ry = rng:random(minry, maxry)
+            local r = math.max(rx, ry)
             local x = (px * pw + 1) + math.floor(pw / 2)
             local y = (py * ph + 1) + math.floor(ph / 2)
-            local roomEllipse = { cx = x, cy = y, rx = rx, ry = ry }
+            local roomEllipse = { cx = x, cy = y, rx = r, ry = r }
             rooms[prism.Vector2._hash(px, py)] = roomEllipse
-            builder:drawEllipse(x, y, rx, ry, prism.cells.Floor)
+            builder:drawEllipse(x, y, r, r, prism.cells.Floor)
          end
       end
    end
@@ -188,7 +211,7 @@ function CircleLevel(rng, player, width, height, depth)
 
    -- add pits to the middles
    for _, room in pairs(rooms) do
-      local r = math.min(room.ry - 2, room.rx - 2)
+      local r = math.min(room.ry - 3, room.rx - 3)
       builder:drawEllipse(room.cx, room.cy, r, r, prism.cells.Pit)
    end
 
@@ -241,13 +264,35 @@ function CircleLevel(rng, player, width, height, depth)
    local drops = prism.components.DropTable(chestloot):getDrops(rng)
    builder:addActor(prism.actors.Chest(drops), math.floor(center.x), math.floor(center.y))
 
+   if depth >= 5 then
+      local chestRoom2 = availableRooms[rng:random(1, #availableRooms)]
+      local center2 = prism.Vector2(chestRoom2.cx + chestRoom.rx - 1, chestRoom2.cy - 1)
+      local drops2 = prism.components.DropTable(chestloot):getDrops(rng)
+      builder:addActor(prism.actors.Chest(drops2), math.floor(center2.x), math.floor(center2.y))
+   end
+   if depth >= 10 then
+      local chestRoom2 = availableRooms[rng:random(1, #availableRooms)]
+      local center2 = prism.Vector2(chestRoom2.cx + chestRoom.rx - 1, chestRoom2.cy - 1)
+      local drops2 = prism.components.DropTable(chestloot):getDrops(rng)
+      builder:addActor(prism.actors.Chest(drops2), math.floor(center2.x), math.floor(center2.y))
+   end
+
    -- set alternate cells
-   for x = 1, width do
-      for y = 1, height do
-         if builder:get(x, y):getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
-            builder:get(x, y):give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
+   for x = 0, width + 1 do
+      for y = 0, height + 1 do
+         local cell = builder:get(x, y)
+         if cell:getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
+            cell:give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
             -- elseif builder:get(x, y):getName() == "Wall" and builder:get(x, y + 1):getName() == "Floor" then
             --    builder:get(x, y):give(prism.components.Drawable({ char = "=" }))
+         elseif cell:getName() == "Wall" and depth >= 5 then
+            local drawable = cell:get(prism.components.Drawable)
+            if drawable and depth < 10 then
+               drawable.color = ORANGE
+            else
+               drawable.color = prism.Color4.RED
+            end
+            cell:give(drawable)
          end
       end
    end
