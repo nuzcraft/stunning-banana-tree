@@ -98,7 +98,7 @@ local keybindOffsets = {
 -- the level. This is a similar pattern to the example KoboldController.
 function GameLevelState:keypressed(key, scancode)
    -- handles opening geometer for us
-   spectrum.LevelState.keypressed(self, key, scancode)
+   -- spectrum.LevelState.keypressed(self, key, scancode)
 
    local decision = self.decision
    if not decision then return end
