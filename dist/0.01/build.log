@@ -7,24 +7,24 @@ project mounted at: "D:\Development\LOVE\stunning-banana-tree"
 reading config
 setting options
 target platforms: "windows,macos,linux,steamdeck"
+  identifier: com.nuzcraft.kickingkobolds
   use32bit: false
   developer: nuzcraft
-  libs: table: 0x0264d0cc15b0
-  ignore: table: 0x0264ccd4dd38
-  icon: resources/icon.png
-  version: 0.01
+  config: 
+  libs: table: 0x019d533fe2a8
   love: 12.0
+  icon: resources/icon.png
+  ignore: table: 0x019d533ff018
+  version: 0.01
   output: D:\Development\LOVE\stunning-banana-tree/dist
   name: KickingKobolds
-  config: 
-  identifier: com.nuzcraft.kickingkobolds
-step finished in 0.001s
+step finished in 0.008s
 
 making lovefile
 creating lovefile from: "D:\Development\LOVE\stunning-banana-tree"
-ignoring: ".vscode,bin,definitions,screenshots,.github,.gitattributes,.gitignore,.git,.DS_Store,.vs,.vscode"
+ignoring: ".vscode,bin,definitions,screenshots,dist,.github,.gitattributes,.gitignore,.git,.DS_Store,.vs,.vscode"
 created "output/kickingkobolds_0.01/KickingKobolds.love"
-step finished in 0.835s
+step finished in 0.842s
 
 building windows win64
 getting love src for: "love-12.0-win64.zip"
@@ -34,7 +34,7 @@ setting game metadata
 replacing modified contents
 fuse exe
 built windows win64 successfully
-step finished in 1.481s
+step finished in 1.466s
 
 building macos
 getting love src for: "love-12.0-macos.zip"
@@ -42,7 +42,7 @@ src already cached!
 update plist
 setting game icon
 built macos successfully
-step finished in 4.091s
+step finished in 4.033s
 
 building linux
 getting love src for: "love-12.0-x86_64.AppImage"
@@ -50,7 +50,7 @@ src already cached!
 fuse binary
 writing love.desktop
 built linux successfully
-step finished in 2.454s
+step finished in 2.460s
 
 building steamdeck
 getting love src for: "love-12.0-x86_64.AppImage"
@@ -58,7 +58,7 @@ src already cached!
 fuse binary
 writing love.desktop
 built steamdeck successfully
-step finished in 2.462s
+step finished in 2.409s
 
 finishing build
-build finished in 13.517s
+build finished in 12.997s
