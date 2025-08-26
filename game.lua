@@ -26,6 +26,7 @@ function Game:__new(seed)
    self.rng = prism.RNG(seed)
    self.turns = 0
    self.kickmode = "Kicking"
+   self.xp = 0
    self.stats = {
       numKicks = 0,
       numStomps = 0,
@@ -36,6 +37,7 @@ function Game:__new(seed)
       damageDone = 0,
       damageTaken = 0,
       floorsDescended = 0,
+      xpCollected = 0,
    }
 end
 

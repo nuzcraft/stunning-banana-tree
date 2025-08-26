@@ -7,6 +7,6 @@ prism.registerActor("XP", function()
          color = CYAN,
       }),
       prism.components.Item(),
-      prism.componets.XP(),
+      prism.components.XP(),
    }
 end)
