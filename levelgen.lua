@@ -1,13 +1,6 @@
+require "helper"
 local chestloot = require "loot.chest"
 local PARTITIONS = 3
-
---- @param t table
-function ShuffleInPlace(t)
-   for i = #t, 2, -1 do
-      local j = math.random(i)
-      t[i], t[j] = t[j], t[i]
-   end
-end
 
 --- @param rng RNG
 --- @param player Actor
