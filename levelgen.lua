@@ -137,10 +137,8 @@ end
 
 --- @param rng RNG
 --- @param player Actor
---- @width integer
---- @height integer
 --- @depth integer
-function ClassicLevel(rng, player, width, height, depth)
+function ClassicLevel(rng, player, depth)
    local size_depth = depth
    if size_depth > #SIZE_RECT then size_depth = #SIZE_RECT end
    local width, height = SIZE_RECT[size_depth]:decompose()
@@ -237,10 +235,8 @@ end
 
 --- @param rng RNG
 --- @param player Actor
---- @width integer
---- @height integer
 --- @depth integer
-function CircleLevel(rng, player, width, height, depth)
+function CircleLevel(rng, player, depth)
    local size_depth = depth
    if size_depth > #SIZE_CIRC then size_depth = #SIZE_CIRC end
    local width, height = SIZE_CIRC[size_depth]:decompose()
@@ -354,13 +350,11 @@ end
 
 --- @param rng RNG
 --- @param player Actor
---- @width integer
---- @height integer
 --- @depth integer
-function GetLevel(rng, player, width, height, depth)
+function GetLevel(rng, player, depth)
    if rng:random() < 0.5 then
-      return ClassicLevel(rng, player, width, height, depth)
+      return ClassicLevel(rng, player, depth)
    else
-      return CircleLevel(rng, player, width, height, depth)
+      return CircleLevel(rng, player, depth)
    end
 end
