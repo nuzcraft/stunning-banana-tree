@@ -7,8 +7,10 @@ Collect.targets = { CollectTarget }
 
 function Collect:perform(level, xp)
    level:removeActor(xp)
-   Game.xp = Game.xp + 1
-   Game.stats.xpCollected = Game.stats.xpCollected + 1
+   if self.owner:has(prism.components.PlayerController) then
+      Game.xp = Game.xp + 1
+      Game.stats.xpCollected = Game.stats.xpCollected + 1
+   end
 end
 
 return Collect
