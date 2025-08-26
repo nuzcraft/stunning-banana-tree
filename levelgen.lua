@@ -1,6 +1,34 @@
 require "helper"
 local chestloot = require "loot.chest"
-local PARTITIONS = 3
+--- @type table<integer>
+local PARTITIONS = { 3, 3, 3, 4, 4, 4, 4, 4, 5, 5 }
+
+--- @type table<Vector2>
+local SIZE_RECT = {
+   prism.Vector2(40, 20),
+   prism.Vector2(50, 30),
+   prism.Vector2(50, 30),
+   prism.Vector2(50, 30),
+   prism.Vector2(60, 40),
+   prism.Vector2(60, 40),
+   prism.Vector2(70, 50),
+   prism.Vector2(70, 50),
+   prism.Vector2(80, 60),
+   prism.Vector2(100, 80),
+}
+--- @type table<Vector2>
+local SIZE_CIRC = {
+   prism.Vector2(40, 40),
+   prism.Vector2(40, 40),
+   prism.Vector2(40, 40),
+   prism.Vector2(40, 40),
+   prism.Vector2(50, 50),
+   prism.Vector2(50, 50),
+   prism.Vector2(60, 60),
+   prism.Vector2(70, 70),
+   prism.Vector2(80, 80),
+   prism.Vector2(100, 100),
+}
 
 --- @param rng RNG
 --- @param width integer
@@ -24,20 +52,21 @@ end
 --- @param rng RNG
 --- @param width integer
 --- @param height integer
+--- @param partitions integer
 --- @param builder MapBuilder
 --- @param type string
-function AddRoomsToBuilder(rng, width, height, builder, type)
+function AddRoomsToBuilder(rng, width, height, partitions, builder, type)
    local rooms = {}
-   local missing = prism.Vector2(rng:random(0, PARTITIONS - 1), rng:random(0, PARTITIONS - 1))
-   local pw, ph = math.floor(width / PARTITIONS), math.floor(height / PARTITIONS)
+   local missing = prism.Vector2(rng:random(0, partitions - 1), rng:random(0, partitions - 1))
+   local pw, ph = math.floor(width / partitions), math.floor(height / partitions)
    -- rectangle min & max
    local minrw, minrh = math.floor(pw / 3), math.floor(ph / 3)
    local maxrw, maxrh = pw - 2, ph - 2
    -- radius min & max
    local minrx, minry = math.floor(pw / 6), math.floor(ph / 3)
    local maxrx, maxry = math.floor((pw - 2) / 2), math.floor((ph - 2) / 2)
-   for px = 0, PARTITIONS - 1 do
-      for py = 0, PARTITIONS - 1 do
+   for px = 0, partitions - 1 do
+      for py = 0, partitions - 1 do
          if not missing:equals(px, py) then
             if type == "RectangleGrid" then
                local rw = rng:random(minrw, maxrw)
@@ -112,10 +141,18 @@ end
 --- @height integer
 --- @depth integer
 function ClassicLevel(rng, player, width, height, depth)
+   local size_depth = depth
+   if size_depth > #SIZE_RECT then size_depth = #SIZE_RECT end
+   local width, height = SIZE_RECT[size_depth]:decompose()
+
+   local partitions_depth = depth
+   if partitions_depth > #PARTITIONS then partitions_depth = #PARTITIONS end
+   local partitions = PARTITIONS[partitions_depth]
+
    local builder = GenerateBaseMapBuilder(rng, width, height, depth)
    --- @type table<number, Rectangle>
    local rooms = {}
-   rooms, builder = AddRoomsToBuilder(rng, width, height, builder, "RectangleGrid")
+   rooms, builder = AddRoomsToBuilder(rng, width, height, partitions, builder, "RectangleGrid")
 
    -- add hallways between rooms
    for hash, currentRoom in pairs(rooms) do
@@ -137,7 +174,7 @@ function ClassicLevel(rng, player, width, height, depth)
 
    local startRoom
    while not startRoom do
-      local x, y = rng:random(0, PARTITIONS - 1), rng:random(0, PARTITIONS - 1)
+      local x, y = rng:random(0, partitions - 1), rng:random(0, partitions - 1)
       startRoom = rooms[prism.Vector2._hash(x, y)]
    end
 
@@ -204,10 +241,18 @@ end
 --- @height integer
 --- @depth integer
 function CircleLevel(rng, player, width, height, depth)
+   local size_depth = depth
+   if size_depth > #SIZE_CIRC then size_depth = #SIZE_CIRC end
+   local width, height = SIZE_CIRC[size_depth]:decompose()
+
+   local partitions_depth = depth
+   if partitions_depth > #PARTITIONS then partitions_depth = #PARTITIONS end
+   local partitions = PARTITIONS[partitions_depth]
+
    local builder = GenerateBaseMapBuilder(rng, width, height, depth)
    --- @type table<number, table>
    local rooms = {}
-   rooms, builder = AddRoomsToBuilder(rng, width, height, builder, "CircleGrid")
+   rooms, builder = AddRoomsToBuilder(rng, width, height, partitions, builder, "CircleGrid")
 
    -- add hallways between rooms
    for hash, currentRoom in pairs(rooms) do
@@ -242,7 +287,7 @@ function CircleLevel(rng, player, width, height, depth)
 
    local startRoom
    while not startRoom do
-      local x, y = rng:random(0, PARTITIONS - 1), rng:random(0, PARTITIONS - 1)
+      local x, y = rng:random(0, partitions - 1), rng:random(0, partitions - 1)
       startRoom = rooms[prism.Vector2._hash(x, y)]
    end
 
