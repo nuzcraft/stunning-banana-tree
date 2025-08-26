@@ -53,8 +53,10 @@ function GameLevelState:draw(primary, secondary)
 
    -- custom terminal drawing goes here!
    local currentActor = self:getCurrentActor()
-   local health = currentActor and currentActor:get(prism.components.Health)
-   if health then self.display:putString(1, 1, "HP:" .. health.hp .. "/" .. health:getMaxHP()) end
+   local health = currentActor and currentActor:get(prism.components.Health) or 0
+   local healthString = string.format("HP:" .. health.hp .. "/" .. health:getMaxHP())
+   if health then self.display:putString(1, 1, healthString) end
+   self.display:putString(#healthString + 2, 1, "XP:" .. Game.xp, CYAN)
    self.display:putString(1, 2, "Depth: " .. Game.depth)
    self.display:putString(-1, 2, "Turns: " .. Game.turns, nil, nil, nil, "right", self.display.width)
    local kickmodeColor = ORANGE
