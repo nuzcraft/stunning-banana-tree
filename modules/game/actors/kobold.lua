@@ -12,8 +12,22 @@ prism.registerActor("Kobold", function()
       prism.components.Attacker(1),
       prism.components.Kicker(2),
       prism.components.DropTable {
-         chance = 0.3,
-         entry = prism.actors.MeatBrick,
+         {
+            chance = 0.3,
+            entry = prism.actors.MeatBrick,
+         },
+         {
+            chance = 1.0,
+            entry = prism.actors.XP,
+         },
+         {
+            chance = 1.0,
+            entry = prism.actors.XP,
+         },
+         {
+            chance = 1.0,
+            entry = prism.actors.XP,
+         },
       },
    }
 end)
