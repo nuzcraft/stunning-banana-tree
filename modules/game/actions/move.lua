@@ -1,6 +1,4 @@
-local MoveTarget = prism.Target()
-   :isPrototype(prism.Vector2)
-   :range(1)
+local MoveTarget = prism.Target():isPrototype(prism.Vector2):range(1)
 
 ---@class Move : Action
 ---@field name string
@@ -12,7 +10,7 @@ Move.targets = { MoveTarget }
 
 Move.requiredComponents = {
    prism.components.Controller,
-   prism.components.Mover
+   prism.components.Mover,
 }
 
 --- @param level Level
@@ -25,6 +23,10 @@ end
 --- @param level Level
 --- @param destination Vector2
 function Move:perform(level, destination)
+   local collectTarget = level:query(prism.components.XP):at(destination:decompose()):first()
+   local collect = prism.actions.Collect(self.owner, collectTarget)
+   if level:canPerform(collect) and self.owner:has(prism.components.XPCollector) then level:perform(collect) end
+
    level:moveActor(self.owner, destination)
 end
 

@@ -10,6 +10,7 @@ require "levelgen"
 --- @field damageDone integer
 --- @field damageTaken integer
 --- @field floorsDescended integer
+--- @field xpCollected integer
 
 --- @class Game : Object
 --- @field depth integer

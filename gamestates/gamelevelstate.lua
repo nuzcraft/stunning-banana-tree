@@ -128,7 +128,7 @@ function GameLevelState:keypressed(key, scancode)
          return
       end
 
-      local target = self.level:query():at(destination:decompose()):first()
+      local target = self.level:query(prism.components.Collider):at(destination:decompose()):first()
       if Game.kickmode == "Kicking" then
          local kick = prism.actions.Kick(owner, target)
          if self.level:canPerform(kick) then
