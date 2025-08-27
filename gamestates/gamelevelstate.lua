@@ -67,7 +67,7 @@ function GameLevelState:draw(primary, secondary)
    if log then
       local offset = 0
       for line in log:iterLast(5) do
-         self.display:putString(1, self.display.height - offset, line)
+         self.display:putString(1, self.display.height - offset, line, prism.Color4.DARKGRAY)
          offset = offset + 1
       end
    end
