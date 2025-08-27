@@ -7,9 +7,6 @@ prism.registerActor("MeatBrick", function()
       prism.components.Consumable({
          healing = 1,
       }),
-      prism.components.Item {
-         stackable = prism.actors.MeatBrick,
-         stackLimit = 99,
-      },
+      prism.components.Item {},
    }
 end)

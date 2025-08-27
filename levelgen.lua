@@ -213,6 +213,10 @@ function ClassicLevel(rng, player, depth)
    local chestRoom = availableRooms[rng:random(1, #availableRooms)]
    local center = chestRoom:center()
    local drops = prism.components.DropTable(chestloot):getDrops(rng)
+   print(drops)
+   for x in pairs(drops) do
+      print(x)
+   end
    builder:addActor(prism.actors.Chest(drops), math.floor(center.x), math.floor(center.y))
 
    if depth >= 5 then
