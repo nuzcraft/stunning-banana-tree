@@ -1,7 +1,11 @@
 prism.registerActor("Player", function()
    return prism.Actor.fromComponents {
       prism.components.Name("Player"),
-      prism.components.Drawable("@", prism.Color4.GREEN, nil, math.huge),
+      prism.components.Drawable({
+         char = "@",
+         color = prism.Color4.GREEN,
+         layer = math.huge,
+      }),
       prism.components.Position(),
       prism.components.Collider(),
       prism.components.PlayerController(),
@@ -16,5 +20,6 @@ prism.registerActor("Player", function()
       prism.components.StatusEffects(),
       prism.components.Attacker(1),
       prism.components.Kicker(3),
+      prism.components.XPCollector(),
    }
 end)

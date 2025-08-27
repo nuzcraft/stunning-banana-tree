@@ -10,6 +10,7 @@ require "levelgen"
 --- @field damageDone integer
 --- @field damageTaken integer
 --- @field floorsDescended integer
+--- @field xpCollected integer
 
 --- @class Game : Object
 --- @field depth integer
@@ -26,6 +27,7 @@ function Game:__new(seed)
    self.rng = prism.RNG(seed)
    self.turns = 0
    self.kickmode = "Kicking"
+   self.xp = 0
    self.stats = {
       numKicks = 0,
       numStomps = 0,
@@ -36,6 +38,7 @@ function Game:__new(seed)
       damageDone = 0,
       damageTaken = 0,
       floorsDescended = 0,
+      xpCollected = 0,
    }
 end
 
@@ -48,10 +51,9 @@ end
 --- @return MapBuilder builder
 function Game:generateNextFloor(player)
    self.depth = self.depth + 1
-   self.depth = 10
    local genRNG = prism.RNG(self:getLevelSeed())
-   return CircleLevel(genRNG, player, 50, 50, self.depth)
-   -- return GetLevel(genRNG, player, 50, 50, self.depth)
+   -- return CircleLevel(genRNG, player, 50, 50, self.depth)
+   return GetLevel(genRNG, player, self.depth)
 end
 
 return Game(tostring(os.time()))

@@ -53,8 +53,10 @@ function GameLevelState:draw(primary, secondary)
 
    -- custom terminal drawing goes here!
    local currentActor = self:getCurrentActor()
-   local health = currentActor and currentActor:get(prism.components.Health)
-   if health then self.display:putString(1, 1, "HP:" .. health.hp .. "/" .. health:getMaxHP()) end
+   local health = currentActor and currentActor:get(prism.components.Health) or 0
+   local healthString = string.format("HP:" .. health.hp .. "/" .. health:getMaxHP())
+   if health then self.display:putString(1, 1, healthString) end
+   self.display:putString(#healthString + 2, 1, "XP:" .. Game.xp, CYAN)
    self.display:putString(1, 2, "Depth: " .. Game.depth)
    self.display:putString(-1, 2, "Turns: " .. Game.turns, nil, nil, nil, "right", self.display.width)
    local kickmodeColor = ORANGE
@@ -65,7 +67,7 @@ function GameLevelState:draw(primary, secondary)
    if log then
       local offset = 0
       for line in log:iterLast(5) do
-         self.display:putString(1, self.display.height - offset, line)
+         self.display:putString(1, self.display.height - offset, line, prism.Color4.DARKGRAY)
          offset = offset + 1
       end
    end
@@ -126,7 +128,7 @@ function GameLevelState:keypressed(key, scancode)
          return
       end
 
-      local target = self.level:query():at(destination:decompose()):first()
+      local target = self.level:query(prism.components.Collider):at(destination:decompose()):first()
       if Game.kickmode == "Kicking" then
          local kick = prism.actions.Kick(owner, target)
          if self.level:canPerform(kick) then

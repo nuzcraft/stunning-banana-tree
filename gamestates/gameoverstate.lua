@@ -117,6 +117,16 @@ function GameOverState:draw()
       "right",
       self.display.width
    )
+   self.display:putString(
+      0,
+      midpoint + 4,
+      "XP Collected: " .. Game.stats.xpCollected,
+      prism.Color4.DARKGRAY,
+      nil,
+      nil,
+      "right",
+      self.display.width
+   )
    self.display:draw()
 end
 
