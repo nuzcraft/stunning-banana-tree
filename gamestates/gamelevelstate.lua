@@ -1,6 +1,7 @@
 local keybindings = require "keybindingschema"
 local GameOverState = require "gamestates.gameoverstate"
-local InventoryState = require "gamestates.inventorystate"
+-- local InventoryState = require "gamestates.inventorystate"
+local PauseState = require "gamestates.pausestate"
 
 --- @class GameLevelState : LevelState
 --- @field path Path
@@ -152,6 +153,11 @@ function GameLevelState:keypressed(key, scancode)
             Game.turns = Game.turns + 1
          end
       end
+   end
+
+   if action == "pause" then
+      local pauseState = PauseState(self.display, decision, self.level)
+      self.manager:push(pauseState)
    end
 
    -- if action == "inventory" then
