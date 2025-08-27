@@ -75,7 +75,9 @@ function GameLevelState:draw(primary, secondary)
    if log then
       local offset = 0
       for line in log:iterLast(5) do
-         self.display:putString(1, self.display.height - offset, line, prism.Color4.DARKGRAY)
+         local color = prism.Color4.DARKGRAY
+         if string.find(line, "Level Up!") then color = GREEN end
+         self.display:putString(1, self.display.height - offset, line, color)
          offset = offset + 1
       end
    end

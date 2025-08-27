@@ -40,7 +40,7 @@ function Game:__new(seed)
    self.rng = prism.RNG(seed)
    self.turns = 0
    self.kickmode = "Kicking"
-   self.xp = 0
+   self.xp = 9
    self.level = 1
    self.levelThreshold = levelThresholds[self.level]
    self.stats = {
