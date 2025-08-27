@@ -1,5 +1,18 @@
 require "levelgen"
 
+local levelThresholds = {
+   10,
+   20,
+   30,
+   40,
+   50,
+   60,
+   70,
+   80,
+   90,
+   100,
+}
+
 --- @class GameStats
 --- @field numKicks integer
 --- @field numStomps integer
@@ -28,6 +41,8 @@ function Game:__new(seed)
    self.turns = 0
    self.kickmode = "Kicking"
    self.xp = 0
+   self.level = 1
+   self.levelThreshold = levelThresholds[self.level]
    self.stats = {
       numKicks = 0,
       numStomps = 0,
@@ -54,6 +69,11 @@ function Game:generateNextFloor(player)
    local genRNG = prism.RNG(self:getLevelSeed())
    -- return CircleLevel(genRNG, player, 50, 50, self.depth)
    return GetLevel(genRNG, player, self.depth)
+end
+
+--- @param level integer
+function Game:setLevelThreshold(level)
+   self.levelThreshold = levelThresholds[level]
 end
 
 return Game(tostring(os.time()))
