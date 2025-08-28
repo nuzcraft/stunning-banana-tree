@@ -71,6 +71,16 @@ function GameLevelState:draw(primary, secondary)
    local kickmodeColor = ORANGE
    if Game.kickmode == "Stomping" then kickmodeColor = YELLOW end
    self.display:putString(1, 3, Game.kickmode, kickmodeColor)
+   self.display:putString(
+      1,
+      self.display.height,
+      "[esc] for options",
+      prism.Color4.DARKGRAY,
+      nil,
+      nil,
+      "right",
+      self.display.width
+   )
 
    local log = currentActor and currentActor:get(prism.components.Log)
    if log then
