@@ -93,6 +93,8 @@ local upgrades = {
    },
 }
 
+local skillPointsAvailable = Game.skillPoints
+
 --- @class PauseState : GameState
 --- @overload fun(display: Display, decision: ActionDecision, level: Level)
 local PauseState = spectrum.GameState:extend "PauseState"
@@ -183,6 +185,16 @@ function PauseState:draw()
       CYAN
    )
    -- working on level up screen
+   self.display:putString(
+      1,
+      midpoint - 12,
+      "SKILL POINTS: " .. skillPointsAvailable,
+      GREEN,
+      nil,
+      nil,
+      "center",
+      self.display.width
+   )
    local boxRect = { x = midwidth - 20, y = midpoint - 8, w = 40, h = 17 }
    self.display:putString(midwidth - 19, midpoint - 9, "skill", nil, nil, nil, "center", 14)
    self.display:putString(midwidth - 4, midpoint - 9, "amt", nil, nil, nil, "center", 3)
@@ -241,7 +253,7 @@ function PauseState:draw()
       local costAmt = "100"
       if upgrade.currentLevel < #upgrade.costs then costAmt = tostring(upgrade.costs[upgrade.currentLevel + 1]) end
       local costColor = RED
-      if tonumber(costAmt) <= 1 then costColor = GREEN end
+      if tonumber(costAmt) <= skillPointsAvailable then costColor = GREEN end
       if costAmt == "100" then
          costAmt = "-"
          costColor = fg

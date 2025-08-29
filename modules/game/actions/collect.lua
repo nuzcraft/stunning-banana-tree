@@ -15,6 +15,7 @@ function Collect:perform(level, xp)
       if Game.xp >= Game.levelThreshold then
          Game.xp = Game.xp - Game.levelThreshold
          Game.level = Game.level + 1
+         Game.skillPoints = Game.skillPoints + 1
          Game:setLevelThreshold(Game.level)
          Log.addMessage(self.owner, "Level Up! You gained a skill point.")
       end
