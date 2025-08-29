@@ -19,4 +19,8 @@ return spectrum.Keybinding {
    { key = "escape", action = "pause", description = "Pauses and unpauses the game." },
    { key = "r", mode = "paused", action = "restart", description = "Restarts the game." },
    { key = "q", mode = "paused", action = "quit", description = "Quits the game." },
+   { key = "w", mode = "paused", action = "move up", description = "Moves the character upward." },
+   { key = "a", mode = "paused", action = "move left", description = "Moves the character left." },
+   { key = "s", mode = "paused", action = "move down", description = "Moves the character downward." },
+   { key = "d", mode = "paused", action = "move right", description = "Moves the character right." },
 }

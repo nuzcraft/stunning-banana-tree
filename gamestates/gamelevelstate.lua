@@ -57,7 +57,7 @@ function GameLevelState:draw(primary, secondary)
    local health = currentActor and currentActor:get(prism.components.Health) or 0
    local healthString = string.format("HP:" .. health.hp .. "/" .. health:getMaxHP())
    if health then self.display:putString(1, 1, healthString) end
-   local depthString = string.format("Depth: " .. Game.depth)
+   local depthString = string.format("Depth:" .. Game.depth)
    self.display:putString(1, 2, depthString)
 
    self.display:putString(math.max(#healthString, #depthString) + 2, 1, "LVL:" .. Game.level, GREEN)
@@ -67,7 +67,7 @@ function GameLevelState:draw(primary, secondary)
       "XP:" .. Game.xp .. "/" .. Game.levelThreshold,
       CYAN
    )
-   self.display:putString(-1, 2, "Turns: " .. Game.turns, nil, nil, nil, "right", self.display.width)
+   self.display:putString(-1, 2, "Turns:" .. Game.turns, nil, nil, nil, "right", self.display.width)
    local kickmodeColor = ORANGE
    if Game.kickmode == "Stomping" then kickmodeColor = YELLOW end
    self.display:putString(1, 3, Game.kickmode, kickmodeColor)
