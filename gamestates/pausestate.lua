@@ -7,7 +7,13 @@ local right_triangle = 17
 local left_triangle = 18
 local light_shade = 177
 local box_vert = 180
+local box_down_left = 192
+local box_up_right = 193
+local box_up_horiz = 194
+local box_down_horiz = 195
 local box_horiz = 197
+local box_up_left = 218
+local box_down_right = 219
 local full_block = 220
 
 -- upgrades
@@ -177,21 +183,19 @@ function PauseState:draw()
       CYAN
    )
    -- working on level up screen
+   local boxRect = { x = midwidth - 20, y = midpoint - 8, w = 40, h = 17 }
+   self.display:putString(midwidth - 19, midpoint - 9, "skill", nil, nil, nil, "center", 14)
+   self.display:putString(midwidth - 4, midpoint - 9, "amt", nil, nil, nil, "center", 3)
+   self.display:putString(midwidth, midpoint - 9, "progress", nil, nil, nil, "center", 9)
+   self.display:putString(midwidth + 10, midpoint - 9, "nxt", nil, nil, nil, "center", 3)
+   self.display:putString(midwidth + 14, midpoint - 9, "cost", nil, nil, nil, "center", 5)
    for index, upgrade in ipairs(upgrades) do
       local fg = DARKGRAY
       local bg = nil
+      local yPos = midpoint - 7 + (index - 1) * 2
       if upgrade.selected then fg = WHITE end
-      self.display:putString(midwidth - 19, midpoint - 7 + (index - 1) * 2, upgrade.text, fg, bg, nil, "right", 14)
-      self.display:putString(
-         midwidth - 4,
-         midpoint - 7 + (index - 1) * 2,
-         tostring(upgrade.currentAmount),
-         fg,
-         bg,
-         nil,
-         "center",
-         3
-      )
+      self.display:putString(midwidth - 19, yPos, upgrade.text, fg, bg, nil, "right", 14)
+      self.display:putString(midwidth - 4, yPos, tostring(upgrade.currentAmount), fg, bg, nil, "center", 3)
       -- levels
       local midChar = light_shade
       if upgrade.levels == 1 and upgrade.currentLevel >= 1 then
@@ -201,7 +205,7 @@ function PauseState:draw()
       elseif upgrade.levels >= 4 and upgrade.currentLevel >= 3 then
          midChar = full_block
       end
-      self.display:put(midwidth + 4, midpoint - 7 + (index - 1) * 2, midChar, fg, bg, nil)
+      self.display:put(midwidth + 4, yPos, midChar, fg, bg, nil)
       local midLeftChar = light_shade
       if upgrade.levels >= 2 then
          if upgrade.levels < 4 and upgrade.currentLevel >= 1 then
@@ -209,7 +213,7 @@ function PauseState:draw()
          elseif upgrade.levels >= 4 and upgrade.currentLevel >= 2 then
             midLeftChar = full_block
          end
-         self.display:put(midwidth + 3, midpoint - 7 + (index - 1) * 2, midLeftChar, fg, bg, nil)
+         self.display:put(midwidth + 3, yPos, midLeftChar, fg, bg, nil)
       end
       local midRightChar = light_shade
       if upgrade.levels >= 3 then
@@ -218,22 +222,22 @@ function PauseState:draw()
          elseif upgrade.currentLevel >= 4 then
             midRightChar = full_block
          end
-         self.display:put(midwidth + 5, midpoint - 7 + (index - 1) * 2, midRightChar, fg, bg, nil)
+         self.display:put(midwidth + 5, yPos, midRightChar, fg, bg, nil)
       end
       local leftChar = light_shade
       if upgrade.levels >= 4 then
          if upgrade.currentLevel >= 1 then leftChar = full_block end
-         self.display:put(midwidth + 2, midpoint - 7 + (index - 1) * 2, leftChar, fg, bg, nil)
+         self.display:put(midwidth + 2, yPos, leftChar, fg, bg, nil)
       end
       local rightChar = light_shade
       if upgrade.levels >= 5 then
          if upgrade.currentLevel >= 5 then rightChar = full_block end
-         self.display:put(midwidth + 6, midpoint - 7 + (index - 1) * 2, rightChar, fg, bg, nil)
+         self.display:put(midwidth + 6, yPos, rightChar, fg, bg, nil)
       end
 
       local nxtAmt = "MAX"
       if upgrade.currentLevel < #upgrade.amounts then nxtAmt = tostring(upgrade.amounts[upgrade.currentLevel + 1]) end
-      self.display:putString(midwidth + 10, midpoint - 7 + (index - 1) * 2, nxtAmt, fg, bg, nil, "center", 3)
+      self.display:putString(midwidth + 10, yPos, nxtAmt, fg, bg, nil, "center", 3)
       local costAmt = "100"
       if upgrade.currentLevel < #upgrade.costs then costAmt = tostring(upgrade.costs[upgrade.currentLevel + 1]) end
       local costColor = RED
@@ -242,22 +246,15 @@ function PauseState:draw()
          costAmt = "-"
          costColor = fg
       end
-      self.display:putString(midwidth + 14, midpoint - 7 + (index - 1) * 2, costAmt, costColor, bg, nil, "center", 5)
+      self.display:putString(midwidth + 14, yPos, costAmt, costColor, bg, nil, "center", 5)
 
       if upgrade.selected then
-         local left_tri_x = midwidth + 3
-         local right_tri_x = midwidth + 5
-         if upgrade.levels == 3 or upgrade.levels == 2 then
-            left_tri_x = left_tri_x - 1
-            right_tri_x = right_tri_x + 1
-         elseif upgrade.levels == 5 or upgrade.levels == 4 then
-            left_tri_x = left_tri_x - 2
-            right_tri_x = right_tri_x + 2
-         end
-         self.display:put(left_tri_x, midpoint - 7 + (index - 1) * 2, left_triangle, fg, bg, nil)
-         self.display:put(right_tri_x, midpoint - 7 + (index - 1) * 2, right_triangle, fg, bg, nil)
+         local left_tri_x = midwidth + 1
+         local right_tri_x = midwidth + 7
+         self.display:put(left_tri_x, yPos, left_triangle, fg, bg, nil)
+         self.display:put(right_tri_x, yPos, right_triangle, fg, bg, nil)
          for j = midwidth - 19, midwidth + 18, 1 do
-            self.display:putBG(j, midpoint - 7 + (index - 1) * 2, DARKGRAY, nil)
+            self.display:putBG(j, yPos, DARKGRAY, nil)
          end
       end
    end
@@ -297,6 +294,18 @@ function PauseState:draw()
    )
    self.display:putLine(midwidth - 19, midpoint - 8, midwidth + 18, midpoint - 8, box_horiz, WHITE, nil, nil)
    self.display:putLine(midwidth - 19, midpoint + 8, midwidth + 18, midpoint + 8, box_horiz, WHITE, nil, nil)
+   self.display:put(boxRect.x, boxRect.y, box_down_right, nil, nil, nil)
+   self.display:put(boxRect.x + boxRect.w - 1, boxRect.y, box_down_left, nil, nil, nil)
+   self.display:put(boxRect.x, boxRect.y + boxRect.h - 1, box_up_right, nil, nil, nil)
+   self.display:put(boxRect.x + boxRect.w - 1, boxRect.y + boxRect.h - 1, box_up_left, nil, nil, nil)
+   self.display:put(boxRect.x + 15, boxRect.y, box_down_horiz, nil, nil, nil)
+   self.display:put(boxRect.x + 19, boxRect.y, box_down_horiz, nil, nil, nil)
+   self.display:put(boxRect.x + 29, boxRect.y, box_down_horiz, nil, nil, nil)
+   self.display:put(boxRect.x + 33, boxRect.y, box_down_horiz, nil, nil, nil)
+   self.display:put(boxRect.x + 15, boxRect.y + boxRect.h - 1, box_up_horiz, nil, nil, nil)
+   self.display:put(boxRect.x + 19, boxRect.y + boxRect.h - 1, box_up_horiz, nil, nil, nil)
+   self.display:put(boxRect.x + 29, boxRect.y + boxRect.h - 1, box_up_horiz, nil, nil, nil)
+   self.display:put(boxRect.x + 33, boxRect.y + boxRect.h - 1, box_up_horiz, nil, nil, nil)
 
    self.display:putString(1, midpoint + 10, "[wasd] to select & spend", WHITE, nil, nil, "center", self.display.width)
    self.display:putString(
@@ -341,6 +350,18 @@ function PauseState:keypressed(key)
       love.event.restart()
    elseif action == "quit" then
       love.event.quit()
+   elseif action == "move down" then
+      if selected_index < #upgrades then
+         upgrades[selected_index].selected = false
+         selected_index = selected_index + 1
+         upgrades[selected_index].selected = true
+      end
+   elseif action == "move up" then
+      if selected_index > 1 then
+         upgrades[selected_index].selected = false
+         selected_index = selected_index - 1
+         upgrades[selected_index].selected = true
+      end
    end
 end
 
