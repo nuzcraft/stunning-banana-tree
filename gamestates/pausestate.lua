@@ -144,8 +144,9 @@ function PauseState:GetCurrentInfo()
    local wallKicker = self.currentActor and self.currentActor:get(prism.components.WallKicker)
    if wallKicker then upgrades[3].currentLevel = 1 end
    -- stomp damage
+   local stomper = self.currentActor and self.currentActor:get(prism.components.Stomper)
    local stompDamage = upgrades[4].currentAmount
-   if attacker then stompDamage = attacker.damage end
+   if attacker and stomper then stompDamage = attacker.damage + stomper.bonusDamage end
    upgrades[4].currentAmount = stompDamage
    local stompDamageLevel = IndexOf(upgrades[4].amounts, stompDamage)
    if stompDamageLevel then upgrades[4].currentLevel = stompDamageLevel end
@@ -434,6 +435,17 @@ function PauseState:keypressed(key)
          local attacker = self.currentActor:get(prism.components.Attacker)
          if kicker and attacker then kicker.bonusDamage = newAMT - attacker.damage end
          kickUPG.newLevel = 0
+      end
+      -- kick dist
+      -- wall kick
+      -- stomp damage
+      local stompUPG = upgrades[4]
+      if stompUPG.newLevel > 0 then
+         local newAMT = stompUPG.amounts[stompUPG.currentLevel + stompUPG.newLevel]
+         local stomper = self.currentActor:get(prism.components.Stomper)
+         local attacker = self.currentActor:get(prism.components.Attacker)
+         if stomper and attacker then stomper.bonusDamage = newAMT - attacker.damage end
+         stompUPG.newLevel = 0
       end
       Game.skillPoints = Game.skillPoints - skillPointsSpending
       skillPointsSpending = 0
