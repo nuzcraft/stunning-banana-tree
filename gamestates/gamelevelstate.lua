@@ -1,6 +1,7 @@
 local keybindings = require "keybindingschema"
 local GameOverState = require "gamestates.gameoverstate"
-local InventoryState = require "gamestates.inventorystate"
+-- local InventoryState = require "gamestates.inventorystate"
+local PauseState = require "gamestates.pausestate"
 
 --- @class GameLevelState : LevelState
 --- @field path Path
@@ -56,18 +57,38 @@ function GameLevelState:draw(primary, secondary)
    local health = currentActor and currentActor:get(prism.components.Health) or 0
    local healthString = string.format("HP:" .. health.hp .. "/" .. health:getMaxHP())
    if health then self.display:putString(1, 1, healthString) end
-   self.display:putString(#healthString + 2, 1, "XP:" .. Game.xp, CYAN)
-   self.display:putString(1, 2, "Depth: " .. Game.depth)
-   self.display:putString(-1, 2, "Turns: " .. Game.turns, nil, nil, nil, "right", self.display.width)
+   local depthString = string.format("Depth:" .. Game.depth)
+   self.display:putString(1, 2, depthString)
+
+   self.display:putString(math.max(#healthString, #depthString) + 2, 1, "LVL:" .. Game.level, GREEN)
+   self.display:putString(
+      math.max(#healthString, #depthString) + 2,
+      2,
+      "XP:" .. Game.xp .. "/" .. Game.levelThreshold,
+      CYAN
+   )
+   self.display:putString(-1, 2, "Turns:" .. Game.turns, nil, nil, nil, "right", self.display.width)
    local kickmodeColor = ORANGE
    if Game.kickmode == "Stomping" then kickmodeColor = YELLOW end
    self.display:putString(1, 3, Game.kickmode, kickmodeColor)
+   self.display:putString(
+      1,
+      self.display.height,
+      "[esc] for options",
+      prism.Color4.DARKGRAY,
+      nil,
+      nil,
+      "right",
+      self.display.width
+   )
 
    local log = currentActor and currentActor:get(prism.components.Log)
    if log then
       local offset = 0
       for line in log:iterLast(5) do
-         self.display:putString(1, self.display.height - offset, line, prism.Color4.DARKGRAY)
+         local color = prism.Color4.DARKGRAY
+         if string.find(line, "Level Up!") then color = GREEN end
+         self.display:putString(1, self.display.height - offset, line, color)
          offset = offset + 1
       end
    end
@@ -142,6 +163,11 @@ function GameLevelState:keypressed(key, scancode)
             Game.turns = Game.turns + 1
          end
       end
+   end
+
+   if action == "pause" then
+      local pauseState = PauseState(self.display, decision, self.level)
+      self.manager:push(pauseState)
    end
 
    -- if action == "inventory" then

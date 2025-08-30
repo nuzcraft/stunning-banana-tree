@@ -16,4 +16,11 @@ return spectrum.Keybinding {
    { key = "p", action = "pickup", description = "Picks up an inventory item." },
    { key = "space", action = "select", description = "Selects a target." },
    { key = "escape", mode = "title", action = "quit", description = "Quits the game." },
+   { key = "escape", action = "pause", description = "Pauses and unpauses the game." },
+   { key = "r", mode = "paused", action = "restart", description = "Restarts the game." },
+   { key = "q", mode = "paused", action = "quit", description = "Quits the game." },
+   { key = "w", mode = "paused", action = "move up", description = "Moves the selection upward." },
+   { key = "a", mode = "paused", action = "move left", description = "Moves the selection left." },
+   { key = "s", mode = "paused", action = "move down", description = "Moves the selection downward." },
+   { key = "d", mode = "paused", action = "move right", description = "Moves the selection right." },
 }
