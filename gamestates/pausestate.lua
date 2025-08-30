@@ -6,6 +6,7 @@ require "helper"
 local right_triangle = 17
 local left_triangle = 18
 local light_shade = 177
+local medium_shade = 178
 local box_vert = 180
 local box_down_left = 192
 local box_up_right = 193
@@ -27,6 +28,7 @@ local upgrades = {
       costs = { 1, 2, 2, 3, 4 },
       currentLevel = 0,
       selected = true,
+      newLevel = 0,
    },
    {
       text = "kick dist",
@@ -36,6 +38,7 @@ local upgrades = {
       costs = { 2, 2, 3, 3, 5 },
       currentLevel = 0,
       selected = false,
+      newLevel = 0,
    },
    {
       text = "wall kick",
@@ -45,6 +48,7 @@ local upgrades = {
       costs = { 3 },
       currentLevel = 0,
       selected = false,
+      newLevel = 0,
    },
    {
       text = "stomp dmg",
@@ -54,6 +58,7 @@ local upgrades = {
       costs = { 1, 2, 2, 3, 4 },
       currentLevel = 0,
       selected = false,
+      newLevel = 0,
    },
    {
       text = "stomp aoe dmg",
@@ -63,6 +68,7 @@ local upgrades = {
       costs = { 1, 2, 2, 3, 4 },
       currentLevel = 0,
       selected = false,
+      newLevel = 0,
    },
    {
       text = "stomp aoe size",
@@ -72,6 +78,7 @@ local upgrades = {
       costs = { 3, 4, 5 },
       currentLevel = 0,
       selected = false,
+      newLevel = 0,
    },
    {
       text = "pit stomp",
@@ -81,6 +88,7 @@ local upgrades = {
       costs = { 3 },
       currentLevel = 0,
       selected = false,
+      newLevel = 0,
    },
    {
       text = "max hp",
@@ -90,10 +98,12 @@ local upgrades = {
       costs = { 2, 2, 2, 2, 2 },
       currentLevel = 0,
       selected = false,
+      newLevel = 0,
    },
 }
 
-local skillPointsAvailable = Game.skillPoints
+local skillPointsAvailable = 0
+local skillPointsSpending = 0
 
 --- @class PauseState : GameState
 --- @overload fun(display: Display, decision: ActionDecision, level: Level)
@@ -162,6 +172,7 @@ function PauseState:GetCurrentInfo()
    upgrades[8].currentAmount = maxHP
    local maxHPLevel = IndexOf(upgrades[8].amounts, maxHP)
    if maxHPLevel then upgrades[8].currentLevel = maxHPLevel end
+   skillPointsAvailable = Game.skillPoints
 end
 
 function PauseState:draw()
@@ -207,51 +218,109 @@ function PauseState:draw()
       local yPos = midpoint - 7 + (index - 1) * 2
       if upgrade.selected then fg = WHITE end
       self.display:putString(midwidth - 19, yPos, upgrade.text, fg, bg, nil, "right", 14)
-      self.display:putString(midwidth - 4, yPos, tostring(upgrade.currentAmount), fg, bg, nil, "center", 3)
+      local curAmt = tostring(upgrade.currentAmount)
+      local curAmtFG = fg
+      if upgrade.newLevel > 0 then
+         curAmt = tostring(upgrade.amounts[upgrade.currentLevel + upgrade.newLevel])
+         curAmtFG = GREEN
+      end
+      self.display:putString(midwidth - 4, yPos, curAmt, curAmtFG, bg, nil, "center", 3)
       -- levels
       local midChar = light_shade
-      if upgrade.levels == 1 and upgrade.currentLevel >= 1 then
-         midChar = full_block
-      elseif upgrade.levels >= 2 and upgrade.levels < 4 and upgrade.currentLevel >= 2 then
-         midChar = full_block
-      elseif upgrade.levels >= 4 and upgrade.currentLevel >= 3 then
-         midChar = full_block
-      end
-      self.display:put(midwidth + 4, yPos, midChar, fg, bg, nil)
-      local midLeftChar = light_shade
-      if upgrade.levels >= 2 then
-         if upgrade.levels < 4 and upgrade.currentLevel >= 1 then
-            midLeftChar = full_block
-         elseif upgrade.levels >= 4 and upgrade.currentLevel >= 2 then
-            midLeftChar = full_block
+      local midFG = fg
+      if upgrade.levels == 1 then
+         if upgrade.currentLevel >= 1 then
+            midChar = full_block
+         elseif upgrade.newLevel >= 1 then
+            midChar = medium_shade
+            midFG = GREEN
          end
-         self.display:put(midwidth + 3, yPos, midLeftChar, fg, bg, nil)
+      elseif upgrade.levels >= 2 and upgrade.levels < 4 then
+         if upgrade.currentLevel >= 2 then
+            midChar = full_block
+         elseif upgrade.currentLevel + upgrade.newLevel >= 2 then
+            midChar = medium_shade
+            midFG = GREEN
+         end
+      elseif upgrade.levels >= 4 then
+         if upgrade.currentLevel >= 3 then
+            midChar = full_block
+         elseif upgrade.currentLevel + upgrade.newLevel >= 3 then
+            midChar = medium_shade
+            midFG = GREEN
+         end
+      end
+      self.display:put(midwidth + 4, yPos, midChar, midFG, bg, nil)
+      local midLeftChar = light_shade
+      local midLeftFG = fg
+      if upgrade.levels >= 2 then
+         if upgrade.levels < 4 then
+            if upgrade.currentLevel >= 1 then
+               midLeftChar = full_block
+            elseif upgrade.currentLevel + upgrade.newLevel >= 1 then
+               midLeftChar = medium_shade
+               midLeftFG = GREEN
+            end
+         elseif upgrade.levels >= 4 then
+            if upgrade.currentLevel >= 2 then
+               midLeftChar = full_block
+            elseif upgrade.currentLevel + upgrade.newLevel >= 2 then
+               midLeftChar = medium_shade
+               midLeftFG = GREEN
+            end
+         end
+         self.display:put(midwidth + 3, yPos, midLeftChar, midLeftFG, bg, nil)
       end
       local midRightChar = light_shade
+      local midRightFG = fg
       if upgrade.levels >= 3 then
-         if upgrade.levels < 4 and upgrade.currentLevel >= 3 then
-            midRightChar = full_block
+         if upgrade.levels < 4 then
+            if upgrade.currentLevel >= 3 then
+               midRightChar = full_block
+            elseif upgrade.currentLevel + upgrade.newLevel >= 3 then
+               midRightChar = medium_shade
+               midRightFG = GREEN
+            end
          elseif upgrade.currentLevel >= 4 then
             midRightChar = full_block
+         elseif upgrade.currentLevel + upgrade.newLevel >= 4 then
+            midRightChar = medium_shade
+            midRightFG = GREEN
          end
-         self.display:put(midwidth + 5, yPos, midRightChar, fg, bg, nil)
+         self.display:put(midwidth + 5, yPos, midRightChar, midRightFG, bg, nil)
       end
       local leftChar = light_shade
+      local leftFG = fg
       if upgrade.levels >= 4 then
-         if upgrade.currentLevel >= 1 then leftChar = full_block end
-         self.display:put(midwidth + 2, yPos, leftChar, fg, bg, nil)
+         if upgrade.currentLevel >= 1 then
+            leftChar = full_block
+         elseif upgrade.currentLevel + upgrade.newLevel >= 1 then
+            leftChar = medium_shade
+            leftFG = GREEN
+         end
+         self.display:put(midwidth + 2, yPos, leftChar, leftFG, bg, nil)
       end
       local rightChar = light_shade
+      local rightFG = fg
       if upgrade.levels >= 5 then
-         if upgrade.currentLevel >= 5 then rightChar = full_block end
-         self.display:put(midwidth + 6, yPos, rightChar, fg, bg, nil)
+         if upgrade.currentLevel >= 5 then
+            rightChar = full_block
+         elseif upgrade.currentLevel + upgrade.newLevel >= 5 then
+            rightChar = medium_shade
+            rightFG = GREEN
+         end
+         self.display:put(midwidth + 6, yPos, rightChar, rightFG, bg, nil)
       end
 
       local nxtAmt = "MAX"
-      if upgrade.currentLevel < #upgrade.amounts then nxtAmt = tostring(upgrade.amounts[upgrade.currentLevel + 1]) end
+      if upgrade.currentLevel + upgrade.newLevel < #upgrade.amounts then
+         nxtAmt = tostring(upgrade.amounts[upgrade.currentLevel + upgrade.newLevel + 1])
+      end
       self.display:putString(midwidth + 10, yPos, nxtAmt, fg, bg, nil, "center", 3)
       local costAmt = "100"
-      if upgrade.currentLevel < #upgrade.costs then costAmt = tostring(upgrade.costs[upgrade.currentLevel + 1]) end
+      if upgrade.currentLevel + upgrade.newLevel < #upgrade.costs then
+         costAmt = tostring(upgrade.costs[upgrade.currentLevel + upgrade.newLevel + 1])
+      end
       local costColor = RED
       if tonumber(costAmt) <= skillPointsAvailable then costColor = GREEN end
       if costAmt == "100" then
@@ -373,6 +442,26 @@ function PauseState:keypressed(key)
          upgrades[selected_index].selected = false
          selected_index = selected_index - 1
          upgrades[selected_index].selected = true
+      end
+   elseif action == "move right" then
+      local upg = upgrades[selected_index]
+      if upg.currentLevel + upg.newLevel < upg.levels then
+         local cost = upg.costs[upg.currentLevel + upg.newLevel + 1]
+         if cost <= skillPointsAvailable then
+            upg.newLevel = upg.newLevel + 1
+            skillPointsAvailable = skillPointsAvailable - cost
+            skillPointsSpending = skillPointsSpending + cost
+         end
+      end
+   elseif action == "move left" then
+      local upg = upgrades[selected_index]
+      if upg.newLevel > 0 then
+         local cost = upg.costs[upg.currentLevel + upg.newLevel]
+         if cost <= skillPointsSpending then
+            upg.newLevel = upg.newLevel - 1
+            skillPointsAvailable = skillPointsAvailable + cost
+            skillPointsSpending = skillPointsSpending - cost
+         end
       end
    end
 end
