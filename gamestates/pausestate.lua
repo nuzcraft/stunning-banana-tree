@@ -437,6 +437,13 @@ function PauseState:keypressed(key)
          kickUPG.newLevel = 0
       end
       -- kick dist
+      local kickDistUPG = upgrades[2]
+      if kickDistUPG.newLevel > 0 then
+         local newAMT = kickDistUPG.amounts[kickDistUPG.currentLevel + kickDistUPG.newLevel]
+         local kicker = self.currentActor:get(prism.components.Kicker)
+         if kicker then kicker.distance = newAMT end
+         kickDistUPG.newLevel = 0
+      end
       -- wall kick
       -- stomp damage
       local stompUPG = upgrades[4]
