@@ -9,6 +9,8 @@ Stomp.name = "Stomp"
 Stomp.targets = { StompTarget }
 Stomp.requiredComponents = {
    prism.components.Controller,
+   prism.components.Stomper,
+   prism.components.Attacker,
 }
 
 function Stomp:canPerform(level)
@@ -18,7 +20,9 @@ end
 --- @param level Level
 --- @param stomped Actor
 function Stomp:perform(level, stomped)
-   local damage = prism.actions.Damage(stomped, 1)
+   local damageAmount = self.owner:get(prism.components.Attacker).damage
+      + self.owner:get(prism.components.Stomper).bonusDamage
+   local damage = prism.actions.Damage(stomped, damageAmount)
    local stompstr = sf("You stomp the %s.", Name.lower(stomped))
    local stompstr2 = sf("The %s stomps you!", Name.lower(self.owner))
    local stompstr3 = sf("The %s stomps the %s.", Name.lower(self.owner), Name.lower(stomped))
