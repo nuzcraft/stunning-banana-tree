@@ -41,6 +41,7 @@ function Kick:perform(level, kicked)
    end
 
    local damageamount = self.owner:get(prism.components.Attacker).damage
+      + self.owner:get(prism.components.Kicker).bonusDamage
    local damage = prism.actions.Damage(kicked, damageamount)
    if level:canPerform(damage) then
       level:perform(damage)

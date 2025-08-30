@@ -128,13 +128,13 @@ function PauseState:GetCurrentInfo()
    self.currentActor = self.previousState:getCurrentActor()
    -- kick damage
    local attacker = self.currentActor and self.currentActor:get(prism.components.Attacker)
+   local kicker = self.currentActor and self.currentActor:get(prism.components.Kicker)
    local kickDamage = upgrades[1].currentAmount
-   if attacker then kickDamage = attacker.damage end
+   if attacker and kicker then kickDamage = attacker.damage + kicker.bonusDamage end
    upgrades[1].currentAmount = kickDamage
    local kickDamageLevel = IndexOf(upgrades[1].amounts, kickDamage)
    if kickDamageLevel then upgrades[1].currentLevel = kickDamageLevel end
    -- kick dist
-   local kicker = self.currentActor and self.currentActor:get(prism.components.Kicker)
    local kickDistance = upgrades[2].currentAmount
    if kicker then kickDistance = kicker.distance end
    upgrades[2].currentAmount = kickDistance
@@ -425,7 +425,20 @@ end
 
 function PauseState:keypressed(key)
    local binding = keybindings:keypressed(key)
-   if binding == "pause" then self.manager:pop() end
+   if binding == "pause" then
+      -- kick damage
+      local kickUPG = upgrades[1]
+      if kickUPG.newLevel > 0 then
+         local newAMT = kickUPG.amounts[kickUPG.currentLevel + kickUPG.newLevel]
+         local kicker = self.currentActor:get(prism.components.Kicker)
+         local attacker = self.currentActor:get(prism.components.Attacker)
+         if kicker and attacker then kicker.bonusDamage = newAMT - attacker.damage end
+         kickUPG.newLevel = 0
+      end
+      Game.skillPoints = Game.skillPoints - skillPointsSpending
+      skillPointsSpending = 0
+      self.manager:pop()
+   end
    local action = keybindings:keypressed(key, "paused")
    if action == "restart" then
       love.event.restart()
