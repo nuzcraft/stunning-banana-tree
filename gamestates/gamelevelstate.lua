@@ -2,6 +2,7 @@ local keybindings = require "keybindingschema"
 local GameOverState = require "gamestates.gameoverstate"
 -- local InventoryState = require "gamestates.inventorystate"
 local PauseState = require "gamestates.pausestate"
+local GeneralTargetHandler = require "gamestates.targethandlers.generaltargethandler"
 
 --- @class GameLevelState : LevelState
 --- @field path Path
@@ -150,10 +151,15 @@ function GameLevelState:keypressed(key, scancode)
       end
 
       local target = self.level:query(prism.components.Collider):at(destination:decompose()):first()
+      local targetCell = self.level:getCell(destination:decompose())
       if Game.kickmode == "Kicking" then
          local kick = prism.actions.Kick(owner, target)
+         local wallkick = prism.actions.WallKick(owner, targetCell)
          if self.level:canPerform(kick) then
             decision:setAction(kick)
+            Game.turns = Game.turns + 1
+         elseif self.level:canPerform(wallkick) then
+            decision:setAction(wallkick)
             Game.turns = Game.turns + 1
          end
       else
