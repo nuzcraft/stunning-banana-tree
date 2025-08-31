@@ -33,18 +33,8 @@ function WallKick:perform(level, targetVec)
    -- local WallKicker = self.owner:expect(prism.components.WallKicker)
    local x, y = targetVec:decompose()
    level:setCell(x, y, prism.cells.Floor())
-
-   -- local damage = prism.actions.Damage(attacked, attacker.damage)
-   -- if level:canPerform(damage) then
-   --    level:perform(damage)
-   --    local dmgstr = ""
-   --    if damage.dealt then dmgstr = sf("Dealing %i damage.", damage.dealt) end
-   --    local attackName = Name.lower(attacked)
-   --    local ownerName = Name.lower(self.owner)
-   --    Log.addMessage(self.owner, sf("You attack the %s. %s", attackName, dmgstr))
-   --    Log.addMessage(attacked, sf("The %s attacks you! %s", ownerName, dmgstr))
-   --    Log.addMessageSensed(level, self, sf("The %s attacks the %s. %s", ownerName, attackName, dmgstr))
-   -- end
+   Log.addMessage(self.owner, "You kick the wall. It crumbles.")
+   Log.addMessageSensed(level, self, sf("The %s kicks the wall. It crumbles.", Name.lower(self.owner)))
 end
 
 return WallKick
