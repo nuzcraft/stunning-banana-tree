@@ -152,9 +152,10 @@ function GameLevelState:keypressed(key, scancode)
 
       local target = self.level:query(prism.components.Collider):at(destination:decompose()):first()
       local targetCell = self.level:getCell(destination:decompose())
+      local targetCellPos = destination
       if Game.kickmode == "Kicking" then
          local kick = prism.actions.Kick(owner, target)
-         local wallkick = prism.actions.WallKick(owner, targetCell)
+         local wallkick = prism.actions.WallKick(owner, destination)
          if self.level:canPerform(kick) then
             decision:setAction(kick)
             Game.turns = Game.turns + 1
