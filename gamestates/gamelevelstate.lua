@@ -2,7 +2,7 @@ local keybindings = require "keybindingschema"
 local GameOverState = require "gamestates.gameoverstate"
 -- local InventoryState = require "gamestates.inventorystate"
 local PauseState = require "gamestates.pausestate"
-local GeneralTargetHandler = require "gamestates.targethandlers.generaltargethandler"
+local CellTargetHandler = require "gamestates.targethandlers.celltargethandler"
 
 --- @class GameLevelState : LevelState
 --- @field path Path
@@ -175,6 +175,11 @@ function GameLevelState:keypressed(key, scancode)
    if action == "pause" then
       local pauseState = PauseState(self.display, decision, self.level)
       self.manager:push(pauseState)
+   end
+
+   if action == "inventory" then
+      local celltargethandler = CellTargetHandler(self.display, self, { owner:getPosition() }, nil)
+      self.manager:push(celltargethandler)
    end
 
    -- if action == "inventory" then
