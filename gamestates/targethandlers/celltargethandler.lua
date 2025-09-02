@@ -10,6 +10,7 @@ function CellTargetHandler:getValidTargets()
    local valid = {}
    for i = 1, #self.targetList, 1 do
       local actingaction = self.action(self.levelState.decision.actor, self.targetList[i])
+      ---@diagnostic disable-next-line: param-type-mismatch
       if self.levelState.level:canPerform(actingaction) then table.insert(valid, self.targetList[i]) end
    end
    return valid
@@ -64,7 +65,9 @@ function CellTargetHandler:keypressed(key)
    if action == "return" then self.manager:pop() end
    if action == "select" then
       local actingaction = self.action(self.levelState.decision.actor, self.curTarget)
+      ---@diagnostic disable-next-line: param-type-mismatch
       if self.levelState.level:canPerform(actingaction) then
+         ---@diagnostic disable-next-line: param-type-mismatch
          self.levelState.decision:setAction(actingaction)
          self.manager:pop()
       end
