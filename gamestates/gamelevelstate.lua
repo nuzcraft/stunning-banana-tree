@@ -155,13 +155,13 @@ function GameLevelState:keypressed(key, scancode)
       local targetCellPos = destination
       if Game.kickmode == "Kicking" then
          local kick = prism.actions.Kick(owner, target)
-         local wallkick = prism.actions.WallKick(owner, destination)
+         -- local wallkick = prism.actions.WallKick(owner, destination)
          if self.level:canPerform(kick) then
             decision:setAction(kick)
             Game.turns = Game.turns + 1
-         elseif self.level:canPerform(wallkick) then
-            decision:setAction(wallkick)
-            Game.turns = Game.turns + 1
+            -- elseif self.level:canPerform(wallkick) then
+            --    decision:setAction(wallkick)
+            --    Game.turns = Game.turns + 1
          end
       else
          local stomp = prism.actions.Stomp(owner, target)
@@ -186,9 +186,11 @@ function GameLevelState:keypressed(key, scancode)
                table.insert(nearbyCells, prism.Vector2(startPos.x + i, startPos.y + j))
             end
          end
-         local wallkick = prism.actions.WallKick
-         local celltargethandler = CellTargetHandler(self.display, self, nearbyCells, wallkick)
-         self.manager:push(celltargethandler)
+         if owner:get(prism.components.WallKicker) then
+            local wallkick = prism.actions.WallKick
+            local celltargethandler = CellTargetHandler(self.display, self, nearbyCells, wallkick)
+            self.manager:push(celltargethandler)
+         end
       end
    end
 

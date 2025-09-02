@@ -445,6 +445,11 @@ function PauseState:keypressed(key)
          kickDistUPG.newLevel = 0
       end
       -- wall kick
+      local wallkickUPG = upgrades[3]
+      if wallkickUPG.newLevel > 0 then
+         self.currentActor:give(prism.components.WallKicker())
+         wallkickUPG.newLevel = 0
+      end
       -- stomp damage
       local stompUPG = upgrades[4]
       if stompUPG.newLevel > 0 then

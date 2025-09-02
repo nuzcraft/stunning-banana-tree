@@ -22,6 +22,6 @@ prism.registerActor("Player", function()
       prism.components.Kicker(3, 0),
       prism.components.Stomper(0),
       prism.components.XPCollector(),
-      prism.components.WallKicker(),
+      -- prism.components.WallKicker(),
    }
 end)
