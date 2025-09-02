@@ -53,8 +53,8 @@ local keybindOffsets = {
 }
 
 function CellTargetHandler:keypressed(key)
-   local action = keybindings:keypressed(key)
-   if action == "inventory" then -- tab key
+   local action = keybindings:keypressed(key, "targeting")
+   if action == "cycle" then -- tab key
       local lastTarget = self.curTarget
       self.index, self.curTarget = next(self.validTargets, self.index)
       while (not self.index and #self.validTargets > 0) or (lastTarget == self.curTarget and #self.validTargets > 1) do

@@ -24,4 +24,8 @@ return spectrum.Keybinding {
    { key = "a", mode = "paused", action = "move left", description = "Moves the selection left." },
    { key = "s", mode = "paused", action = "move down", description = "Moves the selection downward." },
    { key = "d", mode = "paused", action = "move right", description = "Moves the selection right." },
+   { key = "escape", mode = "targeting", action = "return", description = "Exits targeting screen" },
+   { key = "f", mode = "targeting", action = "select", description = "Selects a target." },
+   { key = "space", mode = "targeting", action = "select", description = "Selects a target." },
+   { key = "tab", mode = "targeting", action = "cycle", description = "Cycles through targets." },
 }
