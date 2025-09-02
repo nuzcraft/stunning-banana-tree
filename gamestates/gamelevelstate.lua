@@ -177,7 +177,7 @@ function GameLevelState:keypressed(key, scancode)
       self.manager:push(pauseState)
    end
 
-   if action == "inventory" then
+   if action == "targeting" then
       local nearbyCells = {}
       local startPos = owner:getPosition()
       if startPos then
