@@ -178,8 +178,18 @@ function GameLevelState:keypressed(key, scancode)
    end
 
    if action == "inventory" then
-      local celltargethandler = CellTargetHandler(self.display, self, { owner:getPosition() }, nil)
-      self.manager:push(celltargethandler)
+      local nearbyCells = {}
+      local startPos = owner:getPosition()
+      if startPos then
+         for i = -1, 1, 1 do
+            for j = -1, 1, 1 do
+               table.insert(nearbyCells, prism.Vector2(startPos.x + i, startPos.y + j))
+            end
+         end
+         local wallkick = prism.actions.WallKick
+         local celltargethandler = CellTargetHandler(self.display, self, nearbyCells, wallkick)
+         self.manager:push(celltargethandler)
+      end
    end
 
    -- if action == "inventory" then
