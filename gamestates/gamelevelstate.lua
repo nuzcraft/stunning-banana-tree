@@ -2,6 +2,7 @@ local keybindings = require "keybindingschema"
 local GameOverState = require "gamestates.gameoverstate"
 -- local InventoryState = require "gamestates.inventorystate"
 local PauseState = require "gamestates.pausestate"
+local CellTargetHandler = require "gamestates.targethandlers.celltargethandler"
 
 --- @class GameLevelState : LevelState
 --- @field path Path
@@ -150,11 +151,17 @@ function GameLevelState:keypressed(key, scancode)
       end
 
       local target = self.level:query(prism.components.Collider):at(destination:decompose()):first()
+      local targetCell = self.level:getCell(destination:decompose())
+      local targetCellPos = destination
       if Game.kickmode == "Kicking" then
          local kick = prism.actions.Kick(owner, target)
+         -- local wallkick = prism.actions.WallKick(owner, destination)
          if self.level:canPerform(kick) then
             decision:setAction(kick)
             Game.turns = Game.turns + 1
+            -- elseif self.level:canPerform(wallkick) then
+            --    decision:setAction(wallkick)
+            --    Game.turns = Game.turns + 1
          end
       else
          local stomp = prism.actions.Stomp(owner, target)
@@ -168,6 +175,23 @@ function GameLevelState:keypressed(key, scancode)
    if action == "pause" then
       local pauseState = PauseState(self.display, decision, self.level)
       self.manager:push(pauseState)
+   end
+
+   if action == "targeting" then
+      local nearbyCells = {}
+      local startPos = owner:getPosition()
+      if startPos then
+         for i = -1, 1, 1 do
+            for j = -1, 1, 1 do
+               table.insert(nearbyCells, prism.Vector2(startPos.x + i, startPos.y + j))
+            end
+         end
+         if owner:get(prism.components.WallKicker) then
+            local wallkick = prism.actions.WallKick
+            local celltargethandler = CellTargetHandler(self.display, self, nearbyCells, wallkick)
+            self.manager:push(celltargethandler)
+         end
+      end
    end
 
    -- if action == "inventory" then

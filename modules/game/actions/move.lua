@@ -18,6 +18,7 @@ Move.requiredComponents = {
 function Move:canPerform(level, destination)
    local mover = self.owner:expect(prism.components.Mover)
    return level:getCellPassableByActor(destination.x, destination.y, self.owner, mover.mask)
+      and level:inBounds(destination:decompose())
 end
 
 --- @param level Level

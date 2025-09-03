@@ -197,7 +197,7 @@ function ClassicLevel(rng, player, depth)
       end
    end
 
-   builder:addPadding(1, prism.cells.Wall)
+   builder:addPadding(1, prism.cells.OuterWall)
 
    --- @type Rectangle[]
    local availableRooms = {}
@@ -306,7 +306,7 @@ function CircleLevel(rng, player, depth)
       end
    end
 
-   builder:addPadding(1, prism.cells.Wall)
+   builder:addPadding(1, prism.cells.OuterWall)
 
    --- @type table[]
    local availableRooms = {}
