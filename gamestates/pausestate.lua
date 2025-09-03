@@ -459,6 +459,21 @@ function PauseState:keypressed(key)
          if stomper and attacker then stomper.bonusDamage = newAMT - attacker.damage end
          stompUPG.newLevel = 0
       end
+      -- stomp aoe dmg
+      -- stomp aoe size
+      -- pit stomp
+      -- max health
+      local healthUPG = upgrades[8]
+      if healthUPG.newLevel > 0 then
+         local newAMT = healthUPG.amounts[healthUPG.currentLevel + healthUPG.newLevel]
+         local health = self.currentActor:get(prism.components.Health)
+         if health then
+            local diff = newAMT - health:getMaxHP()
+            health:setMaxHP(newAMT)
+            if diff > 0 then health:heal(diff) end
+         end
+         healthUPG.newLevel = 0
+      end
       Game.skillPoints = Game.skillPoints - skillPointsSpending
       skillPointsSpending = 0
       self.manager:pop()
