@@ -30,6 +30,12 @@ function Health:getMaxHP()
 end
 
 --- @param amount integer
+function Health:setMaxHP(amount)
+   self.maxHP = amount
+   if self.hp > amount then self.hp = amount end
+end
+
+--- @param amount integer
 function Health:heal(amount)
    local amt = math.min(self.hp + amount, self:getMaxHP())
    if Name.get(self.owner) == "Player" then Game.stats.healthHealed = Game.stats.healthHealed + (amt - self.hp) end
