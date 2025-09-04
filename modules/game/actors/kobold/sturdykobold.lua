@@ -23,11 +23,11 @@ prism.registerActor("SturdyKobold", function()
          },
          {
             chance = 1.0,
-            entry = prism.actors.XP,
+            entry = prism.actors.XP2,
          },
          {
             chance = 1.0,
-            entry = prism.actors.XP,
+            entry = prism.actors.XP2,
          },
          {
             chance = 1.0,

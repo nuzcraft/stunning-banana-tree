@@ -7,11 +7,16 @@ local CollectTarget = prism.Target():with(prism.components.XP):range(1)
 local Collect = prism.Action:extend "Collect"
 Collect.targets = { CollectTarget }
 
+---@param level Level
+---@param xp Actor
 function Collect:perform(level, xp)
+   local xpComponent = xp:get(prism.components.XP)
+   local xpAmount = 0
+   if xpComponent then xpAmount = xpComponent.amount end
    level:removeActor(xp)
    if self.owner:has(prism.components.PlayerController) then
-      Game.xp = Game.xp + 1
-      Game.stats.xpCollected = Game.stats.xpCollected + 1
+      Game.xp = Game.xp + xpAmount
+      Game.stats.xpCollected = Game.stats.xpCollected + xpAmount
       if Game.xp >= Game.levelThreshold then
          Game.xp = Game.xp - Game.levelThreshold
          Game.level = Game.level + 1

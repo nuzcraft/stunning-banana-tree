@@ -76,7 +76,7 @@ function GameLevelState:draw(primary, secondary)
       1,
       self.display.height,
       "[esc] for options",
-      prism.Color4.DARKGRAY,
+      prism.Color4.LIGHTGRAY,
       nil,
       nil,
       "right",
