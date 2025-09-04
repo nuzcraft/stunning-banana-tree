@@ -23,5 +23,6 @@ prism.registerActor("Player", function()
       prism.components.Stomper(0, 0, 0),
       prism.components.XPCollector(),
       -- prism.components.WallKicker(),
+      -- prism.components.PitStomper(),
    }
 end)

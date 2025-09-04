@@ -4,6 +4,5 @@ prism.registerCell("OuterWall", function()
       prism.components.Drawable("#"),
       prism.components.Collider(),
       prism.components.Opaque(),
-      prism.components.Unbreakable(),
    }
 end)

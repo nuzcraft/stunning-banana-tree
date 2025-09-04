@@ -10,6 +10,8 @@ WallKick.name = "WallKick"
 WallKick.targets = { WallKickTarget }
 WallKick.requiredComponents = { prism.components.WallKicker }
 
+local mask = prism.Collision.createBitmaskFromMovetypes { "walk" }
+
 --- @param level Level
 --- @param targetVec Vector2
 function WallKick:canPerform(level, targetVec)
@@ -18,8 +20,8 @@ function WallKick:canPerform(level, targetVec)
       local targetCell = level:getCell(targetVec:decompose())
       if
          targetCell:has(prism.components.Collider)
-         and targetCell:has(prism.components.Opaque)
-         and not targetCell:has(prism.components.Unbreakable)
+         and targetCell:has(prism.components.Destructible)
+         and not level:getCellPassable(x, y, mask)
       then
          return true
       end
