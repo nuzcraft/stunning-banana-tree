@@ -30,6 +30,35 @@ local SIZE_CIRC = {
    prism.Vector2(100, 100),
 }
 
+local SPAWN_RATES = {
+   { { actor = prism.actors.Kobold, rate = 1.0 } },
+   { { actor = prism.actors.Kobold, rate = 0.9 }, { actor = prism.actors.SturdyKobold, rate = 0.1 } },
+   { { actor = prism.actors.Kobold, rate = 0.8 }, { actor = prism.actors.SturdyKobold, rate = 0.2 } },
+   { { actor = prism.actors.Kobold, rate = 0.7 }, { actor = prism.actors.SturdyKobold, rate = 0.3 } },
+   { { actor = prism.actors.Kobold, rate = 0.6 }, { actor = prism.actors.SturdyKobold, rate = 0.4 } },
+   { { actor = prism.actors.Kobold, rate = 0.5 }, { actor = prism.actors.SturdyKobold, rate = 0.5 } },
+   {
+      { actor = prism.actors.Kobold, rate = 0.45 },
+      { actor = prism.actors.SturdyKobold, rate = 0.45 },
+      { actor = prism.actors.StrongKobold, rate = 0.1 },
+   },
+   {
+      { actor = prism.actors.Kobold, rate = 0.4 },
+      { actor = prism.actors.SturdyKobold, rate = 0.4 },
+      { actor = prism.actors.StrongKobold, rate = 0.2 },
+   },
+   {
+      { actor = prism.actors.Kobold, rate = 0.3 },
+      { actor = prism.actors.SturdyKobold, rate = 0.4 },
+      { actor = prism.actors.StrongKobold, rate = 0.3 },
+   },
+   {
+      { actor = prism.actors.Kobold, rate = 0.2 },
+      { actor = prism.actors.SturdyKobold, rate = 0.4 },
+      { actor = prism.actors.StrongKobold, rate = 0.4 },
+   },
+}
+
 --- @param rng RNG
 --- @param width integer
 --- @param height integer
@@ -136,6 +165,19 @@ function SetAlternateCells(width, height, depth, builder)
 end
 
 --- @param rng RNG
+--- @param rates table array of {actor, rate}
+--- @return function -- actor constructor
+function ChooseByRates(rng, rates)
+   local rand = rng:random()
+   local cumulativeRate = 0
+   for i = 1, #rates do
+      cumulativeRate = cumulativeRate + rates[i].rate
+      if rand < cumulativeRate then return rates[i].actor end
+   end
+   return rates[#rates].actor
+end
+
+--- @param rng RNG
 --- @param player Actor
 --- @depth integer
 function ClassicLevel(rng, player, depth)
@@ -192,7 +234,10 @@ function ClassicLevel(rng, player, depth)
       if room ~= startRoom then
          for n = 1, math.min(math.ceil((depth + 1) / 5), 4) do
             local vec = sides[n]
-            builder:addActor(prism.actors.SturdyKobold(), vec.x, vec.y)
+            local spawnDepth = depth
+            if depth > #SPAWN_RATES then spawnDepth = #SPAWN_RATES end
+            local actortype = ChooseByRates(rng, SPAWN_RATES[spawnDepth])
+            builder:addActor(actortype(), vec.x, vec.y)
          end
       end
    end
@@ -301,7 +346,10 @@ function CircleLevel(rng, player, depth)
       if room ~= startRoom then
          for n = 1, math.min(math.ceil((depth + 1) / 5), 4) do
             local vec = sides[n]
-            builder:addActor(prism.actors.Kobold(), vec.x, vec.y)
+            local spawnDepth = depth
+            if depth > #SPAWN_RATES then spawnDepth = #SPAWN_RATES end
+            local actortype = ChooseByRates(rng, SPAWN_RATES[spawnDepth])
+            builder:addActor(actortype(), vec.x, vec.y)
          end
       end
    end

@@ -23,7 +23,9 @@ local mask = prism.Collision.createBitmaskFromMovetypes { "fly" }
 --- @param kicked Actor
 function Kick:perform(level, kicked)
    local direction = (kicked:getPosition() - self.owner:getPosition())
-   local knockbackResist = kicked:get(prism.components.Sturdy).knockbackResist or 0
+   local knockbackResist = 0
+   local sturdy = kicked:get(prism.components.Sturdy)
+   if sturdy then knockbackResist = sturdy.knockbackResist end
    local distance = math.max(self.owner:get(prism.components.Kicker).distance - knockbackResist, 0)
    local secondaryTarget = nil
    local kickstr = sf("You kick the %s.", Name.lower(kicked))
