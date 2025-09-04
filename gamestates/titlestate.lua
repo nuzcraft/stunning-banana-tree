@@ -72,6 +72,7 @@ function TitleState:draw()
       "left",
       self.display.width
    )
+   self.display:putString(2, midpoint + 21, "Version 0.02", prism.Color4.DARKGRAY, nil, nil, "left", self.display.width)
    self.display:draw()
 end
 
