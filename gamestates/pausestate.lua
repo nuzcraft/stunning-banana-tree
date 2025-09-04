@@ -72,7 +72,7 @@ local upgrades = {
    },
    {
       text = "stomp aoe size",
-      currentAmount = "-",
+      currentAmount = 0,
       levels = 3,
       amounts = { 1, 2, 3 },
       costs = { 3, 4, 5 },
@@ -151,15 +151,14 @@ function PauseState:GetCurrentInfo()
    local stompDamageLevel = IndexOf(upgrades[4].amounts, stompDamage)
    if stompDamageLevel then upgrades[4].currentLevel = stompDamageLevel end
    -- stomp aoe damage
-   local stompAOE = self.currentActor and self.currentActor:get(prism.components.StompAOE)
    local stompAOEDamage = upgrades[5].currentAmount
-   if stompAOE then stompAOEDamage = stompAOE.damage end
+   if stomper then stompAOEDamage = stomper.aoeDamage end
    upgrades[5].currentAmount = stompAOEDamage
    local stompAOEDamageLevel = IndexOf(upgrades[5].amounts, stompAOEDamage)
    if stompAOEDamageLevel then upgrades[5].currentLevel = stompAOEDamageLevel end
    -- stomp aoe size
    local stompAOESize = upgrades[6].currentAmount
-   if stompAOE then stompAOESize = stompAOE.size end
+   if stomper then stompAOESize = stomper.aoeRadius end
    upgrades[6].currentAmount = stompAOESize
    local stompAOESizeLevel = IndexOf(upgrades[6].amounts, stompAOESize)
    if stompAOESizeLevel then upgrades[6].currentLevel = stompAOESizeLevel end
@@ -460,7 +459,21 @@ function PauseState:keypressed(key)
          stompUPG.newLevel = 0
       end
       -- stomp aoe dmg
+      local stompAOEDmgUPG = upgrades[5]
+      if stompAOEDmgUPG.newLevel > 0 then
+         local newAMT = stompAOEDmgUPG.amounts[stompAOEDmgUPG.currentLevel + stompAOEDmgUPG.newLevel]
+         local stomper = self.currentActor:get(prism.components.Stomper)
+         if stomper then stomper.aoeDamage = newAMT end
+         stompAOEDmgUPG.newLevel = 0
+      end
       -- stomp aoe size
+      local stompAOESizeUPG = upgrades[6]
+      if stompAOESizeUPG.newLevel > 0 then
+         local newAMT = stompAOESizeUPG.amounts[stompAOESizeUPG.currentLevel + stompAOESizeUPG.newLevel]
+         local stomper = self.currentActor:get(prism.components.Stomper)
+         if stomper then stomper.aoeRadius = newAMT end
+         stompAOESizeUPG.newLevel = 0
+      end
       -- pit stomp
       -- max health
       local healthUPG = upgrades[8]
