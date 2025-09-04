@@ -163,7 +163,7 @@ function PauseState:GetCurrentInfo()
    local stompAOESizeLevel = IndexOf(upgrades[6].amounts, stompAOESize)
    if stompAOESizeLevel then upgrades[6].currentLevel = stompAOESizeLevel end
    -- pit stomp
-   local pitStomper = self.currentActor and self.currentActor:get(prism.components.pitStomper)
+   local pitStomper = self.currentActor and self.currentActor:get(prism.components.PitStomper)
    if pitStomper then upgrades[7].currentLevel = 1 end
    -- maxHP
    local health = self.currentActor and self.currentActor:get(prism.components.Health)
@@ -475,6 +475,11 @@ function PauseState:keypressed(key)
          stompAOESizeUPG.newLevel = 0
       end
       -- pit stomp
+      local pitstompUPG = upgrades[7]
+      if pitstompUPG.newLevel > 0 then
+         self.currentActor:give(prism.components.PitStomper())
+         pitstompUPG.newLevel = 0
+      end
       -- max health
       local healthUPG = upgrades[8]
       if healthUPG.newLevel > 0 then

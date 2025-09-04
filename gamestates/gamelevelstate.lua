@@ -186,9 +186,13 @@ function GameLevelState:keypressed(key, scancode)
                table.insert(nearbyCells, prism.Vector2(startPos.x + i, startPos.y + j))
             end
          end
-         if owner:get(prism.components.WallKicker) then
+         if owner:get(prism.components.WallKicker) and Game.kickmode == "Kicking" then
             local wallkick = prism.actions.WallKick
             local celltargethandler = CellTargetHandler(self.display, self, nearbyCells, wallkick)
+            self.manager:push(celltargethandler)
+         elseif owner:get(prism.components.PitStomper) and Game.kickmode == "Stomping" then
+            local pitstomp = prism.actions.PitStomp
+            local celltargethandler = CellTargetHandler(self.display, self, nearbyCells, pitstomp)
             self.manager:push(celltargethandler)
          end
       end

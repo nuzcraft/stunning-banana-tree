@@ -36,7 +36,9 @@ function CellTargetHandler:draw()
    local primary, secondary = self.levelState:getSenses()
    self.display:putSenses(primary, secondary)
 
-   self.display:putString(1, 2, "Select a target!", WHITE, DARKGRAY)
+   self.display:putString(1, 2, "[f]/[space] Select a target!", WHITE, DARKGRAY)
+   self.display:putString(1, 3, "[tab] Switch target")
+   self.display:putString(1, 4, "[esc] Exit", DARKGRAY)
    self.display:putString(self.selectorPosition.x + ox, self.selectorPosition.y + oy, "X", RED)
    self.display:draw()
 end

@@ -4,6 +4,6 @@ prism.registerCell("Wall", function()
       prism.components.Drawable("#"),
       prism.components.Collider(),
       prism.components.Opaque(),
+      prism.components.Destructible(),
    }
 end)
-
