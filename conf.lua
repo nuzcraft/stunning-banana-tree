@@ -1,6 +1,6 @@
 --- @diagnostic disable-next-line
 function love.conf(t)
-   t.window.title = "Nuzcraft's Kicking Kobolds v0.01"
+   t.window.title = "Nuzcraft's Kicking Kobolds v0.02"
    t.window.vsync = 0 -- Enable vsync (1 by default)
    t.window.width = 960
    t.window.height = 540

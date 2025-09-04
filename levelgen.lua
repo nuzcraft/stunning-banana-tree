@@ -192,7 +192,7 @@ function ClassicLevel(rng, player, depth)
       if room ~= startRoom then
          for n = 1, math.min(math.ceil((depth + 1) / 5), 4) do
             local vec = sides[n]
-            builder:addActor(prism.actors.Kobold(), vec.x, vec.y)
+            builder:addActor(prism.actors.SturdyKobold(), vec.x, vec.y)
          end
       end
    end

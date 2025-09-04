@@ -1,9 +1,9 @@
-prism.registerActor("Kobold", function()
+prism.registerActor("SturdyKobold", function()
    return prism.Actor.fromComponents {
-      prism.components.Name("Kobold"),
+      prism.components.Name("Sturdy Kobold"),
       prism.components.Drawable({
          char = "k",
-         color = YELLOW,
+         color = ORANGE,
          layer = 2,
       }),
       prism.components.Position(),
@@ -12,12 +12,13 @@ prism.registerActor("Kobold", function()
       prism.components.Sight { range = 12, fov = true },
       prism.components.Mover { "walk" },
       prism.components.KoboldController(),
-      prism.components.Health(3),
+      prism.components.Health(6),
       prism.components.Attacker(1),
-      prism.components.Kicker(2, 0),
+      -- prism.components.Kicker(2, 0),
+      prism.components.Sturdy(1),
       prism.components.DropTable {
          {
-            chance = 0.3,
+            chance = 0.5,
             entry = prism.actors.MeatBrick,
          },
          {
