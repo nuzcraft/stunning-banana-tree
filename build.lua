@@ -4,7 +4,7 @@ return {
    name = "KickingKobolds", -- name of the game for your executable
    developer = "nuzcraft", -- dev name used in metadata of the file
    output = "dist", -- output location for your game, defaults to $SAVE_DIRECTORY
-   version = "0.01", -- 'version' of your game, used to name the folder in output
+   version = "0.02", -- 'version' of your game, used to name the folder in output
    love = "12.0", -- version of LÖVE to use, must match github releases
    ignore = { ".vscode", "bin", "definitions", "screenshots", "dist" }, -- folders/files to ignore in your project
    icon = "resources/icon.png", -- 256x256px PNG icon for game, will be converted for you
