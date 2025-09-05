@@ -23,6 +23,10 @@ function GameLevelState:__new(display, builder, seed)
    }, nil, seed)
 
    spectrum.LevelState.__new(self, level, display)
+
+   self.shakeTime = 0
+   self.shakeDuration = 0
+   self.shakeMagnitude = 3
 end
 
 --- @param message Message
@@ -34,6 +38,20 @@ function GameLevelState:handleMessage(message)
       --- @diagnostic disable-next-line: undefined-field
       self.manager:enter(GameLevelState(self.display, Game:generateNextFloor(message.descender), Game:getLevelSeed()))
    end
+end
+
+---@param dt number
+function GameLevelState:update(dt)
+   spectrum.LevelState.update(self, dt)
+   if self.shakeTime < self.shakeDuration then self.shakeTime = self.shakeTime + dt end
+end
+
+--- @param duration number
+--- @param magnitude number
+function GameLevelState:startShake(duration, magnitude)
+   self.shakeTime = 0
+   self.shakeDuration = duration or 0
+   self.shakeMagnitude = magnitude or 5
 end
 
 --- @param primary Senses[] { curActor:getComponent(prism.components.Senses)}
@@ -99,6 +117,12 @@ function GameLevelState:draw(primary, secondary)
    -- offset it for custom non-terminal UI elements. If you do scale the UI
    -- just remember that display:getCellUnderMouse expects the mouse in the
    -- display's local pixel coordinates
+   if self.shakeTime < self.shakeDuration then
+      local dx = love.math.random(-self.shakeMagnitude, self.shakeMagnitude)
+      local dy = love.math.random(-self.shakeMagnitude, self.shakeMagnitude)
+      love.graphics.translate(dx, dy)
+   end
+
    self.display:draw()
 
    -- custom love2d drawing goes here!
@@ -151,13 +175,12 @@ function GameLevelState:keypressed(key, scancode)
       end
 
       local target = self.level:query(prism.components.Collider):at(destination:decompose()):first()
-      local targetCell = self.level:getCell(destination:decompose())
-      local targetCellPos = destination
       if Game.kickmode == "Kicking" then
          local kick = prism.actions.Kick(owner, target)
          -- local wallkick = prism.actions.WallKick(owner, destination)
          if self.level:canPerform(kick) then
             decision:setAction(kick)
+            self:startShake(0.075, 2)
             Game.turns = Game.turns + 1
             -- elseif self.level:canPerform(wallkick) then
             --    decision:setAction(wallkick)
@@ -167,6 +190,7 @@ function GameLevelState:keypressed(key, scancode)
          local stomp = prism.actions.Stomp(owner, target)
          if self.level:canPerform(stomp) then
             decision:setAction(stomp)
+            self:startShake(0.1, 2)
             Game.turns = Game.turns + 1
          end
       end

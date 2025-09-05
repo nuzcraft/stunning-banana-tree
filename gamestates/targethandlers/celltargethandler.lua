@@ -72,6 +72,8 @@ function CellTargetHandler:keypressed(key)
          ---@diagnostic disable-next-line: param-type-mismatch
          self.levelState.decision:setAction(actingaction)
          self.manager:pop()
+         ---@diagnostic disable-next-line: undefined-field
+         self.levelState:startShake(0.075, 2)
       end
    end
    --    if keybindOffsets[action] then self.selectorPosition = self.selectorPosition + keybindOffsets[action] end
