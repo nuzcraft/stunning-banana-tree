@@ -70,7 +70,7 @@ end
 --- @return MapBuilder builder
 function Game:generateNextFloor(player)
    self.depth = self.depth + 1
-   self.depth = 10
+   -- self.depth = 10
    local genRNG = prism.RNG(self:getLevelSeed())
    -- return CircleLevel(genRNG, player, 50, 50, self.depth)
    return GetLevel(genRNG, player, self.depth)

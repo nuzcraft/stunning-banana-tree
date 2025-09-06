@@ -3,6 +3,7 @@ prism.registerActor("WandofHurt", function()
       prism.components.Name("Wand of Hurt"),
       prism.components.Drawable {
          char = "/",
+         color = PURPLE,
       },
       prism.components.HurtZappable {
          charges = 3,
