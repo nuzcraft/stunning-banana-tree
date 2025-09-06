@@ -12,36 +12,27 @@ end
 function GameOverState:draw()
    local midpoint = math.floor(self.display.height / 2)
    self.display:clear()
-   self.display:putString(1, midpoint - 3, "Game over!", nil, nil, nil, "center", self.display.width)
+   self.display:putString(1, midpoint - 3, "Game over!", WHITE, nil, nil, "center", self.display.width)
    self.display:putString(
       1,
       midpoint - 1,
       "Survived for " .. Game.turns .. " turns",
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "center",
       self.display.width
    )
-   self.display:putString(
-      1,
-      midpoint,
-      "Died on depth " .. Game.depth,
-      prism.Color4.DARKGRAY,
-      nil,
-      nil,
-      "center",
-      self.display.width
-   )
-   self.display:putString(1, midpoint + 3, "[r] to restart", nil, nil, nil, "center", self.display.width)
-   self.display:putString(1, midpoint + 4, "[q] to quit", prism.Color4.DARKGRAY, nil, nil, "center", self.display.width)
+   self.display:putString(1, midpoint, "Died on depth " .. Game.depth, DARKGRAY, nil, nil, "center", self.display.width)
+   self.display:putString(1, midpoint + 3, "[r] to restart", WHITE, nil, nil, "center", self.display.width)
+   self.display:putString(1, midpoint + 4, "[q] to quit", DARKGRAY, nil, nil, "center", self.display.width)
 
    -- run stats
    self.display:putString(
       0,
       midpoint - 4,
       "Number of Kicks: " .. Game.stats.numKicks,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",
@@ -51,7 +42,7 @@ function GameOverState:draw()
       0,
       midpoint - 3,
       "Number of Stomps: " .. Game.stats.numStomps,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",
@@ -61,7 +52,7 @@ function GameOverState:draw()
       0,
       midpoint - 2,
       "Kobolds Killed: " .. Game.stats.koboldsKilled,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",
@@ -71,7 +62,7 @@ function GameOverState:draw()
       0,
       midpoint - 1,
       "Kobolds Pitted: " .. Game.stats.koboldsPitted,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",
@@ -81,7 +72,7 @@ function GameOverState:draw()
       0,
       midpoint,
       "Health Healed: " .. Game.stats.healthHealed,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",
@@ -91,7 +82,7 @@ function GameOverState:draw()
       0,
       midpoint + 1,
       "Chests Opened: " .. Game.stats.chestsOpened,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",
@@ -101,7 +92,7 @@ function GameOverState:draw()
       0,
       midpoint + 2,
       "Damage Done: " .. Game.stats.damageDone,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",
@@ -111,7 +102,7 @@ function GameOverState:draw()
       0,
       midpoint + 3,
       "Damage Taken: " .. Game.stats.damageTaken,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",
@@ -121,7 +112,7 @@ function GameOverState:draw()
       0,
       midpoint + 4,
       "XP Collected: " .. Game.stats.xpCollected,
-      prism.Color4.DARKGRAY,
+      DARKGRAY,
       nil,
       nil,
       "right",

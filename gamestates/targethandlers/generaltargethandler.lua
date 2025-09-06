@@ -44,7 +44,7 @@ function GeneralTargetHandler:draw()
    self.display:putSenses(primary, secondary)
 
    self.display:putString(1, 1, "Select a target!")
-   self.display:putString(self.selectorPosition.x + ox, self.selectorPosition.y + oy, "X", prism.Color4.RED)
+   self.display:putString(self.selectorPosition.x + ox, self.selectorPosition.y + oy, "X", RED)
 
    if self.curTarget then
       local x, y = cameraPos:decompose()

@@ -46,7 +46,7 @@ function Game:__new(seed)
    self.xp = 0
    self.level = 1
    self.levelThreshold = levelThresholds[self.level]
-   self.skillPoints = 10
+   self.skillPoints = 0
    self.stats = {
       numKicks = 0,
       numStomps = 0,
@@ -70,6 +70,7 @@ end
 --- @return MapBuilder builder
 function Game:generateNextFloor(player)
    self.depth = self.depth + 1
+   -- self.depth = 10
    local genRNG = prism.RNG(self:getLevelSeed())
    -- return CircleLevel(genRNG, player, 50, 50, self.depth)
    return GetLevel(genRNG, player, self.depth)

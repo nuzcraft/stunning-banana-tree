@@ -1,10 +1,24 @@
 require "prism"
 
-YELLOW = prism.Color4(1.0, 1.0, 0.0, 1.0)
-ORANGE = prism.Color4(1.0, 0.65, 0.0, 1.0)
-CYAN = prism.Color4(0.0, 1.0, 1.0, 1.0)
-GREEN = prism.Color4.GREEN
-DARKGRAY = prism.Color4.DARKGRAY
-WHITE = prism.Color4.WHITE
-LIGHTGRAY = prism.Color4.LIGHTGRAY
-RED = prism.Color4.RED
+BLACK = prism.Color4(0.0, 0.0, 0.0, 1.0)
+PURPLE = prism.Color4(99 / 255, 42 / 255, 143 / 255, 1.0)
+PINK = prism.Color4(194 / 255, 71 / 255, 184 / 255, 1.0)
+DARKBROWN = prism.Color4(78 / 255, 61 / 255, 59 / 255, 1.0)
+DARKGRAY = prism.Color4(84 / 255, 77 / 255, 84 / 255, 1.0)
+GRAY = prism.Color4(120 / 255, 108 / 255, 100 / 255, 1.0)
+LIGHTGRAY = prism.Color4(160 / 255, 154 / 255, 146 / 255, 1.0)
+WHITE = prism.Color4(245 / 255, 238 / 255, 228 / 255, 1.0)
+CYAN = prism.Color4(100 / 255, 213 / 255, 223 / 255, 1.0)
+LIGHTBLUE = prism.Color4(71 / 255, 143 / 255, 202 / 255, 1.0)
+BlUE = prism.Color4(47 / 255, 88 / 255, 141 / 255, 1.0)
+DARKBLUE = prism.Color4(37 / 255, 47 / 255, 64 / 255, 1.0)
+DARKRED = prism.Color4(99 / 255, 37 / 255, 14 / 255, 1.0)
+RED = prism.Color4(158 / 255, 50 / 255, 39 / 255, 1.0)
+ORANGE = prism.Color4(216 / 255, 121 / 255, 69 / 255, 1.0)
+YELLOW = prism.Color4(244 / 255, 220 / 255, 109 / 255, 1.0)
+LIGHTGREEN = prism.Color4(137 / 255, 170 / 255, 85 / 255, 1.0)
+GREEN = prism.Color4(78 / 255, 131 / 255, 87 / 255, 1.0)
+DARKGREEN = prism.Color4(56 / 255, 105 / 255, 86 / 255, 1.0)
+DARKERGREEN = prism.Color4(43 / 255, 74 / 255, 60 / 255, 1.0)
+TAN = prism.Color4(233 / 255, 155 / 255, 124 / 255, 1.0)
+BROWN = prism.Color4(130 / 255, 83 / 255, 65 / 255, 1.0)

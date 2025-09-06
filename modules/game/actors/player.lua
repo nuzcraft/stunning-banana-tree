@@ -3,7 +3,7 @@ prism.registerActor("Player", function()
       prism.components.Name("Player"),
       prism.components.Drawable({
          char = "@",
-         color = prism.Color4.GREEN,
+         color = GREEN,
          layer = math.huge,
       }),
       prism.components.Position(),
