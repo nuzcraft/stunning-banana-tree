@@ -10,7 +10,7 @@ prism.registerCell("Pit", function()
          },
          overhang = {
             char = '"',
-            color = DARKGRAY,
+            color = DARKBROWN,
          },
       }),
    }

@@ -20,7 +20,7 @@ prism.registerCell("Wall", function()
          },
          alternate05 = {
             char = "#",
-            color = YELLOW,
+            color = BROWN,
          },
          original10 = {
             char = "#",
@@ -28,7 +28,7 @@ prism.registerCell("Wall", function()
          },
          alternate10 = {
             char = "#",
-            color = ORANGE,
+            color = DARKRED,
          },
       }),
    }

@@ -7,10 +7,19 @@ prism.registerCell("Floor", function()
       prism.components.AlternateDrawable({
          original = {
             char = ".",
+            color = LIGHTGRAY,
          },
          alternate = {
             char = ".",
+            color = GRAY,
+         },
+         original05 = {
+            char = ".",
             color = LIGHTGRAY,
+         },
+         alternate05 = {
+            char = ".",
+            color = GRAY,
          },
       }),
    }
