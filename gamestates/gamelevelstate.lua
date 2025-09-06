@@ -86,7 +86,8 @@ function GameLevelState:draw(primary, secondary)
       "XP:" .. Game.xp .. "/" .. Game.levelThreshold,
       CYAN
    )
-   self.display:putString(-1, 2, "Turns:" .. Game.turns, nil, nil, nil, "right", self.display.width)
+   -- self.display:putString(1, 1, "FPS: " .. love.timer.getFPS(), WHITE, nil, nil, "right", self.display.width)
+   self.display:putString(-1, 2, "Turns:" .. Game.turns, WHITE, nil, nil, "right", self.display.width)
    local kickmodeColor = ORANGE
    if Game.kickmode == "Stomping" then kickmodeColor = YELLOW end
    self.display:putString(1, 3, Game.kickmode, kickmodeColor)
