@@ -340,85 +340,31 @@ function PauseState:draw()
       end
    end
 
-   self.display:putLine(
-      midwidth - 20,
-      midpoint - 7,
-      midwidth - 20,
-      midpoint + 7,
-      box_vert,
-      prism.Color4.WHITE,
-      nil,
-      nil
-   )
-   self.display:putLine(midwidth - 5, midpoint - 7, midwidth - 5, midpoint + 7, box_vert, prism.Color4.WHITE, nil, nil)
-   self.display:putLine(midwidth - 1, midpoint - 7, midwidth - 1, midpoint + 7, box_vert, prism.Color4.WHITE, nil, nil)
-   self.display:putLine(midwidth + 9, midpoint - 7, midwidth + 9, midpoint + 7, box_vert, prism.Color4.WHITE, nil, nil)
-   self.display:putLine(
-      midwidth + 13,
-      midpoint - 7,
-      midwidth + 13,
-      midpoint + 7,
-      box_vert,
-      prism.Color4.WHITE,
-      nil,
-      nil
-   )
-   self.display:putLine(
-      midwidth + 19,
-      midpoint - 7,
-      midwidth + 19,
-      midpoint + 7,
-      box_vert,
-      prism.Color4.WHITE,
-      nil,
-      nil
-   )
+   self.display:putLine(midwidth - 20, midpoint - 7, midwidth - 20, midpoint + 7, box_vert, WHITE, nil, nil)
+   self.display:putLine(midwidth - 5, midpoint - 7, midwidth - 5, midpoint + 7, box_vert, WHITE, nil, nil)
+   self.display:putLine(midwidth - 1, midpoint - 7, midwidth - 1, midpoint + 7, box_vert, WHITE, nil, nil)
+   self.display:putLine(midwidth + 9, midpoint - 7, midwidth + 9, midpoint + 7, box_vert, WHITE, nil, nil)
+   self.display:putLine(midwidth + 13, midpoint - 7, midwidth + 13, midpoint + 7, box_vert, WHITE, nil, nil)
+   self.display:putLine(midwidth + 19, midpoint - 7, midwidth + 19, midpoint + 7, box_vert, WHITE, nil, nil)
    self.display:putLine(midwidth - 19, midpoint - 8, midwidth + 18, midpoint - 8, box_horiz, WHITE, nil, nil)
    self.display:putLine(midwidth - 19, midpoint + 8, midwidth + 18, midpoint + 8, box_horiz, WHITE, nil, nil)
-   self.display:put(boxRect.x, boxRect.y, box_down_right, nil, nil, nil)
-   self.display:put(boxRect.x + boxRect.w - 1, boxRect.y, box_down_left, nil, nil, nil)
-   self.display:put(boxRect.x, boxRect.y + boxRect.h - 1, box_up_right, nil, nil, nil)
-   self.display:put(boxRect.x + boxRect.w - 1, boxRect.y + boxRect.h - 1, box_up_left, nil, nil, nil)
-   self.display:put(boxRect.x + 15, boxRect.y, box_down_horiz, nil, nil, nil)
-   self.display:put(boxRect.x + 19, boxRect.y, box_down_horiz, nil, nil, nil)
-   self.display:put(boxRect.x + 29, boxRect.y, box_down_horiz, nil, nil, nil)
-   self.display:put(boxRect.x + 33, boxRect.y, box_down_horiz, nil, nil, nil)
-   self.display:put(boxRect.x + 15, boxRect.y + boxRect.h - 1, box_up_horiz, nil, nil, nil)
-   self.display:put(boxRect.x + 19, boxRect.y + boxRect.h - 1, box_up_horiz, nil, nil, nil)
-   self.display:put(boxRect.x + 29, boxRect.y + boxRect.h - 1, box_up_horiz, nil, nil, nil)
-   self.display:put(boxRect.x + 33, boxRect.y + boxRect.h - 1, box_up_horiz, nil, nil, nil)
+   self.display:put(boxRect.x, boxRect.y, box_down_right, WHITE, nil, nil)
+   self.display:put(boxRect.x + boxRect.w - 1, boxRect.y, box_down_left, WHITE, nil, nil)
+   self.display:put(boxRect.x, boxRect.y + boxRect.h - 1, box_up_right, WHITE, nil, nil)
+   self.display:put(boxRect.x + boxRect.w - 1, boxRect.y + boxRect.h - 1, box_up_left, WHITE, nil, nil)
+   self.display:put(boxRect.x + 15, boxRect.y, box_down_horiz, WHITE, nil, nil)
+   self.display:put(boxRect.x + 19, boxRect.y, box_down_horiz, WHITE, nil, nil)
+   self.display:put(boxRect.x + 29, boxRect.y, box_down_horiz, WHITE, nil, nil)
+   self.display:put(boxRect.x + 33, boxRect.y, box_down_horiz, WHITE, nil, nil)
+   self.display:put(boxRect.x + 15, boxRect.y + boxRect.h - 1, box_up_horiz, WHITE, nil, nil)
+   self.display:put(boxRect.x + 19, boxRect.y + boxRect.h - 1, box_up_horiz, WHITE, nil, nil)
+   self.display:put(boxRect.x + 29, boxRect.y + boxRect.h - 1, box_up_horiz, WHITE, nil, nil)
+   self.display:put(boxRect.x + 33, boxRect.y + boxRect.h - 1, box_up_horiz, WHITE, nil, nil)
 
    self.display:putString(1, midpoint + 10, "[wasd] to select & spend", WHITE, nil, nil, "center", self.display.width)
-   self.display:putString(
-      1,
-      midpoint + 11,
-      "[esc] to return",
-      prism.Color4.LIGHTGRAY,
-      nil,
-      nil,
-      "center",
-      self.display.width
-   )
-   self.display:putString(
-      1,
-      midpoint + 12,
-      "[r] to restart",
-      prism.Color4.DARKGRAY,
-      nil,
-      nil,
-      "center",
-      self.display.width
-   )
-   self.display:putString(
-      1,
-      midpoint + 13,
-      "[q] to quit",
-      prism.Color4.DARKGRAY,
-      nil,
-      nil,
-      "center",
-      self.display.width
-   )
+   self.display:putString(1, midpoint + 11, "[esc] to return", LIGHTGRAY, nil, nil, "center", self.display.width)
+   self.display:putString(1, midpoint + 12, "[r] to restart", DARKGRAY, nil, nil, "center", self.display.width)
+   self.display:putString(1, midpoint + 13, "[q] to quit", DARKGRAY, nil, nil, "center", self.display.width)
 
    self.display:draw()
 end

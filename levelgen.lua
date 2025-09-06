@@ -138,26 +138,62 @@ function CreateLShapedHallway(rng, builder, vecA, vecB)
    return builder
 end
 
+--- @param rng RNG
 --- @param width integer
 --- @param height integer
 --- @param depth integer
 --- @param builder MapBuilder
-function SetAlternateCells(width, height, depth, builder)
+function SetAlternateCells(rng, width, height, depth, builder)
+   local nox, noy = rng:random(1, 10000), rng:random(1, 10000)
    for x = 0, width + 1 do
       for y = 0, height + 1 do
          local cell = builder:get(x, y)
-         if cell:getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
-            cell:give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
-            -- elseif builder:get(x, y):getName() == "Wall" and builder:get(x, y + 1):getName() == "Floor" then
-            --    builder:get(x, y):give(prism.components.Drawable({ char = "=" }))
-         elseif cell:getName() == "Wall" and depth >= 5 then
-            local drawable = cell:get(prism.components.Drawable)
-            if drawable and depth < 10 then
-               drawable.color = ORANGE
-            else
-               drawable.color = prism.Color4.RED
+         local altdrawable = cell:get(prism.components.AlternateDrawable)
+         if altdrawable then
+            if altdrawable.options["overhang"] and cell:getName() ~= builder:get(x, y - 1):getName() then
+               local drawable = prism.components.Drawable(altdrawable.options["overhang"])
+               cell:give(drawable)
             end
-            cell:give(drawable)
+
+            local ogDepth = 0
+            local altDepth = 0
+            local ogString = "original"
+            local altString = "alternate"
+            for key, _ in pairs(altdrawable.options) do
+               local depthNum = tonumber(string.match(key, "%d+"))
+               if key:match("^original") and depthNum and depthNum > ogDepth and depthNum <= depth then
+                  ogString = key
+                  ogDepth = depthNum
+               end
+               if key:match("^alternate") and depthNum and depthNum > altDepth and depthNum <= depth then
+                  altString = key
+                  altDepth = depthNum
+               end
+            end
+
+            if altdrawable.options[altString] then
+               local noise = love.math.perlinNoise(x / 5 + nox, y / 5 + noy)
+               if noise < 0.5 then
+                  local drawable = prism.components.Drawable(altdrawable.options[altString])
+                  cell:give(drawable)
+               else
+                  local drawable = prism.components.Drawable(altdrawable.options[ogString])
+                  cell:give(drawable)
+               end
+            end
+            -- if cell:getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
+            --    cell:give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
+            --    -- elseif builder:get(x, y):getName() == "Wall" and builder:get(x, y + 1):getName() == "Floor" then
+            --    --    builder:get(x, y):give(prism.components.Drawable({ char = "=" }))
+            -- elseif cell:getName() == "Wall" and depth >= 5 then
+            --    local drawable = cell:get(prism.components.Drawable)
+            --    if drawable and depth < 10 then
+            --       drawable.color = ORANGE
+            --    else
+            --       drawable.color = prism.Color4.RED
+            --    end
+            --    cell:give(drawable)
+            -- end
          end
       end
    end
@@ -273,7 +309,7 @@ function ClassicLevel(rng, player, depth)
       builder:addActor(prism.actors.Chest(drops2), math.floor(center2.x), math.floor(center2.y))
    end
 
-   builder = SetAlternateCells(width, height, depth, builder)
+   builder = SetAlternateCells(rng, width, height, depth, builder)
 
    return builder
 end
@@ -391,7 +427,7 @@ function CircleLevel(rng, player, depth)
       builder:addActor(prism.actors.Chest(drops2), math.floor(center2.x), math.floor(center2.y))
    end
 
-   builder = SetAlternateCells(width, height, depth, builder)
+   builder = SetAlternateCells(rng, width, height, depth, builder)
 
    return builder
 end

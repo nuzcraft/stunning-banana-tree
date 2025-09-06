@@ -46,7 +46,7 @@ function Game:__new(seed)
    self.xp = 0
    self.level = 1
    self.levelThreshold = levelThresholds[self.level]
-   self.skillPoints = 10
+   self.skillPoints = 0
    self.stats = {
       numKicks = 0,
       numStomps = 0,
