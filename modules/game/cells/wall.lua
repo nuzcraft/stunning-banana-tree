@@ -1,7 +1,7 @@
 prism.registerCell("Wall", function()
    return prism.Cell.fromComponents {
       prism.components.Name("Wall"),
-      prism.components.Drawable({ char = "#", color = WHITE }),
+      prism.components.Drawable({ char = "#", color = LIGHTGRAY }),
       prism.components.Collider(),
       prism.components.Opaque(),
       prism.components.Destructible(),
