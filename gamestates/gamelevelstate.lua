@@ -4,6 +4,8 @@ local GameOverState = require "gamestates.gameoverstate"
 local PauseState = require "gamestates.pausestate"
 local CellTargetHandler = require "gamestates.targethandlers.celltargethandler"
 
+local keymode = ""
+
 --- @class GameLevelState : LevelState
 --- @field path Path
 --- @field level Level
@@ -145,8 +147,15 @@ function GameLevelState:keypressed(key, scancode)
 
    local owner = decision.actor
 
+   if key == "lshift" or key == "rshift" then
+      keymode = "shift"
+   elseif key == "lctrl" or key == "rctrl" then
+      keymode = "control"
+   end
+
    -- Resolve the action string from the keybinding schema
    local action = keybindings:keypressed(key)
+   if keymode == "shift" or keymode == "control" then action = keybindings:keypressed(key, keymode) end
 
    -- Attempt to translate the action into a directional move
    if keybindOffsets[action] then
@@ -247,6 +256,10 @@ function GameLevelState:keypressed(key, scancode)
       decision:setAction(prism.actions.Wait(self.decision.actor))
       Game.turns = Game.turns + 1
    end
+end
+
+function GameLevelState:keyreleased(key, scancode)
+   if key == "lshift" or key == "rshift" or key == "lctrl" or key == "rctrl" then keymode = "" end
 end
 
 return GameLevelState
