@@ -13,6 +13,10 @@ end
 function TitleState:draw()
    local midpoint = math.floor(self.display.height / 2)
    local midwidth = math.floor(self.display.width / 2)
+   local cam = spectrum.Camera(midwidth, midpoint)
+   -- cam:setScale(2.0 / 3.0, 2.0 / 3.0)
+   -- cam:setScale(0.5, 0.5)
+   -- cam:push()
    self.display:clear()
    self.display:putString(1, midpoint - 2, "Nuzcraft's Kicking Kobolds", WHITE, nil, nil, "center", self.display.width)
    self.display:put(midwidth - 13, midpoint - 2, 219, GREEN, nil, nil)
@@ -56,6 +60,7 @@ function TitleState:draw()
    )
    self.display:putString(2, midpoint + 21, "Version 0.02", DARKGRAY, nil, nil, "left", self.display.width)
    self.display:draw()
+   -- cam:pop()
 end
 
 function TitleState:keypressed(key, scancode, isrepeat)
