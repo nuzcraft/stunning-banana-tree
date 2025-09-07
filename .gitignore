@@ -8,3 +8,7 @@ build/
 
 bin/
 dist/
+
+# paid assets
+display/GoblinRL.png
+display/oh no more goblins extended.png
