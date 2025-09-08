@@ -76,9 +76,9 @@ function GameLevelState:draw(primary, secondary)
    local currentActor = self:getCurrentActor()
    local health = currentActor and currentActor:get(prism.components.Health) or 0
    local healthString = string.format("HP:" .. health.hp .. "/" .. health:getMaxHP())
-   if health then self.display:putString(1, 1, healthString) end
+   if health then self.display:putString(1, 1, healthString, WHITE) end
    local depthString = string.format("Depth:" .. Game.depth)
-   self.display:putString(1, 2, depthString)
+   self.display:putString(1, 2, depthString, WHITE)
 
    self.display:putString(math.max(#healthString, #depthString) + 2, 1, "LVL:" .. Game.level, GREEN)
    self.display:putString(

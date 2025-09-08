@@ -1,6 +1,21 @@
 require "debugger"
 require "prism"
 require "colors"
+local json = require "prism.engine.lib.json"
+local prefData
+if love.filesystem.getInfo("preferences.json") then
+   prefData = love.filesystem.read("preferences.json")
+else
+   -- fallback: try to read from the OS filesystem (for compiled/distributed builds)
+   local file = io.open("preferences.json", "r")
+   if file then
+      prefData = file:read("*a")
+      file:close()
+   else
+      error("preferences.json not found in either LOVE or OS filesystem!")
+   end
+end
+local preferences = json.decode(prefData)
 
 prism.loadModule("prism/spectrum")
 prism.loadModule("prism/extra/sight")
@@ -10,17 +25,15 @@ prism.loadModule("prism/extra/droptable")
 prism.loadModule("prism/extra/statuseffects")
 prism.loadModule("modules/basegame")
 prism.loadModule("modules/game")
-
 Game = require("game")
-
--- Grab our level state and sprite atlas.
--- local GameLevelState = require "gamestates.gamelevelstate"
 local TitleState = require "gamestates.titlestate"
--- local TitleState = require "gamestates.gameoverstate" -- for testing
+
+love.graphics.setBackgroundColor(BLACK.r, BLACK.g, BLACK.b, BLACK.a) -- update for theme
 
 -- Load a sprite atlas and configure the terminal-style display,
+local fontPath = preferences.font
 love.graphics.setDefaultFilter("nearest", "nearest")
-local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/wanderlust_16x16.png", 16, 16)
+local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/" .. fontPath, 16, 16)
 
 -- local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/cp437_12x12.png", 12, 12)
 -- local spriteAtlas = spectrum.SpriteAtlas.fromAtlased("display/GoblinRL.png", "display/GoblinRL.json")
