@@ -14,7 +14,7 @@ prism.loadModule("modules/game")
 Game = require("game")
 
 -- Grab our level state and sprite atlas.
-local GameLevelState = require "gamestates.gamelevelstate"
+-- local GameLevelState = require "gamestates.gamelevelstate"
 local TitleState = require "gamestates.titlestate"
 -- local TitleState = require "gamestates.gameoverstate" -- for testing
 

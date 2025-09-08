@@ -262,6 +262,10 @@ function GameLevelState:keyreleased(key)
    if key == "lshift" or key == "rshift" or key == "lctrl" or key == "rctrl" then keymode = "" end
 end
 
+function GameLevelState:resume()
+   keymode = ""
+end
+
 -- - @param x integer
 -- - @param y integer
 -- - @param depth integer
