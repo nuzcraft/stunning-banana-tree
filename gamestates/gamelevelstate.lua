@@ -60,7 +60,6 @@ end
 --- @param secondary Senses[]
 function GameLevelState:draw(primary, secondary)
    if not self.decision then return end
-
    self.display:clear()
 
    local position = self.decision.actor:getPosition()
