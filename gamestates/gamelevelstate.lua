@@ -258,8 +258,35 @@ function GameLevelState:keypressed(key, scancode)
    end
 end
 
-function GameLevelState:keyreleased(key, scancode)
+function GameLevelState:keyreleased(key)
    if key == "lshift" or key == "rshift" or key == "lctrl" or key == "rctrl" then keymode = "" end
 end
+
+-- - @param x integer
+-- - @param y integer
+-- - @param depth integer
+-- function GameLevelState:setAlternateCell(x, y, depth)
+--    local cell = self.level:getCell(x, y)
+--    local altdrawable = cell:get(prism.components.AlternateDrawable)
+--    if altdrawable then
+--       if altdrawable.options["overhang"] and cell:getName() ~= self.level:getCell(x, y - 1):getName() then
+--          local drawable = prism.components.Drawable(altdrawable.options["overhang"])
+--          cell:give(drawable)
+--       end
+
+--       local ogDepth = 0
+--       local ogString = "original"
+--       for key, _ in pairs(altdrawable.options) do
+--          local depthNum = tonumber(string.match(key, "%d+"))
+--          if key:match("^original") and depthNum and depthNum > ogDepth and depthNum <= depth then
+--             ogString = key
+--             ogDepth = depthNum
+--          end
+--       end
+
+--       local drawable = prism.components.Drawable(altdrawable.options[ogString])
+--       cell:give(drawable)
+--    end
+-- end
 
 return GameLevelState

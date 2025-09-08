@@ -181,19 +181,6 @@ function SetAlternateCells(rng, width, height, depth, builder)
                   cell:give(drawable)
                end
             end
-            -- if cell:getName() == "Pit" and builder:get(x, y - 1):getName() ~= "Pit" then
-            --    cell:give(prism.components.Drawable({ char = '"', color = prism.Color4.DARKGRAY }))
-            --    -- elseif builder:get(x, y):getName() == "Wall" and builder:get(x, y + 1):getName() == "Floor" then
-            --    --    builder:get(x, y):give(prism.components.Drawable({ char = "=" }))
-            -- elseif cell:getName() == "Wall" and depth >= 5 then
-            --    local drawable = cell:get(prism.components.Drawable)
-            --    if drawable and depth < 10 then
-            --       drawable.color = ORANGE
-            --    else
-            --       drawable.color = prism.Color4.RED
-            --    end
-            --    cell:give(drawable)
-            -- end
          end
       end
    end

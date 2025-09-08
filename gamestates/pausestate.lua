@@ -104,6 +104,7 @@ local upgrades = {
 
 local skillPointsAvailable = 0
 local skillPointsSpending = 0
+local keymode = ""
 
 --- @class PauseState : GameState
 --- @overload fun(display: Display, decision: ActionDecision, level: Level)
@@ -122,6 +123,7 @@ end
 function PauseState:load(previous)
    self.previousState = previous
    self:GetCurrentInfo()
+   keymode = ""
 end
 
 function PauseState:GetCurrentInfo()
@@ -361,7 +363,7 @@ function PauseState:draw()
    self.display:put(boxRect.x + 29, boxRect.y + boxRect.h - 1, box_up_horiz, WHITE, nil, nil)
    self.display:put(boxRect.x + 33, boxRect.y + boxRect.h - 1, box_up_horiz, WHITE, nil, nil)
 
-   self.display:putString(1, midpoint + 10, "[wasd] to select & spend", WHITE, nil, nil, "center", self.display.width)
+   -- self.display:putString(1, midpoint + 10, "[arrows] to select & spend", WHITE, nil, nil, "center", self.display.width)
    self.display:putString(1, midpoint + 11, "[esc] to return", LIGHTGRAY, nil, nil, "center", self.display.width)
    self.display:putString(1, midpoint + 12, "[r] to restart", DARKGRAY, nil, nil, "center", self.display.width)
    self.display:putString(1, midpoint + 13, "[q] to quit", DARKGRAY, nil, nil, "center", self.display.width)
@@ -369,8 +371,18 @@ function PauseState:draw()
    self.display:draw()
 end
 
+function PauseState:keyreleased(key)
+   if key == "lshift" or key == "rshift" or key == "lctrl" or key == "rctrl" then keymode = "" end
+end
+
 function PauseState:keypressed(key)
+   if key == "lshift" or key == "rshift" then
+      keymode = "shift"
+   elseif key == "lctrl" or key == "rctrl" then
+      keymode = "control"
+   end
    local binding = keybindings:keypressed(key)
+   if keymode == "shift" or keymode == "control" then binding = keybindings:keypressed(key, keymode) end
    if binding == "pause" then
       -- kick damage
       local kickUPG = upgrades[1]

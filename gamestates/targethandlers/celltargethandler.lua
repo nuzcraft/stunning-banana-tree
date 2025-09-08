@@ -1,6 +1,7 @@
 local keybindings = require "keybindingschema"
 local Name = prism.components.Name
 local TargetHandler = require "gamestates.targethandlers.targethandler"
+local keymode = "targeting"
 
 --- @class CellTargetHandler : TargetHandler
 --- @field selectorPosition Vector2
@@ -54,14 +55,28 @@ local keybindOffsets = {
    ["move down-right"] = prism.Vector2.DOWN_RIGHT,
 }
 
+function CellTargetHandler:keyreleased(key)
+   if key == "lshift" or key == "rshift" then keymode = "targeting" end
+end
+
 function CellTargetHandler:keypressed(key)
-   local action = keybindings:keypressed(key, "targeting")
+   if key == "lshift" or key == "rshift" then keymode = "shift-targeting" end
+   local action = keybindings:keypressed(key, keymode)
    if action == "cycle" then -- tab key
       local lastTarget = self.curTarget
       self.index, self.curTarget = next(self.validTargets, self.index)
       while (not self.index and #self.validTargets > 0) or (lastTarget == self.curTarget and #self.validTargets > 1) do
          self.index, self.curTarget = next(self.validTargets, self.index)
       end
+      self:setSelectorPosition()
+   elseif action == "cycle-backward" then
+      local n = #self.validTargets
+      if not self.index or self.index <= 1 then
+         self.index = n
+      else
+         self.index = self.index - 1
+      end
+      self.curTarget = self.validTargets[self.index]
       self:setSelectorPosition()
    end
    if action == "return" then self.manager:pop() end
