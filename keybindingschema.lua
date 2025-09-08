@@ -6,7 +6,7 @@ local keys = preferences.keybindings
 
 return spectrum.Keybinding {
    -- numpad
-   { key = keys.move_up_2, action = "move up", description = "Moves the character upward." },
+   { key = keys.move_up_2 or "kp8", action = "move up", description = "Moves the character upward." },
    { key = keys.move_left_2, action = "move left", description = "Moves the character left." },
    { key = keys.move_down_2, action = "move down", description = "Moves the character downward." },
    { key = keys.move_right_2, action = "move right", description = "Moves the character right." },
@@ -86,7 +86,7 @@ return spectrum.Keybinding {
    { key = keys.pause_2, action = "pause", description = "Pauses and unpauses the game." },
    { key = keys.pause_3, mode = "shift", action = "pause", description = "Pauses and unpauses the game." },
 
-   { key = keys.move_up_2, mode = "paused", action = "move up", description = "Moves the selection upward." },
+   { key = keys.move_up_2 or "kp8", mode = "paused", action = "move up", description = "Moves the selection upward." },
    { key = keys.move_left_2, mode = "paused", action = "move left", description = "Moves the selection left." },
    { key = keys.move_down_2, mode = "paused", action = "move down", description = "Moves the selection downward." },
    { key = keys.move_right_2, mode = "paused", action = "move right", description = "Moves the selection right." },
