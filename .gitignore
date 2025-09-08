@@ -8,3 +8,9 @@ build/
 
 bin/
 dist/
+
+# paid assets
+display/GoblinRL.png
+display/GoblinRL.json
+display/oh no more goblins extended.png
+display/onmge.json

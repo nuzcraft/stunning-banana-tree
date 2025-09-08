@@ -14,12 +14,16 @@ prism.loadModule("modules/game")
 Game = require("game")
 
 -- Grab our level state and sprite atlas.
-local GameLevelState = require "gamestates.gamelevelstate"
+-- local GameLevelState = require "gamestates.gamelevelstate"
 local TitleState = require "gamestates.titlestate"
 -- local TitleState = require "gamestates.gameoverstate" -- for testing
 
 -- Load a sprite atlas and configure the terminal-style display,
+love.graphics.setDefaultFilter("nearest", "nearest")
 local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/wanderlust_16x16.png", 16, 16)
+
+-- local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/cp437_12x12.png", 12, 12)
+-- local spriteAtlas = spectrum.SpriteAtlas.fromAtlased("display/GoblinRL.png", "display/GoblinRL.json")
 local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(16, 16))
 
 -- Automatically size the window to match the terminal dimensions

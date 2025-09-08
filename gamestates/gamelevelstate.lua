@@ -4,6 +4,8 @@ local GameOverState = require "gamestates.gameoverstate"
 local PauseState = require "gamestates.pausestate"
 local CellTargetHandler = require "gamestates.targethandlers.celltargethandler"
 
+local keymode = ""
+
 --- @class GameLevelState : LevelState
 --- @field path Path
 --- @field level Level
@@ -86,7 +88,8 @@ function GameLevelState:draw(primary, secondary)
       "XP:" .. Game.xp .. "/" .. Game.levelThreshold,
       CYAN
    )
-   self.display:putString(-1, 2, "Turns:" .. Game.turns, nil, nil, nil, "right", self.display.width)
+   -- self.display:putString(1, 1, "FPS: " .. love.timer.getFPS(), WHITE, nil, nil, "right", self.display.width)
+   self.display:putString(-1, 2, "Turns:" .. Game.turns, WHITE, nil, nil, "right", self.display.width)
    local kickmodeColor = ORANGE
    if Game.kickmode == "Stomping" then kickmodeColor = YELLOW end
    self.display:putString(1, 3, Game.kickmode, kickmodeColor)
@@ -144,8 +147,15 @@ function GameLevelState:keypressed(key, scancode)
 
    local owner = decision.actor
 
+   if key == "lshift" or key == "rshift" then
+      keymode = "shift"
+   elseif key == "lctrl" or key == "rctrl" then
+      keymode = "control"
+   end
+
    -- Resolve the action string from the keybinding schema
    local action = keybindings:keypressed(key)
+   if keymode == "shift" or keymode == "control" then action = keybindings:keypressed(key, keymode) end
 
    -- Attempt to translate the action into a directional move
    if keybindOffsets[action] then
@@ -247,5 +257,40 @@ function GameLevelState:keypressed(key, scancode)
       Game.turns = Game.turns + 1
    end
 end
+
+function GameLevelState:keyreleased(key)
+   if key == "lshift" or key == "rshift" or key == "lctrl" or key == "rctrl" then keymode = "" end
+end
+
+function GameLevelState:resume()
+   keymode = ""
+end
+
+-- - @param x integer
+-- - @param y integer
+-- - @param depth integer
+-- function GameLevelState:setAlternateCell(x, y, depth)
+--    local cell = self.level:getCell(x, y)
+--    local altdrawable = cell:get(prism.components.AlternateDrawable)
+--    if altdrawable then
+--       if altdrawable.options["overhang"] and cell:getName() ~= self.level:getCell(x, y - 1):getName() then
+--          local drawable = prism.components.Drawable(altdrawable.options["overhang"])
+--          cell:give(drawable)
+--       end
+
+--       local ogDepth = 0
+--       local ogString = "original"
+--       for key, _ in pairs(altdrawable.options) do
+--          local depthNum = tonumber(string.match(key, "%d+"))
+--          if key:match("^original") and depthNum and depthNum > ogDepth and depthNum <= depth then
+--             ogString = key
+--             ogDepth = depthNum
+--          end
+--       end
+
+--       local drawable = prism.components.Drawable(altdrawable.options[ogString])
+--       cell:give(drawable)
+--    end
+-- end
 
 return GameLevelState
