@@ -181,6 +181,9 @@ function PauseState:draw()
    -- self.previousState:draw()
    local midpoint = math.floor(self.display.height / 2)
    local midwidth = math.floor(self.display.width / 2)
+   local cam = spectrum.Camera(0, 0)
+   cam:setScale(1.0 / Game.scale, 1.0 / Game.scale)
+   cam:push()
    self.display:clear()
    local health = self.currentActor and self.currentActor:get(prism.components.Health)
    local healthString = ""
@@ -369,6 +372,7 @@ function PauseState:draw()
    self.display:putString(1, midpoint + 13, "[q] to quit", DARKGRAY, nil, nil, "center", self.display.width)
 
    self.display:draw()
+   cam:pop()
 end
 
 function PauseState:keyreleased(key)

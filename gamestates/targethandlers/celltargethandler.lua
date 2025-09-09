@@ -30,6 +30,9 @@ end
 
 function CellTargetHandler:draw()
    local cameraPos = self.selectorPosition
+   local cam = spectrum.Camera(0, 0)
+   cam:setScale(1.0 / Game.scale, 1.0 / Game.scale)
+   cam:push()
    self.display:clear()
    local ox, oy = self.display:getCenterOffset(cameraPos:decompose())
    self.display:setCamera(ox, oy)
@@ -42,6 +45,7 @@ function CellTargetHandler:draw()
    self.display:putString(1, 4, "[esc] Exit", DARKGRAY)
    self.display:putString(self.selectorPosition.x + ox, self.selectorPosition.y + oy, "X", RED)
    self.display:draw()
+   cam:pop()
 end
 
 local keybindOffsets = {
