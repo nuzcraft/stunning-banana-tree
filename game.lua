@@ -34,6 +34,7 @@ local levelThresholds = {
 --- @field turns integer
 --- @field kickmode string
 --- @field stats GameStats
+--- @field scale number
 --- @overload fun(seed: string): Game
 local Game = prism.Object:extend("Game")
 
@@ -59,6 +60,7 @@ function Game:__new(seed)
       floorsDescended = 0,
       xpCollected = 0,
    }
+   self.scale = 1.0
 end
 
 --- @return string

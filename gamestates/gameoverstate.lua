@@ -11,6 +11,9 @@ end
 
 function GameOverState:draw()
    local midpoint = math.floor(self.display.height / 2)
+   local cam = spectrum.Camera(0, 0)
+   cam:setScale(1.0 / Game.scale, 1.0 / Game.scale)
+   cam:push()
    self.display:clear()
    self.display:putString(1, midpoint - 3, "Game over!", WHITE, nil, nil, "center", self.display.width)
    self.display:putString(
@@ -119,6 +122,7 @@ function GameOverState:draw()
       self.display.width
    )
    self.display:draw()
+   cam:pop()
 end
 
 function GameOverState:keypressed(key, scancode, isrepeat)

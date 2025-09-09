@@ -60,6 +60,9 @@ end
 --- @param secondary Senses[]
 function GameLevelState:draw(primary, secondary)
    if not self.decision then return end
+   local cam = spectrum.Camera(0, 0)
+   cam:setScale(1.0 / Game.scale, 1.0 / Game.scale)
+   cam:push()
    self.display:clear()
 
    local position = self.decision.actor:getPosition()
@@ -117,6 +120,7 @@ function GameLevelState:draw(primary, secondary)
    end
 
    self.display:draw()
+   cam:pop()
 
    -- custom love2d drawing goes here!
 end

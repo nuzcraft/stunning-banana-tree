@@ -39,8 +39,13 @@ love.graphics.setDefaultFilter("nearest", "nearest")
 local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/" .. fontPath, fontWidth, fontHeight)
 local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(fontWidth, fontHeight))
 
+Game.scale = preferences.scale
 -- Automatically size the window to match the terminal dimensions
-display:fitWindowToTerminal()
+-- display:fitWindowToTerminal()
+local cellWidth, cellHeight = display.cellSize.x, display.cellSize.y
+local windowWidth = display.width * cellWidth * Game.scale
+local windowHeight = display.height * cellHeight * Game.scale
+love.window.updateMode(windowWidth, windowHeight, { resizable = true, usedpiscale = false })
 
 -- spin up our state machine
 --- @type GameStateManager
