@@ -10,7 +10,7 @@ bin/
 dist/
 
 # paid assets
-display/GoblinRL.png
-display/GoblinRL.json
-display/oh no more goblins extended.png
-display/onmge.json
+display/GoblinRL_8x16.png
+display/GoblinRL_8x16.json
+display/ONMGE_12x12.png
+display/ONMGE_12x12.json

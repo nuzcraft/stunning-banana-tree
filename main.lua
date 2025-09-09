@@ -1,6 +1,18 @@
 require "debugger"
 require "prism"
 require "colors"
+local json = require "prism.engine.lib.json"
+local prefData
+if love.filesystem.getInfo("preferences.json") then
+   prefData = love.filesystem.read("preferences.json")
+else
+   local file = io.open("preferences.json", "r")
+   if file then
+      prefData = file:read("*a")
+      file:close()
+   end
+end
+local preferences = json.decode(prefData)
 
 prism.loadModule("prism/spectrum")
 prism.loadModule("prism/extra/sight")
@@ -10,21 +22,22 @@ prism.loadModule("prism/extra/droptable")
 prism.loadModule("prism/extra/statuseffects")
 prism.loadModule("modules/basegame")
 prism.loadModule("modules/game")
-
 Game = require("game")
-
--- Grab our level state and sprite atlas.
--- local GameLevelState = require "gamestates.gamelevelstate"
 local TitleState = require "gamestates.titlestate"
--- local TitleState = require "gamestates.gameoverstate" -- for testing
+
+love.graphics.setBackgroundColor(BLACK.r, BLACK.g, BLACK.b, BLACK.a)
 
 -- Load a sprite atlas and configure the terminal-style display,
+local fontPath = preferences.font or "wanderlust_16x16.png"
+local fontWidth, fontHeight = 16, 16
+local w, h = string.match(fontPath, "(%d+)x(%d+)")
+if w and h then
+   fontWidth = tonumber(w)
+   fontHeight = tonumber(h)
+end
 love.graphics.setDefaultFilter("nearest", "nearest")
-local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/wanderlust_16x16.png", 16, 16)
-
--- local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/cp437_12x12.png", 12, 12)
--- local spriteAtlas = spectrum.SpriteAtlas.fromAtlased("display/GoblinRL.png", "display/GoblinRL.json")
-local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(16, 16))
+local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/" .. fontPath, fontWidth, fontHeight)
+local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(fontWidth, fontHeight))
 
 -- Automatically size the window to match the terminal dimensions
 display:fitWindowToTerminal()

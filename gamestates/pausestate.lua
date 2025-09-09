@@ -186,10 +186,10 @@ function PauseState:draw()
    local healthString = ""
    if health then
       healthString = string.format("HP:" .. health.hp .. "/" .. health:getMaxHP())
-      self.display:putString(1, 1, healthString)
+      self.display:putString(1, 1, healthString, WHITE)
    end
    local depthString = string.format("Depth:" .. Game.depth)
-   self.display:putString(1, 2, depthString)
+   self.display:putString(1, 2, depthString, WHITE)
    self.display:putString(math.max(#healthString, #depthString) + 2, 1, "LVL:" .. Game.level, GREEN)
    self.display:putString(
       math.max(#healthString, #depthString) + 2,
