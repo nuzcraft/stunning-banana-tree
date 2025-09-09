@@ -36,7 +36,13 @@ if w and h then
    fontHeight = tonumber(h)
 end
 love.graphics.setDefaultFilter("nearest", "nearest")
-local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/" .. fontPath, fontWidth, fontHeight)
+local atlasPath = "display/" .. string.gsub(fontPath, ".png", ".json")
+local spriteAtlas
+if love.filesystem.getInfo(atlasPath) then
+   spriteAtlas = spectrum.SpriteAtlas.fromAtlased("display/" .. fontPath, atlasPath)
+else
+   spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/" .. fontPath, fontWidth, fontHeight)
+end
 local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(fontWidth, fontHeight))
 
 Game.scale = preferences.scale
