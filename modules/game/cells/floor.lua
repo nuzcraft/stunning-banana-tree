@@ -1,24 +1,24 @@
 prism.registerCell("Floor", function()
    return prism.Cell.fromComponents {
       prism.components.Name("Floor"),
-      prism.components.Drawable({ char = ".", color = LIGHTGRAY }),
+      prism.components.Drawable({ char = "floor", color = LIGHTGRAY }),
       prism.components.Collider({ allowedMovetypes = { "walk", "fly" } }),
       prism.components.Destructible(),
       prism.components.AlternateDrawable({
          original = {
-            char = ".",
+            char = "floor",
             color = LIGHTGRAY,
          },
          alternate = {
-            char = ".",
+            char = "floor2",
             color = GRAY,
          },
          original05 = {
-            char = ".",
+            char = "floor",
             color = LIGHTGRAY,
          },
          alternate05 = {
-            char = ".",
+            char = "floor2",
             color = GRAY,
          },
       }),
