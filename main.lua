@@ -6,13 +6,10 @@ local prefData
 if love.filesystem.getInfo("preferences.json") then
    prefData = love.filesystem.read("preferences.json")
 else
-   -- fallback: try to read from the OS filesystem (for compiled/distributed builds)
    local file = io.open("preferences.json", "r")
    if file then
       prefData = file:read("*a")
       file:close()
-   else
-      error("preferences.json not found in either LOVE or OS filesystem!")
    end
 end
 local preferences = json.decode(prefData)
