@@ -28,10 +28,10 @@ prism.loadModule("modules/game")
 Game = require("game")
 local TitleState = require "gamestates.titlestate"
 
-love.graphics.setBackgroundColor(BLACK.r, BLACK.g, BLACK.b, BLACK.a) -- update for theme
+love.graphics.setBackgroundColor(BLACK.r, BLACK.g, BLACK.b, BLACK.a)
 
 -- Load a sprite atlas and configure the terminal-style display,
-local fontPath = preferences.font
+local fontPath = preferences.font or "wanderlust_16x16.png"
 love.graphics.setDefaultFilter("nearest", "nearest")
 local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/" .. fontPath, 16, 16)
 
