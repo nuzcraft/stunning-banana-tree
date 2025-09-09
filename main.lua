@@ -41,7 +41,10 @@ local spriteAtlas
 if love.filesystem.getInfo(atlasPath) then
    spriteAtlas = spectrum.SpriteAtlas.fromAtlased("display/" .. fontPath, atlasPath)
 else
-   spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/" .. fontPath, fontWidth, fontHeight)
+   spriteAtlas = spectrum.SpriteAtlas.fromAtlased(
+      "display/" .. fontPath,
+      "display/ascii_" .. fontWidth .. "x" .. fontHeight .. ".json"
+   )
 end
 local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(fontWidth, fontHeight))
 

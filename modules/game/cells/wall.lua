@@ -11,12 +11,12 @@ prism.registerCell("Wall", function()
       prism.components.Destructible(),
       prism.components.AlternateDrawable({
          original = {
-            char = "#",
+            char = "wallBrokenBrick",
             color = WHITE,
             -- background = DARKGRAY,
          },
          alternate = {
-            char = "#",
+            char = "wallSparseBrick",
             color = LIGHTGRAY,
             -- background = DARKGRAY,
          },
