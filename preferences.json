@@ -64,6 +64,6 @@
         "TAN": [233, 155, 124, 255],
         "BROWN": [130, 83, 65, 255]
     },
-    "font": "wanderlust_16x16.png",
+    "font": "cp437_12x12.png",
     "scale": 1.5
 }
