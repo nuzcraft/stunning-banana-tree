@@ -22,6 +22,7 @@ function WallKick:canPerform(level, targetVec)
          targetCell:has(prism.components.Collider)
          and targetCell:has(prism.components.Destructible)
          and not level:getCellPassable(x, y, mask)
+         and not level:query():at(targetVec:decompose()):first()
       then
          return true
       end
