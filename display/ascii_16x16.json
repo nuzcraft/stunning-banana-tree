@@ -255,6 +255,7 @@
 { "name" : "small_n" , "rect": [192,240,16,16] },
 { "name" : "super_2" , "rect": [208,240,16,16] },
 { "name" : "interior_square" , "rect": [224,240,16,16] },
-{ "name" : "open_interior_square" , "rect": [240,240,16,16] }
+{ "name" : "open_interior_square" , "rect": [240,240,16,16] },
+{ "name" : "big_X" , "rect": [128,80,16,16] }
     ]
 }
