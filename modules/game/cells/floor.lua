@@ -21,6 +21,10 @@ prism.registerCell("Floor", function()
             char = "floorBrick",
             color = GRAY,
          },
+         original10 = {
+            char = "floorSolid",
+            color = GRAY,
+         },
       }),
    }
 end)

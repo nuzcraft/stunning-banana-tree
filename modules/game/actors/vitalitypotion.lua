@@ -2,7 +2,7 @@ prism.registerActor("VitalityPotion", function()
    return prism.Actor.fromComponents {
       prism.components.Name("Potion of Vitality"),
       prism.components.Drawable({
-         char = "!",
+         char = "potion_bottle",
          color = RED,
       }),
       prism.components.Collider(),

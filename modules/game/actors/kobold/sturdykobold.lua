@@ -2,7 +2,7 @@ prism.registerActor("SturdyKobold", function()
    return prism.Actor.fromComponents {
       prism.components.Name("Sturdy Kobold"),
       prism.components.Drawable({
-         char = "k",
+         char = "kobold_armed",
          color = ORANGE,
          layer = 2,
       }),
