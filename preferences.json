@@ -65,5 +65,6 @@
         "BROWN": [130, 83, 65, 255]
     },
     "font": "ONMGE_12x12.png",
-    "scale": 1.0
+    "scale": 1.0,
+    "screenshake": true
 }

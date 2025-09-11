@@ -3,6 +3,20 @@ local GameOverState = require "gamestates.gameoverstate"
 -- local InventoryState = require "gamestates.inventorystate"
 local PauseState = require "gamestates.pausestate"
 local CellTargetHandler = require "gamestates.targethandlers.celltargethandler"
+local json = require "prism.engine.lib.json"
+local prefData
+if love.filesystem.getInfo("preferences.json") then
+   prefData = love.filesystem.read("preferences.json")
+else
+   local file = io.open("preferences.json", "r")
+   if file then
+      prefData = file:read("*a")
+      file:close()
+   end
+end
+local preferences = json.decode(prefData)
+
+local screenshake = preferences.screenshake
 
 local keymode = ""
 
@@ -51,9 +65,11 @@ end
 --- @param duration number
 --- @param magnitude number
 function GameLevelState:startShake(duration, magnitude)
-   self.shakeTime = 0
-   self.shakeDuration = duration or 0
-   self.shakeMagnitude = magnitude or 5
+   if screenshake == true then
+      self.shakeTime = 0
+      self.shakeDuration = duration or 0
+      self.shakeMagnitude = magnitude or 5
+   end
 end
 
 --- @param primary Senses[] { curActor:getComponent(prism.components.Senses)}
