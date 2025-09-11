@@ -29,8 +29,18 @@ function TitleState:draw()
    self.display:putString(1, midpoint + 4, "[esc] to quit", DARKGRAY, nil, nil, "center", self.display.width)
    self.display:putString(
       2,
-      midpoint + 18,
+      midpoint + 17,
       "Made with Love2D & PrismRL",
+      DARKGRAY,
+      nil,
+      nil,
+      "left",
+      self.display.width
+   )
+   self.display:putString(
+      2,
+      midpoint + 18,
+      "Oh no, more Goblins! tiles by MRMO Tarius",
       DARKGRAY,
       nil,
       nil,
@@ -57,7 +67,7 @@ function TitleState:draw()
       "left",
       self.display.width
    )
-   self.display:putString(2, midpoint + 21, "Version 0.02", DARKGRAY, nil, nil, "left", self.display.width)
+   self.display:putString(2, midpoint + 21, "Version 0.03", DARKGRAY, nil, nil, "left", self.display.width)
    self.display:draw()
    cam:pop()
 end
