@@ -7,9 +7,17 @@ if love.filesystem.getInfo("preferences.json") then
    prefData = love.filesystem.read("preferences.json")
 else
    local file = io.open("preferences.json", "r")
+   local file2 = io.open("lib/preferences.json", "r")
+   local file3 = io.open("../Resources/preferences.json", "r")
    if file then
       prefData = file:read("*a")
       file:close()
+   elseif file2 then
+      prefData = file2:read("*a")
+      file2:close()
+   elseif file3 then
+      prefData = file3:read("*a")
+      file3:close()
    end
 end
 local preferences = json.decode(prefData)
