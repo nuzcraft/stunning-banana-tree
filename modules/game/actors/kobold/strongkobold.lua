@@ -4,6 +4,7 @@ prism.registerActor("StrongKobold", function()
       prism.components.Drawable({
          char = "kobold_armed",
          color = RED,
+         background = DARKBLUE,
          layer = 2,
       }),
       prism.components.Position(),

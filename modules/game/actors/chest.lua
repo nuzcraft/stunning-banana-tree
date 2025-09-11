@@ -6,6 +6,7 @@ prism.registerActor("Chest", function(contents)
       prism.components.Drawable({
          char = "chest",
          color = YELLOW,
+         background = DARKBROWN,
          layer = 2,
       }),
       prism.components.Container(),

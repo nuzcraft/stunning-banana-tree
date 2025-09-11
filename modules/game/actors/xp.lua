@@ -5,6 +5,7 @@ prism.registerActor("XP", function()
       prism.components.Drawable({
          char = "coin",
          color = CYAN,
+         background = DARKBLUE,
          layer = 1,
       }),
       prism.components.Item(),
