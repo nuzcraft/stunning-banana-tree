@@ -3,8 +3,9 @@ prism.registerActor("XP", function()
       prism.components.Name("XP"),
       prism.components.Position(),
       prism.components.Drawable({
-         char = 253,
+         char = "coin",
          color = CYAN,
+         background = DARKBLUE,
          layer = 1,
       }),
       prism.components.Item(),

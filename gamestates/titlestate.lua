@@ -18,19 +18,29 @@ function TitleState:draw()
    cam:push()
    self.display:clear()
    self.display:putString(1, midpoint - 2, "Nuzcraft's Kicking Kobolds", WHITE, nil, nil, "center", self.display.width)
-   self.display:put(midwidth - 13, midpoint - 2, 219, GREEN, nil, nil)
-   self.display:put(midwidth + 14, midpoint - 2, 192, GREEN, nil, nil)
-   self.display:put(midwidth - 13, midpoint - 1, 193, GREEN, nil, nil)
-   self.display:put(midwidth + 14, midpoint - 1, 218, GREEN, nil, nil)
+   self.display:put(midwidth - 13, midpoint - 2, "boxdr", GREEN, nil, nil)
+   self.display:put(midwidth + 14, midpoint - 2, "boxdl", GREEN, nil, nil)
+   self.display:put(midwidth - 13, midpoint - 1, "boxur", GREEN, nil, nil)
+   self.display:put(midwidth + 14, midpoint - 1, "boxul", GREEN, nil, nil)
    for i = 1, 26 do
-      self.display:put(midwidth - 13 + i, midpoint - 1, 197, GREEN, nil, nil)
+      self.display:put(midwidth - 13 + i, midpoint - 1, "boxh", GREEN, nil, nil)
    end
    self.display:putString(1, midpoint + 3, "press any key to start", WHITE, nil, nil, "center", self.display.width)
    self.display:putString(1, midpoint + 4, "[esc] to quit", DARKGRAY, nil, nil, "center", self.display.width)
    self.display:putString(
       2,
-      midpoint + 18,
+      midpoint + 17,
       "Made with Love2D & PrismRL",
+      DARKGRAY,
+      nil,
+      nil,
+      "left",
+      self.display.width
+   )
+   self.display:putString(
+      2,
+      midpoint + 18,
+      "Oh no, more Goblins! tiles by MRMO Tarius",
       DARKGRAY,
       nil,
       nil,
@@ -57,7 +67,7 @@ function TitleState:draw()
       "left",
       self.display.width
    )
-   self.display:putString(2, midpoint + 21, "Version 0.02", DARKGRAY, nil, nil, "left", self.display.width)
+   self.display:putString(2, midpoint + 21, "Version 0.03", DARKGRAY, nil, nil, "left", self.display.width)
    self.display:draw()
    cam:pop()
 end

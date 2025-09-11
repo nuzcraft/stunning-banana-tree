@@ -43,7 +43,7 @@ function CellTargetHandler:draw()
    self.display:putString(1, 2, "[f]/[space] Select a target!", WHITE, DARKGRAY)
    self.display:putString(1, 3, "[tab] Switch target")
    self.display:putString(1, 4, "[esc] Exit", DARKGRAY)
-   self.display:putString(self.selectorPosition.x + ox, self.selectorPosition.y + oy, "X", RED)
+   self.display:put(self.selectorPosition.x + ox, self.selectorPosition.y + oy, "big_X", RED)
    self.display:draw()
    cam:pop()
 end

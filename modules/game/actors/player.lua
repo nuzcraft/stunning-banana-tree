@@ -4,6 +4,7 @@ prism.registerActor("Player", function()
       prism.components.Drawable({
          char = "@",
          color = GREEN,
+         background = DARKERGREEN,
          layer = math.huge,
       }),
       prism.components.Position(),

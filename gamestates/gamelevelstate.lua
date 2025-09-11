@@ -3,6 +3,28 @@ local GameOverState = require "gamestates.gameoverstate"
 -- local InventoryState = require "gamestates.inventorystate"
 local PauseState = require "gamestates.pausestate"
 local CellTargetHandler = require "gamestates.targethandlers.celltargethandler"
+local json = require "prism.engine.lib.json"
+local prefData
+if love.filesystem.getInfo("preferences.json") then
+   prefData = love.filesystem.read("preferences.json")
+else
+   local file = io.open("preferences.json", "r")
+   local file2 = io.open("lib/preferences.json", "r")
+   local file3 = io.open("../Resources/preferences.json", "r")
+   if file then
+      prefData = file:read("*a")
+      file:close()
+   elseif file2 then
+      prefData = file2:read("*a")
+      file2:close()
+   elseif file3 then
+      prefData = file3:read("*a")
+      file3:close()
+   end
+end
+local preferences = json.decode(prefData)
+
+local screenshake = preferences.screenshake
 
 local keymode = ""
 
@@ -51,9 +73,11 @@ end
 --- @param duration number
 --- @param magnitude number
 function GameLevelState:startShake(duration, magnitude)
-   self.shakeTime = 0
-   self.shakeDuration = duration or 0
-   self.shakeMagnitude = magnitude or 5
+   if screenshake == true then
+      self.shakeTime = 0
+      self.shakeDuration = duration or 0
+      self.shakeMagnitude = magnitude or 5
+   end
 end
 
 --- @param primary Senses[] { curActor:getComponent(prism.components.Senses)}
@@ -143,7 +167,7 @@ local keybindOffsets = {
 -- the level. This is a similar pattern to the example KoboldController.
 function GameLevelState:keypressed(key, scancode)
    -- handles opening geometer for us
-   spectrum.LevelState.keypressed(self, key, scancode)
+   -- spectrum.LevelState.keypressed(self, key, scancode)
 
    local decision = self.decision
    if not decision then return end

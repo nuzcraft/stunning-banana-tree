@@ -2,7 +2,7 @@ prism.registerCell("Wall", function()
    return prism.Cell.fromComponents {
       prism.components.Name("Wall"),
       prism.components.Drawable({
-         char = "#",
+         char = "wallBrokenBrick",
          color = LIGHTGRAY,
          -- background = DARKGRAY
       }),
@@ -11,29 +11,29 @@ prism.registerCell("Wall", function()
       prism.components.Destructible(),
       prism.components.AlternateDrawable({
          original = {
-            char = "#",
-            color = WHITE,
-            -- background = DARKGRAY,
-         },
-         alternate = {
-            char = "#",
+            char = "wallBrokenBrick",
             color = LIGHTGRAY,
             -- background = DARKGRAY,
          },
+         alternate = {
+            char = "wallBrokenBrick",
+            color = WHITE,
+            -- background = DARKGRAY,
+         },
          original05 = {
-            char = "#",
+            char = "wallBrick",
             color = ORANGE,
          },
          alternate05 = {
-            char = "#",
+            char = "wallBrokenBrick",
             color = BROWN,
          },
          original10 = {
-            char = "#",
+            char = "wallBrick",
             color = RED,
          },
          alternate10 = {
-            char = "#",
+            char = "wallBrokenBrick",
             color = DARKRED,
          },
       }),

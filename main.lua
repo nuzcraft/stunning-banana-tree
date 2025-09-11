@@ -7,9 +7,17 @@ if love.filesystem.getInfo("preferences.json") then
    prefData = love.filesystem.read("preferences.json")
 else
    local file = io.open("preferences.json", "r")
+   local file2 = io.open("lib/preferences.json", "r")
+   local file3 = io.open("../Resources/preferences.json", "r")
    if file then
       prefData = file:read("*a")
       file:close()
+   elseif file2 then
+      prefData = file2:read("*a")
+      file2:close()
+   elseif file3 then
+      prefData = file3:read("*a")
+      file3:close()
    end
 end
 local preferences = json.decode(prefData)
@@ -36,7 +44,16 @@ if w and h then
    fontHeight = tonumber(h)
 end
 love.graphics.setDefaultFilter("nearest", "nearest")
-local spriteAtlas = spectrum.SpriteAtlas.fromASCIIGrid("display/" .. fontPath, fontWidth, fontHeight)
+local atlasPath = "display/" .. string.gsub(fontPath, ".png", ".json")
+local spriteAtlas
+if love.filesystem.getInfo(atlasPath) then
+   spriteAtlas = spectrum.SpriteAtlas.fromAtlased("display/" .. fontPath, atlasPath)
+else
+   spriteAtlas = spectrum.SpriteAtlas.fromAtlased(
+      "display/" .. fontPath,
+      "display/ascii_" .. fontWidth .. "x" .. fontHeight .. ".json"
+   )
+end
 local display = spectrum.Display(81, 41, spriteAtlas, prism.Vector2(fontWidth, fontHeight))
 
 Game.scale = preferences.scale

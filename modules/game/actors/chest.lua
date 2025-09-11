@@ -4,8 +4,9 @@ prism.registerActor("Chest", function(contents)
       prism.components.Position(),
       prism.components.Inventory { items = contents },
       prism.components.Drawable({
-         char = "(",
+         char = "chest",
          color = YELLOW,
+         background = DARKBROWN,
          layer = 2,
       }),
       prism.components.Container(),
