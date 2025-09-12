@@ -14,6 +14,13 @@ local levelThresholds = {
    80,
    90,
    100,
+   100,
+   100,
+   100,
+   100,
+   100,
+   100,
+   100,
 }
 
 --- @class GameStats
